@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+        <link rel="shortcut icon" href="./favicon.ico"/>
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="manifest" href="/manifest.json">
+        <link href="splashscreens/iphone5_splash.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image"/>
+        <link href="splashscreens/iphone6_splash.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image"/>
+        <link href="splashscreens/iphoneplus_splash.png" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image"/>
+        <link href="splashscreens/iphonex_splash.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image"/>
+        <link href="splashscreens/iphonexr_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image"/>
+        <link href="splashscreens/iphonexsmax_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image"/>
+        <link href="splashscreens/ipad_splash.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image"/>
+        <link href="splashscreens/ipadpro1_splash.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image"/>
+        <link href="splashscreens/ipadpro3_splash.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image"/>
+        <link href="splashscreens/ipadpro2_splash.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image"/>
+</script><title>采花阁</title>
+<style>
+    @keyframes loading {
+        /*以百分比来规定改变发生的时间 也可以通过"from"和"to",等价于0% 和 100%*/
+        0% {
+            /*rotate(2D旋转) scale(放大或者缩小) translate(移动) skew(翻转)*/
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    #loading {
+        /* display: none; */
+    }
+
+    #icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-top: calc(50% - 50px);
+        margin-left: calc(50% - 25px);
+        animation: loading 2s linear infinite;
+    }
+</style>
+<!-- <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+<script>
+    LA.init({
+        id: "JiRlV4BpkMYZXK6c",
+        ck: "JiRlV4BpkMYZXK6c"
+    })
+</script> -->
+</head>
+<body>
+    <noscript>
+        <strong>We're sorry but 采花阁 doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <div style="width:100%;height:100%;background: #181818;position:absolute;z-index: 999;left: 0;top: 0px" id="loading">
+        <img src="./img/loading.png" id="icon">
+        <p style="text-align: center;
+      margin-top: 10px;
+      color: #FD5C18;
+      font-size: 15px;">数据准备中...</p>
+    </div>
+    <link href="https://web.sdk.qcloud.com/player/tcplayer/release/v4.6.0/tcplayer.min.css" rel="stylesheet"/>
+    <script src="https://web.sdk.qcloud.com/player/tcplayer/release/v4.6.0/libs/TXLivePlayer-1.2.3.min.js"></script>
+    <script src="https://web.sdk.qcloud.com/player/tcplayer/release/v4.6.0/libs/hls.min.1.1.5.js"></script>
+    <script src="https://web.sdk.qcloud.com/player/tcplayer/release/v4.6.0/tcplayer.v4.6.0.min.js"></script>
+</body>
+</html>
