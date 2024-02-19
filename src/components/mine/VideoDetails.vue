@@ -523,7 +523,7 @@ export default {
     );
 
     const _hoisted_1 = {
-      class: "videoDetails",
+      class: "videoDetails videoDetails_v",
     };
     const _hoisted_2 = {
       class: "head_title head_top_20",
@@ -1484,3 +1484,14 @@ export default {
   },
 };
 </script>
+
+<style>
+.videoDetails_v {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.videoDetails_v .cont {
+  flex: 1;
+}
+</style>

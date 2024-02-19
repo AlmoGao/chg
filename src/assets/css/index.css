@@ -28,6 +28,10 @@
     left: 50%;
     transform: translate(-50%,-50%)
 }
+.info-videoCover .error img {
+    /* width: 100%!important;
+    max-height: 100%!important; */
+}
 
 .advertise .banner_item {
     width: 100%;
@@ -1927,7 +1931,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    background: #4d4d4d
+    background: #433e3e
 }
 
 .videoDetails .cont .tab_cont .info-videoItem .info-videoCover .info-videoCover-img div img {
@@ -8122,7 +8126,7 @@ img {
 
 .van-icon-arrow-left {
     padding: 20px;
-    left: -30px
+    left: -20px
 }
 
 .head_top_20 .van-icon-arrow-left {

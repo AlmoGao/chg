@@ -110,7 +110,7 @@ export default {
     );
 
     const _hoisted_1 = {
-      class: "head_title",
+      class: "head_title_ask",
     };
 
     const _hoisted_2 = /*#__PURE__*/ _withScopeId(() =>
@@ -125,7 +125,7 @@ export default {
     );
 
     const _hoisted_3 = {
-      class: "cont_body",
+      class: "cont_body_ask",
     };
 
     const _hoisted_4 = /*#__PURE__*/ _withScopeId(() =>
@@ -161,7 +161,7 @@ export default {
     );
 
     const _hoisted_8 = {
-      class: "info-recommend",
+      class: "",
     };
     const _hoisted_9 = {
       class: "info-videoItem",
@@ -430,3 +430,85 @@ export default {
   },
 };
 </script>
+
+<style>
+.head_title_ask {
+  padding: 0 15px;
+    height: 56px;
+    color: #fff;
+    position: relative;
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+.head_title_ask .title {
+  position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.cont_body_ask {
+  height: calc(100vh - 56px);
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.cont_body_ask .wantAv-title {
+    margin: 0 15px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.cont_body_ask .wantAv-title span {
+    color: #999;
+    font-size: 11.5px;
+    margin-left: 5px;
+    font-weight: 400
+}
+
+.cont_body_ask .textarea {
+    position: relative
+}
+
+.cont_body_ask .textarea .num {
+    position: absolute;
+    bottom: 22px;
+    right: 22px;
+    color: #757575
+}
+
+.cont_body_ask textarea {
+    width: 92%;
+    padding: 7.5px;
+    border: none;
+    font-size: 14px;
+    background-color: #404040;
+    border-radius: 5px;
+    margin: 7.5px 15px 15px;
+    height: 112px;
+    color: #fff;
+    resize: none;
+    box-sizing: border-box
+}
+
+.cont_body_ask .wantAv-input-box {
+    margin: 11.5px 15px 0
+}
+
+.cont_body_ask .wantAv-input-box input {
+    margin-bottom: 11px;
+    width: 100%;
+    border: none;
+    font-size: 15px;
+    color: #fff;
+    background-color: transparent
+}
+
+.cont_body_ask .wantAv-input-box .thin-line {
+    height: 1px;
+    transform: scaleY(.1);
+    background-color: #999
+}
+</style>
