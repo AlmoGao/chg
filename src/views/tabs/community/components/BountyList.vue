@@ -17,7 +17,7 @@ import {
 } from "vue";
 
 import { ref } from "vue";
-import { Toast } from "vant";
+import { showToast } from "vant";
 import { getGlobalProperties } from "@/assets/js/utils.js";
 import { useStore } from "vuex";
 export default {
@@ -69,7 +69,7 @@ export default {
 
     const okBtns = () => {
       if (moneyValue.value === "") {
-        Toast("打赏金额不能为空");
+        showToast("打赏金额不能为空");
         return;
       }
 
@@ -78,7 +78,7 @@ export default {
         money: moneyValue.value,
       };
       askVideoRewardApi(params).then((res) => {
-        Toast(res.message);
+        showToast(res.message);
 
         if (res.code === 0) {
           page.value = 1;

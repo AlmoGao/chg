@@ -19,7 +19,7 @@ import _imports_0 from "@/assets/images/jubao_checked_red.png";
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import { getGlobalProperties } from "@/assets/js/utils.js";
-import { Toast } from "vant";
+import { showToast } from "vant";
 export default {
   name: "AskVideo",
 
@@ -31,7 +31,7 @@ export default {
     const money = ref("");
     const showAskVideoGz = ref(false);
     const videoDetails = computed(() => {
-      // 计算属性初始化加10
+      
       return store.state.videoDetails;
     });
     const isVip = computed(() => {
@@ -44,20 +44,20 @@ export default {
 
     const faBuAskVideo = () => {
       if (!content.value) {
-        Toast("请输入求片内容");
+        showToast("请输入求片内容");
         return;
       }
 
       if (content.value.length < 10) {
-        Toast("详细的描述更方便找片，不少于10个字噢~");
+        showToast("详细的描述更方便找片，不少于10个字噢~");
         return;
       }
 
       if (!isYdguize.value) {
-        Toast("请确认已阅读采花阁发布规则");
+        showToast("请确认已阅读采花阁发布规则");
         return;
       } // if (isVip.value === 0) {
-      //   Toast("仅允许充值会员用户发布求片信息");
+      //   showToast("仅允许充值会员用户发布求片信息");
       //   return;
       // }
 
@@ -67,7 +67,7 @@ export default {
         video_id: videoDetails.value.id,
       };
       askVideoSaveApi(params, "get").then((res) => {
-        Toast(res.message);
+        showToast(res.message);
 
         if (res.code === 0) {
           content.value = "";

@@ -1029,7 +1029,7 @@ export default {
                         {
                           size: "22",
                           name: "arrow-left",
-                          onClick: close.value,
+                          onClick: close,
                         },
                         null,
                         8,

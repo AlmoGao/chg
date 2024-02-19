@@ -20,7 +20,7 @@ export default {
   setup(props) {
     const store = useStore();
     let bannerList = computed(() => {
-      // 计算属性初始化加10
+      
       return store.state.bannerList;
     });
 

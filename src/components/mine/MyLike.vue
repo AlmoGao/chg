@@ -557,7 +557,7 @@ export default {
                     _createVNode(
                       _component_tag_management,
                       {
-                        onClose: close.value,
+                        onClose: close,
                       },
                       null,
                       8,

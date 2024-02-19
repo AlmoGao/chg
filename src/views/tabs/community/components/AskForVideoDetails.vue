@@ -28,7 +28,7 @@ import _imports_3 from "@/assets/images/community/icon_like_tag.png";
 
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
-import { Toast, Dialog } from "vant";
+import { showToast, showDialog as showDialog2 } from "vant";
 import { getGlobalProperties, getMyDate } from "@/assets/js/utils.js";
 import BountyList from "./BountyList.vue";
 import RecommendVideo from "./RecommendVideo.vue";
@@ -140,7 +140,7 @@ export default {
 
     const okBtns = () => {
       if (moneyValue.value === "") {
-        Toast("打赏金额不能为空");
+        showToast("打赏金额不能为空");
         return;
       }
 
@@ -149,7 +149,7 @@ export default {
         money: moneyValue.value,
       };
       askVideoRewardApi(params).then((res) => {
-        Toast(res.message);
+        showToast(res.message);
 
         if (res.code === 0) {
           getAskVideoDetail();
@@ -181,7 +181,7 @@ export default {
         user_id: item.user_id,
       };
       focusSaveApi(params, "get").then((res) => {
-        // Toast(res.message);
+        // showToast(res.message);
         if (res.code === 0) {
           item.isFocus = !item.isFocus;
           store.dispatch("getUserInfo");
@@ -196,7 +196,7 @@ export default {
         },
         "get"
       ).then((res) => {
-        Toast(res.message);
+        showToast(res.message);
 
         if (res.code === 0) {
           item.like_num++;
@@ -205,7 +205,7 @@ export default {
     };
 
     const cainaF = (id) => {
-      Dialog.confirm({
+      showDialog2({
         theme: "round-button",
         className: "myconfirm",
         title: "采纳推荐者视频",
@@ -218,7 +218,7 @@ export default {
             },
             "get"
           ).then((res) => {
-            Toast(res.message);
+            showToast(res.message);
 
             if (res.code === 0) {
               getAskVideoDetail();
@@ -1220,7 +1220,7 @@ export default {
                         {
                           size: "22",
                           name: "arrow-left",
-                          onClick: close.value,
+                          onClick: close,
                         },
                         null,
                         8,

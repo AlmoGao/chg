@@ -20,7 +20,7 @@ import _imports_4 from "@/assets/images/icon_share_fg_bg.png";
 import { useStore } from "vuex";
 import QrcodeVue from "qrcode.vue";
 import Clipboard from "clipboard";
-import { Toast } from "vant";
+import { showToast } from "vant";
 import { ref, computed, watch } from "vue";
 export default {
   name: "SharePopup",
@@ -50,20 +50,20 @@ export default {
     const copy = () => {
       let clipboard = new Clipboard(".copy");
       clipboard.on("success", () => {
-        Toast("复制成功，快去分享吧！"); // 释放内存
+        showToast("复制成功，快去分享吧！"); // 释放内存
 
         clipboard.destroy();
       });
       clipboard.on("error", () => {
         // 不支持复制
-        Toast("该浏览器不支持自动复制"); // 释放内存
+        showToast("该浏览器不支持自动复制"); // 释放内存
 
         clipboard.destroy();
       });
     };
 
     const downImg = () => {
-      Toast("请自行在本页面截图保存");
+      showToast("请自行在本页面截图保存");
     };
 
     const _withScopeId = (n) => (

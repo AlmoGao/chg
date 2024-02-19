@@ -22,10 +22,10 @@ import StudioVideo from "./tabs/studio/StudioVideo.vue";
 import todaysHeadlines from "./tabs/todays/todaysHeadlines.vue";
 import AdultComics from "./tabs/adultComics/AdultComics.vue";
 import { useStore } from "vuex";
-import { Dialog } from "vant";
+import { showDialog } from "vant";
 export default {
   components: {
-    FocusComponent,
+    FocusComponent, 
     RecommondComponent,
     LatestComponent,
     StudioVideo,
@@ -39,7 +39,7 @@ export default {
 
     const active = ref(1);
     const showAdultComicsPopul = ref(false);
-    const skeletonLoading = ref(true);
+    const skeletonLoading = ref(false);
     const showBottomBanner = computed(() => {
       return store.state.showBottomBanner;
     });
@@ -97,7 +97,7 @@ export default {
     };
 
     const releaseValue = () => {
-      Dialog.alert({
+      showDialog({
         title: "温馨提示",
         showCancelButton: true,
         confirmButtonText: "下载APP",
@@ -220,6 +220,7 @@ export default {
               _component_van_skeleton,
               {
                 title: "",
+                class: "van-skeleton-home",
                 row: 10,
                 loading: skeletonLoading.value,
               },
@@ -282,7 +283,7 @@ export default {
                             _createElementVNode(
                               "div",
                               {
-                                class: "cont_body",
+                                class: "cont_body_home",
                                 style: _normalizeStyle({
                                   height: showBottomBanner.value
                                     ? "calc(100vh - 220px)"
@@ -307,7 +308,7 @@ export default {
                             _createElementVNode(
                               "div",
                               {
-                                class: "cont_body",
+                                class: "cont_body_home",
                                 style: _normalizeStyle({
                                   height: showBottomBanner.value
                                     ? "calc(100vh - 220px)"
@@ -343,7 +344,7 @@ export default {
                             _createElementVNode(
                               "div",
                               {
-                                class: "cont_body",
+                                class: "cont_body_home",
                                 style: _normalizeStyle({
                                   height: showBottomBanner.value
                                     ? "calc(100vh - 220px)"
@@ -368,7 +369,7 @@ export default {
                             _createElementVNode(
                               "div",
                               {
-                                class: "cont_body",
+                                class: "cont_body_home",
                                 style: _normalizeStyle({
                                   height: showBottomBanner.value
                                     ? "calc(100vh - 220px)"
@@ -393,7 +394,7 @@ export default {
                             _createElementVNode(
                               "div",
                               {
-                                class: "cont_body",
+                                class: "cont_body_home",
                                 style: _normalizeStyle({
                                   height: showBottomBanner.value
                                     ? "calc(100vh - 220px)"
@@ -442,7 +443,7 @@ export default {
                       _createVNode(
                         _component_AdultComics,
                         {
-                          onClose: close.value,
+                          onClose: close,
                         },
                         null,
                         8,
@@ -464,3 +465,140 @@ export default {
   },
 };
 </script>
+
+
+<style >
+
+#home .cont_body_home {
+    height: calc(100vh - 250px);
+    overflow-y: scroll;
+    overflow-x: hidden
+}
+
+#home .tab_box {
+    position: relative
+}
+
+#home .tab_box .van-icon {
+    position: absolute;
+    color: #fff;
+    top: 13px;
+    right: 15px;
+    font-size: 18px
+}
+
+#home .header {
+    display: grid;
+    grid-template-columns: auto auto auto
+}
+
+#home .header li {
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+#home .header .logo {
+    padding: 10px;
+    height: 30px;
+    margin-right: 10px
+}
+
+#home .header .logo img {
+    height: 100%
+}
+
+#home .header .van-search {
+    padding: 10px 0;
+    width: 100%
+}
+
+#home .header .everyday {
+    margin: 0 10px
+}
+
+#home .header .everyday img {
+    width: 31px;
+    height: 33px
+}
+
+#home .header .publishIcon img {
+    width: 23px;
+    height: 38px
+}
+
+#home .van-tabs .nav_title {
+    font-size: 17px;
+    padding: 0;
+    flex: auto
+}
+
+#home .van-tabs .van-tab--active {
+    font-size: 19px;
+    font-weight: 700
+}
+
+#home .van-tabs .van-tabs__wrap {
+    padding-right: 30px
+}
+
+
+
+#home .tab_box {
+    position: relative
+}
+
+#home .tab_box :deep(.van-icon) {
+    position: absolute;
+    color: #fff;
+    top: 13px;
+    right: 15px;
+    font-size: 18px
+}
+
+#home .header {
+    display: grid;
+    grid-template-columns: auto auto auto
+}
+
+#home .header li {
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+
+#home .header :deep(.van-search) {
+    padding: 10px 0;
+    width: 100%
+}
+
+#home .header .everyday {
+    margin: 0 10px
+}
+
+#home .header .everyday img {
+    width: 31px;
+    height: 33px
+}
+
+#home .header .publishIcon img {
+    width: 23px;
+    height: 38px
+}
+
+#home .van-tabs :deep(.nav_title) {
+    font-size: 17px;
+    padding: 0;
+    flex: auto
+}
+
+#home .van-tabs :deep(.van-tab--active) {
+    font-size: 19px;
+    font-weight: 700
+}
+
+#home .van-tabs :deep(.van-tabs__wrap) {
+    padding-right: 30px
+}
+</style>

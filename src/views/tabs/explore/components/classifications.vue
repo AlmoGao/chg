@@ -47,12 +47,12 @@ export default {
     let menuTetx = ref("");
     const { homeMenuApi, hotAuthorApi } = getGlobalProperties().$api;
     let swipe = ref(null);
-
     const tabItemClick = (item, index) => {
       activeIndex.value = index;
       menu_id.value = item.id;
       label_id.value = "";
       menuTetx.value = item.name;
+      console.error('???', _component_van_swipe)
       swipe.value.swipeTo(index);
     };
 
@@ -197,8 +197,7 @@ export default {
       menuTetx,
     });
 
-    return (_ctx, _cache) => {
-      const _component_my_image = _resolveComponent("my-image");
+    const _component_my_image = _resolveComponent("my-image");
 
       const _component_swiper_slide = _resolveComponent("swiper-slide");
 
@@ -211,6 +210,8 @@ export default {
       const _component_search_popup = _resolveComponent("search-popup");
 
       const _component_van_popup = _resolveComponent("van-popup");
+    return (_ctx, _cache) => {
+      
 
       return (
         _openBlock(),
@@ -249,7 +250,8 @@ export default {
             _createVNode(
               _component_van_swipe,
               {
-                ref: "swipe",
+                ref: el => swipe.value = el,
+                class: "class-swiper2",
                 loop: false,
                 vertical: "",
                 touchable: false,
@@ -452,7 +454,7 @@ export default {
                           searchText: searchText.value,
                           menu_id: menu_id.value,
                           label_id: label_id.value,
-                          onClose: close.value,
+                          onClose: close,
                         },
                         null,
                         8,

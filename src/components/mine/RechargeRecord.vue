@@ -18,7 +18,7 @@ import {
 
 import { ref } from "vue";
 import { getGlobalProperties, getMyDate } from "@/assets/js/utils.js";
-import { Toast } from "vant";
+import { showToast } from "vant";
 import Clipboard from "clipboard";
 export default {
   name: "RechargeRecord",
@@ -68,13 +68,13 @@ export default {
     const copy = (id) => {
       let clipboard = new Clipboard(".copy" + id);
       clipboard.on("success", () => {
-        Toast("复制成功！"); // 释放内存
+        showToast("复制成功！"); // 释放内存
 
         clipboard.destroy();
       });
       clipboard.on("error", () => {
         // 不支持复制
-        Toast("该浏览器不支持自动复制"); // 释放内存
+        showToast("该浏览器不支持自动复制"); // 释放内存
 
         clipboard.destroy();
       });
@@ -170,7 +170,7 @@ export default {
       class: "head_title",
     };
     const _hoisted_20 = {
-      class: "cont_body",
+      class: "",
     };
 
     console.log({
@@ -357,7 +357,7 @@ export default {
                           {
                             size: "22",
                             name: "arrow-left",
-                            onClick: close.value,
+                            onClick: close,
                           },
                           null,
                           8,
@@ -369,7 +369,7 @@ export default {
                     _createVNode(
                       _component_share_freeWatch,
                       {
-                        onClose: close.value,
+                        onClose: close,
                       },
                       null,
                       8,

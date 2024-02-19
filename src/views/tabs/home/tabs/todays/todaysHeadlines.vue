@@ -139,7 +139,7 @@ const _hoisted_2 = {
 };
 const _hoisted_3 = ["onClick"];
 const _hoisted_4 = {
-  class: "video_box"
+  class: "video_box video_box_home"
 };
 const _hoisted_5 = {
   class: "text_title text_ellipsis"
@@ -265,3 +265,10 @@ const _hoisted_18 = ["onClick"];
 
 };
 </script>
+<style>
+.video_box_home {
+  overflow-y: hidden;
+  padding: 0;
+  position: relative;
+}
+</style>

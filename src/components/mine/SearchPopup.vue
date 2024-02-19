@@ -54,20 +54,20 @@ export default {
     let videoId = ref("");
     const showLoading = ref(true);
     const searchText = computed(() => {
-      // 计算属性初始化加10
-      return ref(props.searchText);
+      
+      return props.searchText;
     });
     const label_id = computed(() => {
-      // 计算属性初始化加10
-      return ref(props.label_id);
+      
+      return props.label_id;
     });
     const menu_id = computed(() => {
-      // 计算属性初始化加10
-      return ref(props.menu_id);
+      
+      return props.menu_id;
     });
     const label_name = computed(() => {
-      // 计算属性初始化加10
-      return ref(props.label_name);
+      
+      return props.label_name;
     }); // const searchText = ref(props.searchText);
 
     const detailsTitle = ref("");
@@ -81,14 +81,14 @@ export default {
         finished.value = false;
       }
 
-      detailsTitle.value = "#" + searchText.value.value;
+      detailsTitle.value = "#" + searchText.value;
 
-      if (!label_id.value.value) {
-        if (menu_id.value.value) {
-          detailsTitle.value = searchText.value.value;
+      if (!label_id.value) {
+        if (menu_id.value) {
+          detailsTitle.value = searchText.value;
           menuTypeApi(
             {
-              menu_id: menu_id.value.value,
+              menu_id: menu_id.value,
               page: page.value,
             },
             "get"
@@ -104,10 +104,10 @@ export default {
               }
             }
           });
-        } else if (label_name.value.value) {
+        } else if (label_name.value) {
           labelSearchApi(
             {
-              label_name: label_name.value.value,
+              label_name: label_name.value,
               page: page.value,
             },
             "get"
@@ -126,7 +126,7 @@ export default {
         } else {
           searchApi(
             {
-              data: searchText.value.value,
+              data: searchText.value,
               page: page.value,
             },
             "get"
@@ -143,8 +143,8 @@ export default {
       } else {
         labelTypeApi(
           {
-            label_id: label_id.value.value,
-            menu_id: menu_id.value.value,
+            label_id: label_id.value,
+            menu_id: menu_id.value,
             page: page.value,
           },
           "get"
@@ -278,7 +278,7 @@ export default {
               {
                 size: "22",
                 name: "arrow-left",
-                onClick: close.value,
+                onClick: close,
               },
               null,
               8,

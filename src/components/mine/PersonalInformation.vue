@@ -18,7 +18,7 @@ import {
 
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
-import { Toast } from "vant";
+import { showToast, showLoadingToast } from "vant";
 import { getGlobalProperties } from "@/assets/js/utils.js";
 export default {
   name: "PersonalInformation",
@@ -56,20 +56,20 @@ export default {
 
     const okBtns = () => {
       if (pupupValue.value === "") {
-        Toast(popupText.value + "不能为空");
+        showToast(popupText.value + "不能为空");
       }
 
       if (popupText.value === "兑换码") {
         inviteSaveApi({
           invite_code: pupupValue.value,
         }).then((res) => {
-          Toast(res.message);
+          showToast(res.message);
         });
       } else {
         inviteSaveApi({
           invite_code: pupupValue.value,
         }).then((res) => {
-          Toast(res.message);
+          showToast(res.message);
         });
       }
 
@@ -103,7 +103,7 @@ export default {
       let formdate = new FormData();
       formdate.append("file", file.file);
       modifyTopImageApi(formdate).then((res) => {
-        Toast(res.message);
+        showToast(res.message);
 
         if (res.code === 0) {
           store.dispatch("getUserInfo");
@@ -117,11 +117,11 @@ export default {
 
     const okBtns2 = () => {
       if (email.value === "") {
-        Toast("邮箱账号不能为空");
+        showToast("邮箱账号不能为空");
         return;
       }
 
-      const toast = Toast.loading({
+      const toast = showLoadingToast({
         message: "更新中...",
         forbidClick: true,
         duration: 0,
@@ -129,7 +129,7 @@ export default {
       modifyEmailApi({
         email: email.value,
       }).then((res) => {
-        Toast(res.message);
+        showToast(res.message);
         toast.clear();
 
         if (res.code === 0) {
@@ -477,7 +477,7 @@ export default {
                           {
                             size: "22",
                             name: "arrow-left",
-                            onClick: close.value,
+                            onClick: close,
                           },
                           null,
                           8,
@@ -496,7 +496,7 @@ export default {
                     _createBlock(
                       _resolveDynamicComponent(detailsView.value),
                       {
-                        onClose: close.value,
+                        onClose: close,
                       },
                       null,
                       40,

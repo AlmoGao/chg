@@ -21,7 +21,7 @@ import _imports_1 from "@/assets/images/coin.png";
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import { getGlobalProperties } from "@/assets/js/utils.js";
-import { Toast } from "vant";
+import { showToast } from "vant";
 export default {
   props: {
     data: {
@@ -33,8 +33,8 @@ export default {
   setup(props) {
     const store = useStore();
     let dataItem = computed(() => {
-      // 计算属性初始化加10
-      return ref(props.data);
+      
+      return props.data;
     });
     const { askVideoWantApi } = getGlobalProperties().$api;
 
@@ -46,7 +46,7 @@ export default {
         ask_video_id: item.id,
       };
       askVideoWantApi(params, "get").then((res) => {
-        Toast(res.message);
+        showToast(res.message);
 
         if (res.code === 0) {
           item.isWant = !item.isWant;
@@ -213,7 +213,7 @@ export default {
                       {
                         key: 0,
                         class: _normalizeClass([
-                          "right",
+                          "right right-text",
                           dataItem.value.isWant ? "active" : "",
                         ]),
                         onClick:
@@ -336,3 +336,10 @@ export default {
   },
 };
 </script>
+
+<style>
+.right-text {
+  color: #fff!important;
+  font-size: 12px!important;
+}
+</style>

@@ -25,7 +25,7 @@ import _imports_0 from "@/assets/images/iconMember.png";
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import { getGlobalProperties, advertiseDetails } from "@/assets/js/utils.js";
-import { Toast } from "vant";
+import { showToast, showLoadingToast } from "vant";
 export default {
   setup(props) {
     const store = useStore();
@@ -65,11 +65,11 @@ export default {
 
     const okBtns2 = () => {
       if (email.value === "") {
-        Toast("邮箱账号不能为空");
+        showToast("邮箱账号不能为空");
         return;
       }
 
-      const toast = Toast.loading({
+      const toast = showLoadingToast({
         message: "更新中...",
         forbidClick: true,
         duration: 0,
@@ -77,7 +77,7 @@ export default {
       modifyEmailApi({
         email: email.value,
       }).then((res) => {
-        Toast(res.message);
+        showToast(res.message);
         toast.clear();
 
         if (res.code === 0) {
@@ -89,20 +89,20 @@ export default {
 
     const okBtns = () => {
       if (pupupValue.value === "") {
-        Toast(popupText.value + "不能为空");
+        showToast(popupText.value + "不能为空");
       }
 
       if (popupText.value === "兑换码") {
         inviteSaveApi({
           invite_code: pupupValue.value,
         }).then((res) => {
-          Toast(res.message);
+          showToast(res.message);
         });
       } else {
         inviteSaveApi({
           invite_code: pupupValue.value,
         }).then((res) => {
-          Toast(res.message);
+          showToast(res.message);
         });
       }
 
@@ -268,12 +268,12 @@ export default {
         location.href = gFQunUrl.value;
       } else {
         if (item.label === "兑换码" || item.label === "邀请码") {
-          // Toast("暂未开放");
+          // showToast("暂未开放");
           popupText.value = item.label;
           pupupValue.value = "";
           showDialog.value = true;
         } else {
-          Toast("暂未开放");
+          showToast("暂未开放");
         }
       }
     };
@@ -462,7 +462,7 @@ export default {
       class: "title",
     };
     const _hoisted_24 = {
-      class: "cont_body",
+      class: "",
     };
     const _hoisted_25 = {
       class: "dialog_content",
@@ -793,7 +793,7 @@ export default {
                               {
                                 size: "22",
                                 name: "arrow-left",
-                                onClick: close.value,
+                                onClick: close,
                               },
                               null,
                               8,
@@ -848,7 +848,7 @@ export default {
                           _resolveDynamicComponent(detailsView.value),
                           {
                             key: key.value,
-                            onClose: close.value,
+                            onClose: close,
                           },
                           null,
                           40,

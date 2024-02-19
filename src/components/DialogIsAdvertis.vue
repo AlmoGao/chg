@@ -28,7 +28,7 @@ export default {
     const store = useStore();
     const router = useRouter();
     const showDialogIsAdvertis = computed(() => {
-      // 计算属性初始化加10
+      
       return store.state.showDialogIsAdvertis;
     });
 

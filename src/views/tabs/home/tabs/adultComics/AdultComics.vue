@@ -222,7 +222,7 @@ export default {
               {
                 size: "22",
                 name: "arrow-left",
-                onClick: close.value,
+                onClick: close,
               },
               null,
               8,
@@ -267,7 +267,7 @@ export default {
                 class: "my-swipe",
                 onChange: change,
                 loop: false,
-                ref: "swiper",
+                ref: el => swiper.value = el,
                 "show-indicators": false,
               },
               {
@@ -442,7 +442,7 @@ export default {
                     _component_comics_item_details,
                     {
                       comics_id: comics_id.value,
-                      onClose: close.value,
+                      onClose: close,
                       key: key.value,
                     },
                     null,

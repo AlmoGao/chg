@@ -38,8 +38,8 @@ const _hoisted_3 = {
   class: "details_page",
 };
 const _hoisted_4 = {
-  class: "cont_body",
-  id: "cont_body",
+  // class: "cont_body",
+  // id: "cont_body",
 };
 const _hoisted_5 = {
   class: "start_content",
@@ -117,11 +117,11 @@ export default {
     const showDialog = ref(false);
     let bottomBannerList = ref([]);
     let showDetailsPopul = computed(() => {
-      // 计算属性初始化加10
+      
       return store.state.showLoginPopup;
     });
     const showDialogIsVip = computed(() => {
-      // 计算属性初始化加10
+      
       return store.state.showKtVip;
     });
     const { bannerApi, noticeApi, checkSidApi, startApi, advertiseApi } =
@@ -234,7 +234,6 @@ export default {
     const getNoticeList = () => {
       noticeApi("", "get").then((res) => {
         document.getElementById("loading").style.display = "none";
-        showDialogStart.value = true;
 
         if (res.code === 0) {
           noticeList.value = res.data.rows;
@@ -636,3 +635,20 @@ export default {
   },
 };
 </script>
+
+<style>
+
+.food_tabbar {
+    background-color: #282828;
+    padding-bottom: 5px
+}
+
+.food_tabbar .van-tabbar-item--active {
+    background-color: #282828
+}
+
+.tab_icon {
+    width: 25px!important;
+    height: 25px!important;
+}
+</style>

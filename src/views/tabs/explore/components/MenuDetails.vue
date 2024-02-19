@@ -37,12 +37,12 @@ export default {
   setup(props, { emit }) {
     const store = useStore();
     const searchText = computed(() => {
-      // 计算属性初始化加10
-      return ref(props.searchText);
+      
+      return props.searchText;
     });
     const menu_id = computed(() => {
-      // 计算属性初始化加10
-      return ref(props.menu_id);
+      
+      return props.menu_id;
     });
     let isFocus = computed(() => {
       return store.state.userInfo.focus_user.split(",");
@@ -56,11 +56,11 @@ export default {
     let detailsTitle = ref("");
 
     const getVideoList = () => {
-      detailsTitle = searchText.value.value;
+      detailsTitle = searchText.value;
       newApi(
         {
           page: page.value,
-          menu_id: menu_id.value.value,
+          menu_id: menu_id.value,
         },
         "get"
       ).then((res) => {
@@ -282,7 +282,7 @@ export default {
                 {
                   size: "22",
                   name: "arrow-left",
-                  onClick: close.value,
+                  onClick: close,
                 },
                 null,
                 8,

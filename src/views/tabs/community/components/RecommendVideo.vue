@@ -24,7 +24,7 @@ import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import SelectVideo from "./SelectVideo.vue";
 import { getGlobalProperties } from "@/assets/js/utils.js";
-import { Toast } from "vant";
+import { showToast } from "vant";
 export default {
   props: ["id"],
   components: {
@@ -54,12 +54,12 @@ export default {
 
     const submit = () => {
       if (recommendVideoList.value.length === 0) {
-        Toast("请选择视频");
+        showToast("请选择视频");
         return;
       }
 
       if (recommendVideoList.value.length > 10) {
-        Toast("最多推荐十个视频噢！");
+        showToast("最多推荐十个视频噢！");
         return;
       }
 
@@ -73,7 +73,7 @@ export default {
       });
       params.video_id = video_id.join(",");
       askVideoSubmitApi(params, "get").then((res) => {
-        Toast(res.message);
+        showToast(res.message);
 
         if (res.code === 0) {
           store.commit("SET_RECOMMEND_VIDEO_LIST", []);
@@ -376,7 +376,7 @@ export default {
                       {
                         key: key.value,
                         type: type.value,
-                        onClose: close.value,
+                        onClose: close,
                       },
                       null,
                       8,

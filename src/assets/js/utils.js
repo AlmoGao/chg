@@ -10,7 +10,7 @@ import CryptoJS from "crypto-js";
 // import { useRouter } from "vue-router";
 let Base64 = require("js-base64").Base64;
 import router from "@/router";
-import { Toast } from "vant";
+import { showToast } from "vant";
 import { getCurrentInstance } from "vue";
 import store from "@/store";
 import API from "./api";
@@ -50,7 +50,7 @@ export const getImageUrl = (name) => {
  */
 
 export const showMessage = (message, type) => {
-  Toast({
+  showToast({
     type,
     message,
   });

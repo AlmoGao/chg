@@ -18,10 +18,10 @@ import {
 } from "vue";
 import _imports_0 from "@/assets/images/community/icon_see_num.png";
 import _imports_1 from "@/assets/images/community/icon_like_tag.png";
-import { ref, computed } from "vue"; // import { api as viewerApi } from "v-viewer";
+import { computed } from "vue"; // import { api as viewerApi } from "v-viewer";
 
 import { getGlobalProperties } from "@/assets/js/utils.js";
-import { Toast } from "vant";
+import { showToast } from "vant";
 import { useStore } from "vuex";
 export default {
   props: {
@@ -35,10 +35,9 @@ export default {
     const store = useStore();
     const { focusSaveApi, headLineCommentLikeApi } = getGlobalProperties().$api;
     let dataItem = computed(() => {
-      // 计算属性初始化加10
-      return ref(props.data);
+      
+      return props.data;
     });
-
     const toAutorDetails = (item) => {
       if (item.isFocus === "null") return;
       store.commit("SET_LOGIN_POPUP", {
@@ -56,7 +55,7 @@ export default {
         user_id: item.user_id,
       };
       focusSaveApi(params, "get").then((res) => {
-        // Toast(res.message);
+        // showToast(res.message);
         if (res.code === 0) {
           item.isFocus = !item.isFocus;
           store.dispatch("getUserInfo");
@@ -71,7 +70,7 @@ export default {
         },
         "get"
       ).then((res) => {
-        Toast(res.message);
+        showToast(res.message);
 
         if (res.code === 0) {
           item.like_num++;
@@ -96,7 +95,7 @@ export default {
       class: "left",
     };
     const _hoisted_5 = {
-      class: "right",
+      class: "right mini-follow",
     };
     const _hoisted_6 = {
       class: "cont_details",

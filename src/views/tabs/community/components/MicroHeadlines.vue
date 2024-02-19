@@ -270,7 +270,7 @@ export default {
                 onChange: change,
                 "stop-propagation": stopPropagation.value,
                 loop: false,
-                ref: "swiper",
+                ref: el => swiper.value = el,
                 "show-indicators": false,
               },
               {
@@ -453,7 +453,7 @@ export default {
                       {
                         size: "22",
                         name: "arrow-left",
-                        onClick: close.value,
+                        onClick: close,
                       },
                       null,
                       8,

@@ -11,7 +11,7 @@ import {
 
 import { ref } from "vue";
 import { getGlobalProperties } from "@/assets/js/utils.js";
-import { Toast } from "vant";
+import { showToast } from "vant";
 export default {
   name: "SetPassword",
 
@@ -24,15 +24,15 @@ export default {
 
     const editPwd = () => {
       if (!params.value.password || !params.value.re_password) {
-        Toast("请输入密码");
+        showToast("请输入密码");
         return;
       }
 
       modifyPasswordApi(params.value).then((res) => {
         if (res.code === 0) {
-          Toast("修改成功");
+          showToast("修改成功");
         } else {
-          Toast(res.message);
+          showToast(res.message);
         }
       });
     };

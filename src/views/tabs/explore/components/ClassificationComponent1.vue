@@ -38,6 +38,7 @@ export default {
 
     const tabItemClick = (item, index) => {
       activeIndex.value = index;
+      console.error('????3333', swipe.value)
       swipe.value.swipeTo(index);
     };
 
@@ -205,7 +206,7 @@ export default {
                     _component_search_popup,
                     {
                       searchText: searchText.value,
-                      onClose: close.value,
+                      onClose: close,
                     },
                     null,
                     8,

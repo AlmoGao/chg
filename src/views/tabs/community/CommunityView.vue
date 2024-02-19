@@ -14,7 +14,7 @@ import _imports_1 from "@/assets/images/publishIcon.png";
 
 import { ref } from "vue";
 import { useStore } from "vuex";
-import { Dialog } from "vant";
+import { showDialog } from "vant";
 import SwipeComponent from "../home/tabs/common/SwipeComponent.vue";
 import AskForVideo from "./components/AskForVideo.vue";
 import MicroHeadlines from "./components/MicroHeadlines.vue";
@@ -38,7 +38,7 @@ export default {
     };
 
     const releaseValue = () => {
-      Dialog.alert({
+      showDialog({
         title: "温馨提示",
         showCancelButton: true,
         confirmButtonText: "下载APP",

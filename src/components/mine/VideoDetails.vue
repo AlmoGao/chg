@@ -38,7 +38,7 @@ import {
   getMyDate,
   advertiseDetails,
 } from "@/assets/js/utils.js";
-import { Toast, Dialog } from "vant";
+import { showToast, showDialog as showDialog2, showConfirmDialog } from "vant";
 import AskForVideoDetails from "@/views/tabs/community/components/AskForVideoDetails.vue";
 export default {
   name: "VideoDetails",
@@ -183,7 +183,7 @@ export default {
             const currentTime = parseInt(this.currentTime()); // console.log(currentTime, detailsData.value.end);
 
             if (currentTime >= detailsData.value.end) {
-              Dialog.alert({
+              showDialog2({
                 title: "温馨提示",
                 className: "videoDialog",
                 message: `试看已结束！`,
@@ -198,7 +198,7 @@ export default {
 
         player.on("ended", () => {
           if (detailsData.value.play === 0 && detailsData.value.has_buy === 0) {
-            Dialog.confirm({
+            showConfirmDialog({
               title: "温馨提示",
               className: "videoDialog",
               message: `试看已结束，${detailsData.value.money}赏银，即可解锁完整视频哦！`,
@@ -209,12 +209,12 @@ export default {
                 };
                 payApi(params, "get").then((res) => {
                   if (res.code === 0) {
-                    Toast(res.message);
+                    showToast(res.message);
                     setTimeout(() => {
                       videoDetails(store.state.videoDetails.id);
                     }, 2000);
                   } else {
-                    Toast(res.message);
+                    showToast(res.message);
                   }
                 });
               })
@@ -326,15 +326,15 @@ export default {
       likeApi(params, "get").then((res) => {
         if (res.code === 0) {
           if (!detailsData.value.isLike) {
-            Toast("添加喜欢成功！");
+            showToast("添加喜欢成功！");
           } else {
-            Toast("取消喜欢成功！");
+            showToast("取消喜欢成功！");
           }
 
           detailsData.value.isLike = !detailsData.value.isLike;
           store.dispatch("getUserInfo");
         } else {
-          Toast("添加失败！");
+          showToast("添加失败！");
         }
       });
     };
@@ -379,7 +379,7 @@ export default {
         message: message.value,
       };
       commentSaveApi(params).then((res) => {
-        Toast(res.message);
+        showToast(res.message);
       });
     };
 
@@ -407,7 +407,7 @@ export default {
         user_id: detailsData.value.user_id,
       };
       focusSaveApi(params, "get").then((res) => {
-        // Toast(res.message);
+        // showToast(res.message);
         if (res.code === 0) {
           detailsData.value.isFocus = !detailsData.value.isFocus;
           store.dispatch("getUserInfo");
@@ -416,7 +416,7 @@ export default {
     };
 
     const showDetailsPopul = computed(() => {
-      // 计算属性初始化加10
+      
       return store.state.showLoginPopup;
     });
     watch(showDetailsPopul, () => {
@@ -507,7 +507,7 @@ export default {
       }
 
       feedbackSaveApi(params).then((res) => {
-        Toast(res.message);
+        showToast(res.message);
       });
       console.log(checked);
     };
@@ -678,7 +678,7 @@ export default {
     };
     const _hoisted_33 = ["onClick"];
     const _hoisted_34 = {
-      class: "info-recommend",
+      class: "info-recommend-detail",
     };
 
     const _hoisted_35 = /*#__PURE__*/ _withScopeId(() =>
@@ -882,7 +882,7 @@ export default {
               {
                 size: "22",
                 name: "arrow-left",
-                onClick: close.value,
+                onClick: close,
               },
               null,
               8,

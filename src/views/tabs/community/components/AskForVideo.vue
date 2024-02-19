@@ -558,7 +558,7 @@ export default {
               {
                 class: "my-swipe",
                 onChange: change,
-                ref: "swiper",
+                ref: el => swiper.value = el,
                 "stop-propagation": stopPropagation.value,
                 loop: false,
                 "show-indicators": false,
@@ -868,7 +868,7 @@ export default {
                       {
                         size: "22",
                         name: "arrow-left",
-                        onClick: close.value,
+                        onClick: close,
                       },
                       null,
                       8,

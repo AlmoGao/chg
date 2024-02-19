@@ -14,7 +14,7 @@ import {
 import { useStore } from "vuex";
 import { ref } from "vue";
 import { getGlobalProperties } from "@/assets/js/utils.js";
-import { Toast } from "vant";
+import { showToast } from "vant";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Login",
@@ -37,12 +37,12 @@ export default {
 
     const register = () => {
       if (!params.value.username) {
-        Toast("请输入账号/手机号");
+        showToast("请输入账号/手机号");
         return;
       }
 
       if (!params.value.password) {
-        Toast("请输入密码");
+        showToast("请输入密码");
         return;
       }
 
@@ -54,11 +54,11 @@ export default {
           if (res.code === 0) {
             window.location = "/";
           } else {
-            Toast(res.message);
+            showToast(res.message);
           }
         });
       } else {
-        Toast("您已经注册过了"); // params.value.nickname = getRandomName();
+        showToast("您已经注册过了"); // params.value.nickname = getRandomName();
         // registerAPI(params.value).then((res) => {
         //   console.log(res);
         //   if (res.code === 0) {
@@ -66,7 +66,7 @@ export default {
         //     store.commit("SET_USER_INFO", res.data);
         //     window.location = "/";
         //   } else {
-        //     Toast(res.message);
+        //     showToast(res.message);
         //   }
         // });
       }
@@ -74,12 +74,12 @@ export default {
 
     const login = () => {
       if (!params.value.username) {
-        Toast("请输入账号/手机号");
+        showToast("请输入账号/手机号");
         return;
       }
 
       if (!params.value.password) {
-        Toast("请输入密码");
+        showToast("请输入密码");
         return;
       }
 
@@ -91,7 +91,7 @@ export default {
           store.commit("SET_HG_OAUTH_ID", "login");
           window.location = "/";
         } else {
-          Toast(res.message);
+          showToast(res.message);
         }
       });
     };
@@ -182,7 +182,7 @@ export default {
               {
                 size: "22",
                 name: "arrow-left",
-                onClick: close.value,
+                onClick: close,
               },
               null,
               8,

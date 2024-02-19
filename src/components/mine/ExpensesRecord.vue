@@ -169,7 +169,7 @@ export default {
       class: "head_title",
     };
     const _hoisted_10 = {
-      class: "cont_body",
+      class: "",
     };
     return (_ctx, _cache) => {
       const _component_van_popover = _resolveComponent("van-popover");
@@ -326,7 +326,7 @@ export default {
                           {
                             size: "22",
                             name: "arrow-left",
-                            onClick: close.value,
+                            onClick: close,
                           },
                           null,
                           8,
@@ -338,7 +338,7 @@ export default {
                     _createVNode(
                       _component_share_freeWatch,
                       {
-                        onClose: close.value,
+                        onClose: close,
                       },
                       null,
                       8,

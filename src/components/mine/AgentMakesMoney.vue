@@ -18,7 +18,7 @@ import _imports_0 from "@/assets/images/mine/makeMoneyAd.jpg";
 
 import { ref, computed } from "vue";
 import { getGlobalProperties } from "@/assets/js/utils.js";
-import { Toast } from "vant";
+import { showToast } from "vant";
 import { useStore } from "vuex";
 export default {
   name: "AgentMakesMoney",
@@ -43,7 +43,7 @@ export default {
         if (res.code === 0) {
           commissioDetails.value = res.data;
         } else {
-          Toast(res.message);
+          showToast(res.message);
         }
       });
     };

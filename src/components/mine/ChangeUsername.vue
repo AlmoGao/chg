@@ -12,7 +12,7 @@ import {
 import { ref, computed } from "vue";
 import { getGlobalProperties } from "@/assets/js/utils.js";
 import { useStore } from "vuex";
-import { Toast } from "vant";
+import { showToast } from "vant";
 export default {
   name: "ChangeUsername",
 
@@ -30,7 +30,7 @@ export default {
 
     const modifyNickname = () => {
       if (!nickname.value) {
-        Toast("请输入昵称");
+        showToast("请输入昵称");
         return;
       }
 
@@ -40,7 +40,7 @@ export default {
         },
         "get"
       ).then((res) => {
-        Toast(res.message);
+        showToast(res.message);
 
         if (res.code === 0) {
           store.dispatch("getUserInfo");

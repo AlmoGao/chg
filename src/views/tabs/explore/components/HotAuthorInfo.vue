@@ -45,25 +45,25 @@ export default {
       return store.state.userInfo.focus_user.split(",");
     });
     const searchText = computed(() => {
-      // 计算属性初始化加10
-      return ref(props.searchText);
+      
+      return props.searchText;
     });
     const user_id = computed(() => {
-      // 计算属性初始化加10
-      return ref(props.id);
+      
+      return props.id;
     });
 
     const getAuthorInfo = () => {
-      detailsTitle.value = searchText.value.value;
+      detailsTitle.value = searchText.value;
       autoerVideoApi(
         {
-          user_id: user_id.value.value,
+          user_id: user_id.value,
           page: page.value,
         },
         "get"
       ).then((res) => {
         if (res.code === 0) {
-          res.data.isFocus = isFocus.value.includes(user_id.value.value + "");
+          res.data.isFocus = isFocus.value.includes(user_id.value + "");
           authorInfo.value = res.data;
           videoList.value = videoList.value.concat(res.data.rows.rows);
           loading.value = false;
@@ -96,7 +96,7 @@ export default {
       //   return;
       // }
       const params = {
-        user_id: user_id.value.value,
+        user_id: user_id.value,
       };
       focusSaveApi(params, "get").then((res) => {
         // Toast(res.message);
@@ -269,7 +269,7 @@ export default {
               {
                 size: "22",
                 name: "arrow-left",
-                onClick: close.value,
+                onClick: close,
               },
               null,
               8,

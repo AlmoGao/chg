@@ -29,7 +29,7 @@ import _imports_4 from "@/assets/images/mine/video_detail_send.png";
 
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
-import { Toast } from "vant";
+import { showToast } from "vant";
 import { getGlobalProperties, getMyDate } from "@/assets/js/utils.js";
 export default {
   props: ["id"],
@@ -100,7 +100,7 @@ export default {
         user_id: item.user_id,
       };
       focusSaveApi(params, "get").then((res) => {
-        // Toast(res.message);
+        // showToast(res.message);
         if (res.code === 0) {
           detailData.value.isFocus = !detailData.value.isFocus;
           store.dispatch("getUserInfo");
@@ -115,7 +115,7 @@ export default {
         },
         "get"
       ).then((res) => {
-        Toast(res.message);
+        showToast(res.message);
 
         if (res.code === 0) {
           item.like_num++; // emit("childGetList");

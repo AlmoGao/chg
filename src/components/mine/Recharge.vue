@@ -19,7 +19,7 @@ import _imports_0 from "@/assets/images/mine/song.png";
 import { ref, computed } from "vue";
 import { getGlobalProperties } from "@/assets/js/utils.js";
 import { useStore } from "vuex";
-import { Toast } from "vant";
+import { showToast } from "vant";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Recharge",
@@ -76,7 +76,7 @@ export default {
           depositList.value = res.data.coin;
           vipList.value = res.data.vip_config;
         } else {
-          Toast(res.message);
+          showToast(res.message);
         }
       });
     };
@@ -137,7 +137,7 @@ export default {
         money.value = num;
         showPay.value = true;
       } else {
-        Toast("无可用充值渠道，请选择其它金额或稍后重试");
+        showToast("无可用充值渠道，请选择其它金额或稍后重试");
       }
     };
 
@@ -174,7 +174,7 @@ export default {
           showPay.value = false;
           window.open(res.data.url);
         } else {
-          Toast(res.message);
+          showToast(res.message);
         }
       });
     };
@@ -733,7 +733,7 @@ export default {
                       {
                         size: "22",
                         name: "arrow-left",
-                        onClick: close.value,
+                        onClick: close,
                       },
                       null,
                       8,
@@ -745,7 +745,7 @@ export default {
                     _createVNode(
                       _component_recharge_record,
                       {
-                        onClose: close.value,
+                        onClose: close,
                       },
                       null,
                       8,

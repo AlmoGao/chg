@@ -65,7 +65,6 @@ export default {
           res.data.rows.forEach((item) => {
             item.isFocus = isFocus.value.includes(item.user_id + "");
           });
-          console.log(111);
           emit("skeletonF");
 
           if (page.value === 1) {
@@ -206,7 +205,7 @@ export default {
     };
     const _hoisted_10 = ["onClick"];
     const _hoisted_11 = {
-      class: "video_box",
+      class: "video_box video_box_home",
     };
     const _hoisted_12 = {
       class: "text_title text_ellipsis",
@@ -538,3 +537,11 @@ export default {
   },
 };
 </script>
+
+<style>
+.video_box_home {
+  overflow-y: hidden;
+  padding: 0;
+  position: relative;
+}
+</style>

@@ -21,8 +21,8 @@ export default {
 
   setup(props, { emit }) {
     const dataItem = computed(() => {
-      // 计算属性初始化加10
-      return ref(props.data);
+      
+      return props.data;
     });
 
     const _withScopeId = (n) => (

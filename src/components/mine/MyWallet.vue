@@ -239,7 +239,7 @@ export default {
       class: "title",
     };
     const _hoisted_27 = {
-      class: "cont_body",
+      class: "",
     };
     console.log({
       props,
@@ -375,7 +375,7 @@ export default {
                           {
                             size: "22",
                             name: "arrow-left",
-                            onClick: close.value,
+                            onClick: close,
                           },
                           null,
                           8,
@@ -414,7 +414,7 @@ export default {
                       {
                         key: new Date().getTime(),
                         czActive: active.value,
-                        onClose: close.value,
+                        onClose: close,
                       },
                       null,
                       40,
