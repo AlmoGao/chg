@@ -15,6 +15,7 @@ import {
   resolveDirective as _resolveDirective,
   withDirectives as _withDirectives,
   createTextVNode as _createTextVNode,
+  normalizeClass as _normalizeClass,
   vModelText as _vModelText,
   vShow as _vShow,
   pushScopeId as _pushScopeId,
@@ -22,22 +23,40 @@ import {
 } from "vue";
 import _imports_0 from "@/assets/images/community/icon_see_num.png";
 import _imports_1 from "@/assets/images/community/icon_like_tag.png";
+import _imports_2 from "@/assets/images/community/icon_text_like_red.png";
+import _imports_3 from "@/assets/images/community/icon_message_num.png";
 import _imports_4 from "@/assets/images/mine/video_detail_send.png";
 
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
-import { getGlobalProperties } from "@/assets/js/utils.js";
+import { Toast } from "vant";
+import { getGlobalProperties, getMyDate } from "@/assets/js/utils.js";
 export default {
   props: ["id"],
 
-  setup(props) {
+  setup(props, { emit }) {
     const store = useStore();
-    const { headLineDetailApi } = getGlobalProperties().$api;
+    const { headLineDetailApi, focusSaveApi, headLineCommentLikeApi } =
+      getGlobalProperties().$api;
     let detailData = ref("");
+    let showInput = ref(false);
+    let message = ref("");
     const showLoading = ref(false);
+
+    const toAutorDetails = (item) => {
+      if (item.isFocus === "null") return;
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: "HotAuthorInfo",
+      });
+      store.commit("SET_VIDEO_DETAILS", item);
+    };
 
     let isFocus = computed(() => {
       return store.state.userInfo.focus_user.split(",");
+    });
+    const fileUrl = computed(() => {
+      return store.state.userInfo.top_image;
     });
 
     const getHeadLineDetail = () => {
@@ -63,6 +82,46 @@ export default {
     };
 
     getHeadLineDetail();
+
+    const inputSend = () => {
+      message.value = "";
+      showInput.value = true;
+    };
+
+    const send = () => {
+      showInput.value = false;
+    };
+
+    const focusSave = (item) => {
+      // if (item.isFocus) {
+      //   return;
+      // }
+      const params = {
+        user_id: item.user_id,
+      };
+      focusSaveApi(params, "get").then((res) => {
+        // Toast(res.message);
+        if (res.code === 0) {
+          detailData.value.isFocus = !detailData.value.isFocus;
+          store.dispatch("getUserInfo");
+        }
+      });
+    };
+
+    const getHeadLineCommentLike = (item) => {
+      headLineCommentLikeApi(
+        {
+          head_lines_id: item.id,
+        },
+        "get"
+      ).then((res) => {
+        Toast(res.message);
+
+        if (res.code === 0) {
+          item.like_num++; // emit("childGetList");
+        }
+      });
+    };
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-2a993d4a"), (n = n()), _popScopeId(), n
@@ -122,6 +181,115 @@ export default {
       )
     );
 
+    const _hoisted_12 = {
+      key: 2,
+      class: "pl_box",
+    };
+
+    const _hoisted_13 = /*#__PURE__*/ _withScopeId(() =>
+      /*#__PURE__*/ _createElementVNode(
+        "p",
+        {
+          class: "pl_title",
+        },
+        "评论 8",
+        -1
+      )
+    );
+
+    const _hoisted_14 = {
+      class: "pl_top",
+    };
+    const _hoisted_15 = {
+      class: "img_box",
+    };
+    const _hoisted_16 = ["onClick"];
+    const _hoisted_17 = {
+      class: "left_img_box",
+    };
+
+    const _hoisted_18 = /*#__PURE__*/ _withScopeId(() =>
+      /*#__PURE__*/ _createElementVNode(
+        "div",
+        {
+          class: "right_text",
+        },
+        [
+          /*#__PURE__*/ _createElementVNode(
+            "div",
+            {
+              class: "left",
+            },
+            [
+              /*#__PURE__*/ _createElementVNode("p", null, "烂漫笑冬瓜"),
+              /*#__PURE__*/ _createElementVNode("p", null, "0粉丝"),
+            ]
+          ),
+        ],
+        -1
+      )
+    );
+
+    const _hoisted_19 = {
+      class: "cont_details",
+    };
+
+    const _hoisted_20 = /*#__PURE__*/ _withScopeId(() =>
+      /*#__PURE__*/ _createElementVNode(
+        "p",
+        {
+          class: "cont_text",
+        },
+        " 城市，联系方式城市，联系方式城市，联系方式城市，联系方式城市，联系方式城市，联系方式城市，联系方式城市，联系方式城市，联系方式 ",
+        -1
+      )
+    );
+
+    const _hoisted_21 = {
+      class: "bottom",
+    };
+
+    const _hoisted_22 = /*#__PURE__*/ _withScopeId(() =>
+      /*#__PURE__*/ _createElementVNode("div", null, "4天前", -1)
+    );
+
+    const _hoisted_23 = /*#__PURE__*/ _withScopeId(() =>
+      /*#__PURE__*/ _createElementVNode(
+        "div",
+        {
+          // eslint-disable-next-line
+          class: /*#__PURE__*/ _normalizeClass(true ? "color" : ""),
+        },
+        [
+          /*#__PURE__*/ _createElementVNode("img", {
+            src: _imports_2,
+            alt: "",
+          }),
+          /*#__PURE__*/ _createTextVNode(
+            " " + /*#__PURE__*/ _toDisplayString(0)
+          ),
+        ],
+        -1
+      )
+    );
+
+    const _hoisted_24 = /*#__PURE__*/ _withScopeId(() =>
+      /*#__PURE__*/ _createElementVNode(
+        "img",
+        {
+          src: _imports_3,
+          alt: "",
+        },
+        null,
+        -1
+      )
+    );
+
+    const _hoisted_25 = /*#__PURE__*/ _createTextVNode(
+      " " + /*#__PURE__*/ _toDisplayString(0)
+    );
+
+    const _hoisted_26 = [_hoisted_24, _hoisted_25];
     const _hoisted_27 = {
       class: "video-detail-input",
     };
@@ -139,7 +307,23 @@ export default {
         -1
       )
     );
-    return (ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      toAutorDetails,
+      detailData,
+      getMyDate,
+      fileUrl,
+      showInput,
+      send,
+      message,
+      inputSend,
+      focusSave,
+      getHeadLineCommentLike,
+      showLoading,
+      emit,
+    });
+
+    return (_ctx, _cache) => {
       const _component_Loading = _resolveComponent("Loading");
 
       const _component_my_image = _resolveComponent("my-image");
@@ -152,13 +336,13 @@ export default {
           _Fragment,
           null,
           [
-            $setup.showLoading
+            showLoading.value
               ? (_openBlock(),
                 _createBlock(_component_Loading, {
                   key: 0,
                 }))
               : _createCommentVNode("", true),
-            $setup.detailData
+            detailData.value
               ? (_openBlock(),
                 _createElementBlock("div", _hoisted_1, [
                   _createElementVNode(
@@ -168,14 +352,14 @@ export default {
                       onClick:
                         _cache[1] ||
                         (_cache[1] = () =>
-                          $setup.toAutorDetails($setup.detailData)),
+                          toAutorDetails(detailData.value)),
                     },
                     [
                       _createElementVNode("div", _hoisted_2, [
                         _createVNode(
                           _component_my_image,
                           {
-                            url: $setup.detailData.user_image,
+                            url: detailData.value.user_image,
                           },
                           null,
                           8,
@@ -187,20 +371,20 @@ export default {
                           _createElementVNode(
                             "p",
                             null,
-                            _toDisplayString($setup.detailData.nickname),
+                            _toDisplayString(detailData.value.nickname),
                             1
                           ),
                           _createElementVNode(
                             "p",
                             null,
                             _toDisplayString(
-                              $setup.getMyDate($setup.detailData.created, 2)
+                              getMyDate(detailData.value.created, 2)
                             ),
                             1
                           ),
                         ]),
                         _createElementVNode("div", _hoisted_5, [
-                          $setup.detailData.isFocus !== "null"
+                          detailData.value.isFocus !== "null"
                             ? (_openBlock(),
                               _createElementBlock(
                                 "span",
@@ -209,17 +393,18 @@ export default {
                                   onClick:
                                     _cache[0] ||
                                     (_cache[0] = _withModifiers(
-                                      () => $setup.focusSave($setup.detailData),
+                                      () =>
+                                        focusSave(detailData.value),
                                       ["stop"]
                                     )),
                                   style: _normalizeStyle({
-                                    color: $setup.detailData.isFocus
+                                    color: detailData.value.isFocus
                                       ? "#999"
                                       : "#fd5c18",
                                   }),
                                 },
                                 _toDisplayString(
-                                  $setup.detailData.isFocus ? "已关注" : "关注"
+                                  detailData.value.isFocus ? "已关注" : "关注"
                                 ),
                                 5
                               ))
@@ -232,17 +417,17 @@ export default {
                     _createElementVNode(
                       "p",
                       _hoisted_7,
-                      _toDisplayString($setup.detailData.content),
+                      _toDisplayString(detailData.value.content),
                       1
                     ),
-                    $setup.detailData.images.length
+                    detailData.value.images.length
                       ? (_openBlock(),
                         _createElementBlock("div", _hoisted_8, [
                           (_openBlock(true),
                           _createElementBlock(
                             _Fragment,
                             null,
-                            _renderList($setup.detailData.images, (item) => {
+                            _renderList(detailData.value.images, (item) => {
                               return _withDirectives(
                                 (_openBlock(),
                                 _createElementBlock(
@@ -274,7 +459,7 @@ export default {
                       _createElementVNode("div", null, [
                         _hoisted_10,
                         _createTextVNode(
-                          " " + _toDisplayString($setup.detailData.count),
+                          " " + _toDisplayString(detailData.value.count),
                           1
                         ),
                       ]),
@@ -284,12 +469,12 @@ export default {
                           onClick:
                             _cache[2] ||
                             (_cache[2] = () =>
-                              $setup.getHeadLineCommentLike($setup.detailData)),
+                              getHeadLineCommentLike(detailData.value)),
                         },
                         [
                           _hoisted_11,
                           _createTextVNode(
-                            " " + _toDisplayString($setup.detailData.like_num),
+                            " " + _toDisplayString(detailData.value.like_num),
                             1
                           ),
                         ]
@@ -298,7 +483,95 @@ export default {
                   ]),
                 ]))
               : _createCommentVNode("", true),
-            _createCommentVNode("", true),
+              // eslint-disable-next-line
+            false
+              ? (_openBlock(),
+                _createElementBlock("div", _hoisted_12, [
+                  _hoisted_13,
+                  _createElementVNode("div", _hoisted_14, [
+                    _createElementVNode("div", _hoisted_15, [
+                      _createVNode(
+                        _component_my_image,
+                        {
+                          url: fileUrl.value,
+                        },
+                        null,
+                        8,
+                        ["url"]
+                      ),
+                    ]),
+                    _createElementVNode(
+                      "div",
+                      {
+                        class: "input_box",
+                        onClick:
+                          _cache[3] ||
+                          (_cache[3] = (...args) =>
+                            inputSend && inputSend(...args)),
+                      },
+                      "是不是你的最爱，快来说两句"
+                    ),
+                  ]),
+                  (_openBlock(),
+                  _createElementBlock(
+                    _Fragment,
+                    null,
+                    _renderList(4, (item, index) => {
+                      return _createElementVNode(
+                        "div",
+                        {
+                          class: "pl_item item",
+                          key: index,
+                        },
+                        [
+                          _createElementVNode(
+                            "div",
+                            {
+                              class: "user_box",
+                              onClick: () => toAutorDetails(item),
+                            },
+                            [
+                              _createElementVNode("div", _hoisted_17, [
+                                _createVNode(
+                                  _component_my_image,
+                                  {
+                                    url: item,
+                                  },
+                                  null,
+                                  8,
+                                  ["url"]
+                                ),
+                              ]),
+                              _hoisted_18,
+                            ],
+                            8,
+                            _hoisted_16
+                          ),
+                          _createElementVNode("div", _hoisted_19, [
+                            _hoisted_20,
+                            _createElementVNode("div", _hoisted_21, [
+                              _hoisted_22,
+                              _hoisted_23,
+                              _createElementVNode(
+                                "div",
+                                {
+                                  onClick:
+                                    _cache[4] ||
+                                    (_cache[4] = (...args) =>
+                                      inputSend &&
+                                      inputSend(...args)),
+                                },
+                                _hoisted_26
+                              ),
+                            ]),
+                          ]),
+                        ]
+                      );
+                    }),
+                    64
+                  )),
+                ]))
+              : _createCommentVNode("", true),
             _withDirectives(
               _createElementVNode(
                 "div",
@@ -314,13 +587,13 @@ export default {
                           type: "text",
                           "onUpdate:modelValue":
                             _cache[5] ||
-                            (_cache[5] = ($event) => ($setup.message = $event)),
+                            (_cache[5] = ($event) => (message.value = $event)),
                           placeholder: "优质评论优先展示",
                         },
                         null,
                         512
                       ),
-                      [[_vModelText, $setup.message]]
+                      [[_vModelText, message.value]]
                     ),
                   ]),
                   _createElementVNode(
@@ -330,14 +603,14 @@ export default {
                       onClick:
                         _cache[6] ||
                         (_cache[6] = (...args) =>
-                          $setup.send && $setup.send(...args)),
+                          send && send(...args)),
                     },
                     "确定"
                   ),
                 ],
                 512
               ),
-              [[_vShow, $setup.showInput]]
+              [[_vShow, showInput.value]]
             ),
           ],
           64

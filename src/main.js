@@ -12,15 +12,16 @@ import "viewerjs/dist/viewer.css";
 import VueViewer from "v-viewer";
 import router from "./router";
 import { install } from "./assets/js/registComponents";
-import { installDirective } from "./directive";
+// import { installDirective } from "./directive";
 import api from "@/assets/js/api.js";
 import store from "@/store";
 import "./registerServiceWorker";
+import "./assets/css/index.css"
 // import "video.js/dist/video-js.css"; // 引入video.js的css
 // import hls from "videojs-contrib-hls"; // 播放hls流需要的插件
 const app = createApp(App);
 install(app);
-installDirective(app);
+// installDirective(app);
 app.config.globalProperties.$api = api;
 app.use(router);
 app.use(store);

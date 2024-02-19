@@ -12,6 +12,9 @@ import {
 import _imports_0 from "@/assets/images/everyday.png";
 import _imports_1 from "@/assets/images/publishIcon.png";
 
+import { ref } from "vue";
+import { useStore } from "vuex";
+import { Dialog } from "vant";
 import SwipeComponent from "../home/tabs/common/SwipeComponent.vue";
 import AskForVideo from "./components/AskForVideo.vue";
 import MicroHeadlines from "./components/MicroHeadlines.vue";
@@ -23,7 +26,30 @@ export default {
     MicroHeadlines,
   },
 
-  setup() {
+  setup(props) {
+    let active = ref(0);
+    const store = useStore();
+
+    const handleShowStack = (path) => {
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: path,
+      });
+    };
+
+    const releaseValue = () => {
+      Dialog.alert({
+        title: "温馨提示",
+        showCancelButton: true,
+        confirmButtonText: "下载APP",
+        cancelButtonText: "确认",
+        className: "okAlertPopup",
+        message: "请下载采花阁APP使用上传功能！",
+      }).then(() => {
+        window.open(store.state.baseUrl.h5_download_url);
+      });
+    };
+
     const _withScopeId = (n) => (
       _pushScopeId("data-v-52af4b28"), (n = n()), _popScopeId(), n
     );
@@ -67,7 +93,14 @@ export default {
     const _hoisted_7 = {
       class: "tab_cont webkit-overflow-scrolling-touch",
     };
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      active,
+      handleShowStack,
+      releaseValue,
+    });
+
+    return (_ctx, _cache) => {
       const _component_SwipeComponent = _resolveComponent("SwipeComponent");
 
       const _component_AskForVideo = _resolveComponent("AskForVideo");
@@ -87,7 +120,7 @@ export default {
               class: "everyday",
               onClick:
                 _cache[0] ||
-                (_cache[0] = () => $setup.handleShowStack("VideoMrtj")),
+                (_cache[0] = () => handleShowStack("VideoMrtj")),
             },
             _hoisted_3
           ),
@@ -98,16 +131,16 @@ export default {
               onClick:
                 _cache[1] ||
                 (_cache[1] = (...args) =>
-                  $setup.releaseValue && $setup.releaseValue(...args)),
+                  releaseValue && releaseValue(...args)),
             },
             _hoisted_5
           ),
           _createVNode(
             _component_van_tabs,
             {
-              active: $setup.active,
+              active: active.value,
               "onUpdate:active":
-                _cache[2] || (_cache[2] = ($event) => ($setup.active = $event)),
+                _cache[2] || (_cache[2] = ($event) => (active.value = $event)),
               "line-height": "0",
               swipeable: "",
               animated: "",

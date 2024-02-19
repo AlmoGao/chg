@@ -26,8 +26,10 @@ import _imports_1 from "@/assets/images/community/icon_send_video_tag_find.png";
 import _imports_2 from "@/assets/images/community/icon_right.png";
 import _imports_3 from "@/assets/images/community/icon_like_tag.png";
 
-import { ref } from "vue";
-import { getGlobalProperties } from "@/assets/js/utils.js";
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
+import { Toast, Dialog } from "vant";
+import { getGlobalProperties, getMyDate } from "@/assets/js/utils.js";
 import BountyList from "./BountyList.vue";
 import RecommendVideo from "./RecommendVideo.vue";
 export default {
@@ -38,11 +40,49 @@ export default {
   props: ["id", "isMy"],
 
   setup(props) {
-    const { askVideoDetailApi } = getGlobalProperties().$api;
+    const store = useStore();
+    const {
+      askVideoDetailApi,
+      askVideoRewardApi,
+      askVideoCommentListApi,
+      focusSaveApi,
+      askVideoCommentLikeApi,
+      askVideoConfirmApi,
+    } = getGlobalProperties().$api;
     let detailData = ref("");
+    let showDialog = ref(false);
+    let moneyValue = ref("");
     let time = ref(0);
+    let showDetailsPopul = ref(false);
+    let popupType = ref(1);
     let ask_video_id = ref("");
+    let key = ref(1);
+    let rxqzList = ref([]);
+    let finished = ref(false);
+    let error = ref(false);
+    let loading = ref(false);
+    let page = ref(0);
+    let total = ref(0);
+    let showVideoDetailsPopul = ref(false);
+    let videoId = ref("");
+    let type = ref(1);
     const showLoading = ref(false);
+    let isFocus = computed(() => {
+      return store.state.userInfo.focus_user.split(",");
+    });
+    let change_id = computed(() => {
+      console.log(props.isMy);
+      return store.state.userInfo.change_id;
+    });
+
+    const toAutorDetails = (item) => {
+      if (item.isWant === "null") return; // store.commit("SET_LOGIN_POPUP", { show: true, type: "HotAuthorInfo" });
+
+      store.commit("SET_VIDEO_DETAILS", item);
+      type.value = 2;
+      videoId.value = item.id;
+      showVideoDetailsPopul.value = true;
+    };
 
     const getAskVideoDetail = () => {
       showLoading.value = true;
@@ -63,6 +103,144 @@ export default {
     };
 
     getAskVideoDetail();
+
+    const getAskVideoCommentList = () => {
+      askVideoCommentListApi(
+        {
+          ask_video_id: props.id,
+          page: page.value,
+        },
+        "get"
+      ).then((res) => {
+        if (res.code === 0) {
+          total.value = res.data.total;
+          res.data.rows.forEach((item) => {
+            item.isFocus = isFocus.value.includes(item.user_id + "");
+          });
+          rxqzList.value = rxqzList.value.concat(res.data.rows);
+          loading.value = false;
+
+          if (res.data.rows.length === 0) {
+            finished.value = true;
+          }
+        }
+      });
+    }; // getAskVideoCommentList();
+
+    const onLoad = () => {
+      loading.value = true;
+      page.value++;
+      getAskVideoCommentList();
+    };
+
+    const showDsPopup = () => {
+      moneyValue.value = "";
+      showDialog.value = true;
+    };
+
+    const okBtns = () => {
+      if (moneyValue.value === "") {
+        Toast("打赏金额不能为空");
+        return;
+      }
+
+      const params = {
+        ask_video_id: props.id,
+        money: moneyValue.value,
+      };
+      askVideoRewardApi(params).then((res) => {
+        Toast(res.message);
+
+        if (res.code === 0) {
+          getAskVideoDetail();
+        }
+      });
+      showDialog.value = false;
+    };
+
+    const toBountyList = (type) => {
+      popupType.value = type;
+      key.value = Math.random();
+      store.commit("SET_RECOMMEND_VIDEO_LIST", []);
+      showDetailsPopul.value = true;
+    };
+
+    const close = () => {
+      showDetailsPopul.value = false;
+      getAskVideoDetail();
+      page.value = 1;
+      rxqzList.value = [];
+      getAskVideoCommentList();
+    };
+
+    const focusSave = (item) => {
+      // if (item.isFocus) {
+      //   return;
+      // }
+      const params = {
+        user_id: item.user_id,
+      };
+      focusSaveApi(params, "get").then((res) => {
+        // Toast(res.message);
+        if (res.code === 0) {
+          item.isFocus = !item.isFocus;
+          store.dispatch("getUserInfo");
+        }
+      });
+    };
+
+    const getAskVideoCommentLike = (item) => {
+      askVideoCommentLikeApi(
+        {
+          ask_video_id: item.id,
+        },
+        "get"
+      ).then((res) => {
+        Toast(res.message);
+
+        if (res.code === 0) {
+          item.like_num++;
+        }
+      });
+    };
+
+    const cainaF = (id) => {
+      Dialog.confirm({
+        theme: "round-button",
+        className: "myconfirm",
+        title: "采纳推荐者视频",
+        message: "赏金将会分给该推荐者",
+      })
+        .then(() => {
+          askVideoConfirmApi(
+            {
+              comment_id: id,
+            },
+            "get"
+          ).then((res) => {
+            Toast(res.message);
+
+            if (res.code === 0) {
+              getAskVideoDetail();
+            }
+          });
+        })
+        .catch(() => {
+          // on cancel
+        });
+    };
+
+    const videoPlay = (item) => {
+      // store.commit("SET_LOGIN_POPUP", { show: true, type: "VideoDetails" });
+      store.commit("SET_VIDEO_DETAILS", item);
+      type.value = 1;
+      videoId.value = item.id;
+      showVideoDetailsPopul.value = true;
+    };
+
+    const close1 = () => {
+      showVideoDetailsPopul.value = false;
+    };
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-33f2d3bf"), (n = n()), _popScopeId(), n
@@ -369,7 +547,41 @@ export default {
     const _hoisted_67 = {
       class: "cont_body",
     };
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      toAutorDetails,
+      detailData,
+      getMyDate,
+      okBtns,
+      showDialog,
+      moneyValue,
+      showDsPopup,
+      time,
+      close1,
+      showDetailsPopul,
+      showVideoDetailsPopul,
+      videoId,
+      type,
+      close,
+      toBountyList,
+      popupType,
+      ask_video_id,
+      key,
+      rxqzList,
+      total,
+      focusSave,
+      videoPlay,
+      finished,
+      error,
+      loading,
+      onLoad,
+      getAskVideoCommentLike,
+      change_id,
+      cainaF,
+      showLoading,
+    });
+
+    return (_ctx, _cache) => {
       const _component_Loading = _resolveComponent("Loading");
 
       const _component_my_image = _resolveComponent("my-image");
@@ -398,13 +610,13 @@ export default {
           _Fragment,
           null,
           [
-            $setup.showLoading
+            showLoading.value
               ? (_openBlock(),
                 _createBlock(_component_Loading, {
                   key: 0,
                 }))
               : _createCommentVNode("", true),
-            $setup.detailData
+            detailData.value
               ? (_openBlock(),
                 _createElementBlock("div", _hoisted_1, [
                   _createElementVNode(
@@ -414,7 +626,7 @@ export default {
                       onClick:
                         _cache[0] ||
                         (_cache[0] = _withModifiers(
-                          () => $setup.toAutorDetails($setup.detailData),
+                          () => toAutorDetails(detailData.value),
                           ["stop"]
                         )),
                     },
@@ -423,7 +635,7 @@ export default {
                         _createVNode(
                           _component_my_image,
                           {
-                            url: $setup.detailData.user_image,
+                            url: detailData.value.user_image,
                           },
                           null,
                           8,
@@ -435,13 +647,13 @@ export default {
                           _createElementVNode(
                             "p",
                             null,
-                            _toDisplayString($setup.detailData.nickname),
+                            _toDisplayString(detailData.value.nickname),
                             1
                           ),
                           _createElementVNode(
                             "p",
                             null,
-                            _toDisplayString($setup.detailData.want_num) +
+                            _toDisplayString(detailData.value.want_num) +
                               "人想看",
                             1
                           ),
@@ -450,7 +662,7 @@ export default {
                           "div",
                           _hoisted_5,
                           _toDisplayString(
-                            $setup.getMyDate($setup.detailData.created)
+                            getMyDate(detailData.value.created)
                           ),
                           1
                         ),
@@ -461,17 +673,17 @@ export default {
                     _createElementVNode(
                       "p",
                       _hoisted_7,
-                      _toDisplayString($setup.detailData.content),
+                      _toDisplayString(detailData.value.content),
                       1
                     ),
-                    $setup.detailData.image.length
+                    detailData.value.image.length
                       ? (_openBlock(),
                         _createElementBlock("div", _hoisted_8, [
                           (_openBlock(true),
                           _createElementBlock(
                             _Fragment,
                             null,
-                            _renderList($setup.detailData.image, (item) => {
+                            _renderList(detailData.value.image, (item) => {
                               return _withDirectives(
                                 (_openBlock(),
                                 _createElementBlock(
@@ -479,7 +691,7 @@ export default {
                                   {
                                     class: _normalizeClass(
                                       "details_img_" +
-                                        $setup.detailData.image.length
+                                        detailData.value.image.length
                                     ),
                                     key: item,
                                   },
@@ -503,14 +715,14 @@ export default {
                           )),
                         ]))
                       : _createCommentVNode("", true),
-                    $setup.detailData.video_title
+                    detailData.value.video_title
                       ? (_openBlock(),
                         _createElementBlock("div", _hoisted_9, [
                           _createElementVNode("div", _hoisted_10, [
                             _createVNode(
                               _component_my_image,
                               {
-                                url: $setup.detailData.video_image,
+                                url: detailData.value.video_image,
                               },
                               null,
                               8,
@@ -521,18 +733,18 @@ export default {
                             _createElementVNode(
                               "p",
                               null,
-                              _toDisplayString($setup.detailData.video_title),
+                              _toDisplayString(detailData.value.video_title),
                               1
                             ),
                             _createElementVNode(
                               "p",
                               null,
                               _toDisplayString(
-                                $setup.detailData.video_nickname
+                                detailData.value.video_nickname
                               ) +
                                 " " +
                                 _toDisplayString(
-                                  $setup.detailData.video_count
+                                  detailData.value.video_count
                                 ) +
                                 "次播放 ",
                               1
@@ -542,7 +754,7 @@ export default {
                       : _createCommentVNode("", true),
                   ]),
                   _createElementVNode("div", _hoisted_12, [
-                    $setup.detailData.money > 0
+                    detailData.value.money > 0
                       ? (_openBlock(),
                         _createElementBlock(
                           "div",
@@ -552,8 +764,8 @@ export default {
                             onClick:
                               _cache[1] ||
                               (_cache[1] = (...args) =>
-                                $setup.showDsPopup &&
-                                $setup.showDsPopup(...args)),
+                                showDsPopup &&
+                                showDsPopup(...args)),
                           },
                           _hoisted_15
                         ))
@@ -564,12 +776,12 @@ export default {
                         class: "tuipian_btn",
                         onClick:
                           _cache[2] ||
-                          (_cache[2] = () => $setup.toBountyList(2)),
+                          (_cache[2] = () => toBountyList(2)),
                       },
                       _hoisted_18
                     ),
                   ]),
-                  $setup.detailData.money > 0
+                  detailData.value.money > 0
                     ? (_openBlock(),
                       _createElementBlock("div", _hoisted_19, [
                         _createElementVNode("p", _hoisted_20, [
@@ -577,7 +789,7 @@ export default {
                           _createElementVNode(
                             "span",
                             null,
-                            _toDisplayString($setup.detailData.money) + "赏银",
+                            _toDisplayString(detailData.value.money) + "赏银",
                             1
                           ),
                         ]),
@@ -610,16 +822,17 @@ export default {
                               class: "list_right",
                               onClick:
                                 _cache[3] ||
-                                (_cache[3] = () => $setup.toBountyList(1)),
+                                (_cache[3] = () =>
+                                  toBountyList(1)),
                             },
                             [
                               _createElementVNode(
                                 "span",
                                 null,
-                                _toDisplayString($setup.detailData.award_num) +
+                                _toDisplayString(detailData.value.award_num) +
                                   "人追加打赏" +
                                   _toDisplayString(
-                                    $setup.detailData.award_money
+                                    detailData.value.award_money
                                   ) +
                                   "赏银",
                                 1
@@ -635,21 +848,21 @@ export default {
                               "span",
                               null,
                               _toDisplayString(
-                                $setup.detailData.confirm_status === 1
+                                detailData.value.confirm_status === 1
                                   ? 0
-                                  : $setup.detailData.money
+                                  : detailData.value.money
                               ) + "赏银",
                               1
                             ),
                           ]),
-                          $setup.time > 0
+                          time.value > 0
                             ? (_openBlock(),
                               _createElementBlock("div", _hoisted_28, [
                                 _hoisted_29,
                                 _createVNode(
                                   _component_van_count_down,
                                   {
-                                    time: $setup.time,
+                                    time: time.value,
                                   },
                                   {
                                     default: _withCtx((timeData) => [
@@ -700,20 +913,20 @@ export default {
                   _createVNode(
                     _component_van_list,
                     {
-                      loading: $setup.loading,
+                      loading: loading.value,
                       "onUpdate:loading":
                         _cache[4] ||
-                        (_cache[4] = ($event) => ($setup.loading = $event)),
-                      error: $setup.error,
+                        (_cache[4] = ($event) => (loading.value = $event)),
+                      error: error.value,
                       "onUpdate:error":
                         _cache[5] ||
-                        (_cache[5] = ($event) => ($setup.error = $event)),
-                      finished: $setup.finished,
+                        (_cache[5] = ($event) => (error.value = $event)),
+                      finished: finished.value,
                       offset: 20,
                       "error-text": "请求失败，点击重新加载",
                       "finished-text": "-我也是有底线的-",
                       "loading-text": "正在获取数据...",
-                      onLoad: $setup.onLoad,
+                      onLoad: onLoad,
                     },
                     {
                       default: _withCtx(() => [
@@ -723,7 +936,7 @@ export default {
                             _createElementVNode(
                               "span",
                               null,
-                              _toDisplayString($setup.total) + "人",
+                              _toDisplayString(total.value) + "人",
                               1
                             ),
                           ]),
@@ -731,7 +944,7 @@ export default {
                           _createElementBlock(
                             _Fragment,
                             null,
-                            _renderList($setup.rxqzList, (item, index) => {
+                            _renderList(rxqzList.value, (item, index) => {
                               return (
                                 _openBlock(),
                                 _createElementBlock(
@@ -746,7 +959,8 @@ export default {
                                       {
                                         class: "user_box",
                                         onClick: _withModifiers(
-                                          () => $setup.toAutorDetails(item),
+                                          () =>
+                                            toAutorDetails(item),
                                           ["stop"]
                                         ),
                                       },
@@ -788,7 +1002,7 @@ export default {
                                                       class: "gz",
                                                       onClick: _withModifiers(
                                                         () =>
-                                                          $setup.focusSave(
+                                                          focusSave(
                                                             item
                                                           ),
                                                         ["stop"]
@@ -837,7 +1051,7 @@ export default {
                                                 class: "video_item",
                                                 key: index + "-" + ind,
                                                 onClick: () =>
-                                                  $setup.videoPlay(elem),
+                                                  videoPlay(elem),
                                               },
                                               [
                                                 _createElementVNode(
@@ -879,10 +1093,10 @@ export default {
                                       )),
                                     ]),
                                     _createElementVNode("div", _hoisted_55, [
-                                      $setup.detailData.confirm_status !== 1 &&
-                                      $setup.detailData.user_id ===
-                                        $setup.change_id &&
-                                      item.user_id !== $setup.change_id
+                                      detailData.value.confirm_status !== 1 &&
+                                      detailData.value.user_id ===
+                                        change_id.value &&
+                                      item.user_id !== change_id.value
                                         ? (_openBlock(),
                                           _createElementBlock(
                                             "span",
@@ -890,7 +1104,7 @@ export default {
                                               key: 0,
                                               class: "caina",
                                               onClick: () =>
-                                                $setup.cainaF(item.id),
+                                                cainaF(item.id),
                                             },
                                             "采纳",
                                             8,
@@ -904,9 +1118,12 @@ export default {
                                       _createElementVNode(
                                         "div",
                                         {
-                                          class: _normalizeClass("color"),
+                                          class: _normalizeClass(
+                                            // eslint-disable-next-line
+                                            true ? "color" : ""
+                                          ),
                                           onClick: () =>
-                                            $setup.getAskVideoCommentLike(item),
+                                            getAskVideoCommentLike(item),
                                         },
                                         [
                                           _hoisted_59,
@@ -937,10 +1154,10 @@ export default {
             _createVNode(
               _component_van_popup,
               {
-                show: $setup.showDialog,
+                show: showDialog.value,
                 "onUpdate:show":
                   _cache[8] ||
-                  (_cache[8] = ($event) => ($setup.showDialog = $event)),
+                  (_cache[8] = ($event) => (showDialog.value = $event)),
                 round: "",
               },
               {
@@ -954,7 +1171,7 @@ export default {
                           "onUpdate:modelValue":
                             _cache[6] ||
                             (_cache[6] = ($event) =>
-                              ($setup.moneyValue = $event)),
+                              (moneyValue.value = $event)),
                           type: "text",
                           "max-length": "8",
                           placeholder: "请输入打赏金额",
@@ -962,7 +1179,7 @@ export default {
                         null,
                         512
                       ),
-                      [[_vModelText, $setup.moneyValue]]
+                      [[_vModelText, moneyValue.value]]
                     ),
                     _createElementVNode(
                       "div",
@@ -971,7 +1188,7 @@ export default {
                         onClick:
                           _cache[7] ||
                           (_cache[7] = (...args) =>
-                            $setup.okBtns && $setup.okBtns(...args)),
+                            okBtns && okBtns(...args)),
                       },
                       "确认"
                     ),
@@ -985,10 +1202,10 @@ export default {
             _createVNode(
               _component_van_popup,
               {
-                show: $setup.showDetailsPopul,
+                show: showDetailsPopul.value,
                 "onUpdate:show":
                   _cache[9] ||
-                  (_cache[9] = ($event) => ($setup.showDetailsPopul = $event)),
+                  (_cache[9] = ($event) => (showDetailsPopul.value = $event)),
                 class: "popup_coentent",
                 overlay: false,
                 teleport: "#app",
@@ -1003,7 +1220,7 @@ export default {
                         {
                           size: "22",
                           name: "arrow-left",
-                          onClick: $setup.close,
+                          onClick: close.value,
                         },
                         null,
                         8,
@@ -1013,32 +1230,32 @@ export default {
                         "span",
                         _hoisted_64,
                         _toDisplayString(
-                          $setup.popupType === 1 ? "追加赏金列表" : "我要推片"
+                          popupType.value === 1 ? "追加赏金列表" : "我要推片"
                         ),
                         1
                       ),
                     ]),
                     _createElementVNode("div", _hoisted_65, [
-                      $setup.popupType === 1
+                      popupType.value === 1
                         ? (_openBlock(),
                           _createBlock(
                             _component_bounty_list,
                             {
-                              key: $setup.key,
-                              id: $setup.ask_video_id,
+                              key: key.value,
+                              id: ask_video_id.value,
                             },
                             null,
                             8,
                             ["id"]
                           ))
                         : _createCommentVNode("", true),
-                      $setup.popupType === 2
+                      popupType.value === 2
                         ? (_openBlock(),
                           _createBlock(
                             _component_recommend_video,
                             {
-                              key: $setup.key,
-                              id: $setup.ask_video_id,
+                              key: key.value,
+                              id: ask_video_id.value,
                             },
                             null,
                             8,
@@ -1056,11 +1273,11 @@ export default {
             _createVNode(
               _component_van_popup,
               {
-                show: $setup.showVideoDetailsPopul,
+                show: showVideoDetailsPopul.value,
                 "onUpdate:show":
                   _cache[10] ||
                   (_cache[10] = ($event) =>
-                    ($setup.showVideoDetailsPopul = $event)),
+                    (showVideoDetailsPopul.value = $event)),
                 class: "popup_coentent",
                 overlay: false,
                 teleport: "#app",
@@ -1070,27 +1287,27 @@ export default {
                 default: _withCtx(() => [
                   _createElementVNode("div", _hoisted_66, [
                     _createElementVNode("div", _hoisted_67, [
-                      $setup.type === 1
+                      type.value === 1
                         ? (_openBlock(),
                           _createBlock(
                             _component_video_details,
                             {
                               details_type: 1,
-                              key: $setup.videoId,
-                              onClose: $setup.close1,
+                              key: videoId.value,
+                              onClose: close1,
                             },
                             null,
                             8,
                             ["onClose"]
                           ))
                         : _createCommentVNode("", true),
-                      $setup.type === 2
+                      type.value === 2
                         ? (_openBlock(),
                           _createBlock(
                             _component_hot_author_info,
                             {
-                              key: $setup.videoId,
-                              onClose: $setup.close1,
+                              key: videoId.value,
+                              onClose: close1,
                             },
                             null,
                             8,

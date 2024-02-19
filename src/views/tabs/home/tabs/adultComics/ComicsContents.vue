@@ -7,11 +7,13 @@ import {
   createCommentVNode as _createCommentVNode,
   renderList as _renderList,
   Fragment as _Fragment,
+  pushScopeId as _pushScopeId,
+  popScopeId as _popScopeId,
 } from "vue";
 import _imports_0 from "@/assets/images/adultComics/sort-up.png";
 import _imports_1 from "@/assets/images/adultComics/sort-down.png";
 
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { getGlobalProperties } from "@/assets/js/utils.js";
 import { useStore } from "vuex";
 export default {
@@ -21,7 +23,11 @@ export default {
     const { comicsDirectoryApi } = getGlobalProperties().$api;
     const directoryList = ref([]);
     const store = useStore();
+    const isSort = ref(true);
     directoryList.value = store.state.directoryList;
+    const isVip = computed(() => {
+      return store.state.userInfo.is_vip;
+    });
 
     const getComicsDirectory = () => {
       comicsDirectoryApi(
@@ -41,6 +47,35 @@ export default {
     };
 
     getComicsDirectory();
+
+    const initDirectoryList = () => {
+      directoryList.value = directoryList.value.sort((a, b) => {
+        if (isSort.value) {
+          return a.sort - b.sort;
+        }
+
+        {
+          return b.sort - a.sort;
+        }
+      });
+    };
+
+    const sortFun = () => {
+      isSort.value = !isSort.value;
+      initDirectoryList();
+    };
+
+    const startReading = (item) => {
+      if (item.is_free === 0 && item.money === 0 && isVip.value === 0) {
+        store.commit("SETSHOE_KT_VIP", true);
+      } else {
+        emit("startReading", item);
+      }
+    };
+
+    const _withScopeId = (n) => (
+      _pushScopeId("data-v-020330e2"), (n = n()), _popScopeId(), n
+    );
 
     const _hoisted_1 = {
       class: "comicsContent",
@@ -62,7 +97,16 @@ export default {
       key: 0,
       class: "CartoonDetail-DirectoryPage-tips-vip",
     };
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      startReading,
+      directoryList,
+      isSort,
+      sortFun,
+      _withScopeId,
+    });
+
+    return (_ctx, _cache) => {
       return (
         _openBlock(),
         _createElementBlock("div", _hoisted_1, [
@@ -72,7 +116,7 @@ export default {
                 "span",
                 null,
                 _toDisplayString(
-                  $setup.props.comics_status === 1 ? "连载中" : "已完结"
+                  props.value.comics_status === 1 ? "连载中" : "已完结"
                 ),
                 1
               ),
@@ -89,19 +133,19 @@ export default {
               _createElementVNode(
                 "span",
                 null,
-                "更新至" + _toDisplayString($setup.directoryList.length) + "话",
+                "更新至" + _toDisplayString(directoryList.value.length) + "话",
                 1
               ),
             ]),
             _createElementVNode("div", _hoisted_4, [
-              $setup.isSort
+              isSort.value
                 ? (_openBlock(),
                   _createElementBlock("img", {
                     key: 0,
                     onClick:
                       _cache[0] ||
                       (_cache[0] = (...args) =>
-                        $setup.sortFun && $setup.sortFun(...args)),
+                        sortFun && sortFun(...args)),
                     src: _imports_0,
                   }))
                 : (_openBlock(),
@@ -110,7 +154,7 @@ export default {
                     onClick:
                       _cache[1] ||
                       (_cache[1] = (...args) =>
-                        $setup.sortFun && $setup.sortFun(...args)),
+                        sortFun && sortFun(...args)),
                     src: _imports_1,
                     alt: "",
                   })),
@@ -121,14 +165,14 @@ export default {
             _createElementBlock(
               _Fragment,
               null,
-              _renderList($setup.directoryList, (item) => {
+              _renderList(directoryList.value, (item) => {
                 return (
                   _openBlock(),
                   _createElementBlock(
                     "div",
                     {
                       class: "CartoonDetail-DirectoryPage-list-item",
-                      onClick: () => $setup.startReading(item),
+                      onClick: () => startReading(item),
                       key: item,
                     },
                     [

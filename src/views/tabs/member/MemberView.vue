@@ -22,23 +22,272 @@ import {
 } from "vue";
 import _imports_0 from "@/assets/images/iconMember.png";
 
-// import { ref, computed } from "vue";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
-import { getGlobalProperties } from "@/assets/js/utils.js";
+import { getGlobalProperties, advertiseDetails } from "@/assets/js/utils.js";
+import { Toast } from "vant";
 export default {
-  setup() {
+  setup(props) {
     const store = useStore();
+    const isLoging = ref(false);
+    const showDialog = ref(false);
     const showDialog2 = ref(false);
+    const popupText = ref("");
+    const pupupValue = ref("");
+    const email = ref("");
+    let key = ref("");
     const kefuUrl = ref("");
-    const { homePageApi, groupApi, advertiseApi, customerApi } =
-      getGlobalProperties().$api;
+    const userInfo = computed(() => {
+      return store.state.userInfo;
+    });
+    const fileUrl = computed(() => {
+      return store.state.userInfo.top_image || "123.png";
+    });
+    const {
+      homePageApi,
+      groupApi,
+      inviteSaveApi,
+      modifyEmailApi,
+      advertiseApi,
+      customerApi,
+    } = getGlobalProperties().$api;
+    const showBottomBanner = computed(() => {
+      return store.state.showBottomBanner;
+    });
 
     if (!store.state.userInfo.email) {
       showDialog2.value = true;
     }
 
+    const closeDialog = () => {
+      showDialog2.value = false;
+    };
+
+    const okBtns2 = () => {
+      if (email.value === "") {
+        Toast("邮箱账号不能为空");
+        return;
+      }
+
+      const toast = Toast.loading({
+        message: "更新中...",
+        forbidClick: true,
+        duration: 0,
+      });
+      modifyEmailApi({
+        email: email.value,
+      }).then((res) => {
+        Toast(res.message);
+        toast.clear();
+
+        if (res.code === 0) {
+          showDialog2.value = false;
+          store.dispatch("getUserInfo");
+        }
+      });
+    };
+
+    const okBtns = () => {
+      if (pupupValue.value === "") {
+        Toast(popupText.value + "不能为空");
+      }
+
+      if (popupText.value === "兑换码") {
+        inviteSaveApi({
+          invite_code: pupupValue.value,
+        }).then((res) => {
+          Toast(res.message);
+        });
+      } else {
+        inviteSaveApi({
+          invite_code: pupupValue.value,
+        }).then((res) => {
+          Toast(res.message);
+        });
+      }
+
+      showDialog.value = false;
+    }; // const navList1 = ref([
+    //   {
+    //     label: "我的喜欢",
+    //     path: "MyLike",
+    //     showHeader: "null",
+    //     icon: new URL("./images/iconActiveLike.png", import.meta.url).href,
+    //   },
+    //   {
+    //     label: "我的消息",
+    //     path: "MyMessage",
+    //     icon: new URL("./images/iconServerMsg.png", import.meta.url).href,
+    //   },
+    //   {
+    //     label: "在线客服",
+    //     path: "OnlineService",
+    //     icon: new URL("./images/iconServerCustomer.png", import.meta.url).href,
+    //   },
+    //   {
+    //     label: "官方公告",
+    //     path: "Announcement",
+    //     icon: new URL("./images/iconServerBulletin.png", import.meta.url).href,
+    //   },
+    //   {
+    //     label: "设置",
+    //     path: "MySet",
+    //     icon: new URL("./images/iconServerSet.png", import.meta.url).href,
+    //   },
+    //   {
+    //     label: "加入官方群",
+    //     path: "",
+    //     icon: new URL("./images/iconServerGroup.png", import.meta.url).href,
+    //   },
+    // ]);
+    // const navList2 = ref([]);
+
+    const navList1 = ref([
+      // {
+      //   label: "约炮解锁",
+      //   path: "",
+      //   icon: new URL("./images/iconActiveMyDating.png", import.meta.url).href,
+      // },
+      // {
+      //   label: "购买",
+      //   path: "",
+      //   icon: new URL("./images/iconActiveBuy.png", import.meta.url).href,
+      // },
+      {
+        label: "钱包",
+        path: "MyWallet",
+        icon: new URL("@/assets/images/iconActiveWallet.png", import.meta.url).href,
+      },
+      {
+        label: "分享无限看",
+        path: "ShareFreeWatch",
+        showHeader: "null",
+        icon: new URL("@/assets/images/iconActiveShare.png", import.meta.url).href,
+      },
+      {
+        label: "我的喜欢",
+        path: "MyLike",
+        showHeader: "null",
+        icon: new URL("@/assets/images/iconActiveLike.png", import.meta.url).href,
+      }, // {
+      //   label: "粉丝团",
+      //   path: "",
+      //   icon: new URL("./images/iconActiveFans.png", import.meta.url).href,
+      // },
+      {
+        label: "代理赚钱",
+        path: "AgentMakesMoney",
+        icon: new URL("@/assets/images/iconActiveMakeMoney.png", import.meta.url).href,
+      },
+      {
+        label: "我的微贴",
+        path: "MyMicropost",
+        showHeader: "null",
+        icon: new URL("@/assets/images/iconActivePost.png", import.meta.url).href,
+      },
+    ]);
+    const navList2 = ref([
+      // {
+      //   label: "认证管理",
+      //   path: "",
+      //   icon: new URL("./images/iconServerAttest.png", import.meta.url).href,
+      // },
+      {
+        label: "我的消息",
+        path: "MyMessage",
+        icon: new URL("@/assets/images/iconServerMsg.png", import.meta.url).href,
+      },
+      {
+        label: "在线客服",
+        path: "OnlineService",
+        icon: new URL("@/assets/images/iconServerCustomer.png", import.meta.url).href,
+      },
+      {
+        label: "官方公告",
+        path: "Announcement",
+        icon: new URL("@/assets/images/iconServerBulletin.png", import.meta.url).href,
+      },
+      {
+        label: "设置",
+        path: "MySet",
+        icon: new URL("@/assets/images/iconServerSet.png", import.meta.url).href,
+      },
+      {
+        label: "加入官方群",
+        path: "",
+        icon: new URL("@/assets/images/iconServerGroup.png", import.meta.url).href,
+      }, // {
+      //   label: "应用中心",
+      //   path: "",
+      //   icon: new URL("./images/iconServerApp.png", import.meta.url).href,
+      // },
+      // {
+      //   label: "兑换码",
+      //   path: "",
+      //   icon: new URL("./images/iconServerExchangeCode.png", import.meta.url)
+      //     .href,
+      // },
+      {
+        label: "邀请码",
+        path: "",
+        icon: new URL("@/assets/images/iconServerInviteCode.png", import.meta.url)
+          .href,
+      },
+      {
+        label: "商务合作",
+        path: "",
+        icon: new URL("@/assets/images/iconServerCustomer.png", import.meta.url).href,
+      },
+    ]);
+    const showDetailsPopul = ref(false);
+    const showHeader = ref(true);
+    const detailsTitle = ref("");
+    const detailsView = ref("");
     const gFQunUrl = ref("");
+
+    const toDetails = (item) => {
+      showHeader.value = true;
+      key.value = Math.random();
+
+      if (item.showHeader === "null") {
+        showHeader.value = false;
+      }
+
+      if (item.path) {
+        showDetailsPopul.value = true;
+        detailsView.value = item.path;
+        detailsTitle.value = item.label;
+      } else if (item.url) {
+        // window.open(item.url);
+        location.href = item.url;
+      } else if (item.label === "商务合作") {
+        // window.open(gFQunUrl.value);
+        location.href = kefuUrl.value;
+      } else if (item.label === "加入官方群") {
+        // window.open(gFQunUrl.value);
+        location.href = gFQunUrl.value;
+      } else {
+        if (item.label === "兑换码" || item.label === "邀请码") {
+          // Toast("暂未开放");
+          popupText.value = item.label;
+          pupupValue.value = "";
+          showDialog.value = true;
+        } else {
+          Toast("暂未开放");
+        }
+      }
+    };
+
+    const close = () => {
+      showDetailsPopul.value = false;
+    };
+
+    const toLogin = () => {
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: "Login",
+      });
+    };
 
     const userData = ref({});
 
@@ -77,6 +326,16 @@ export default {
     };
 
     getBanner();
+
+    const toBannerDetails = (item) => {
+      if (item.link) {
+        store.commit("setShowDialogIsAdvertis", {
+          show: true,
+          url: item.link,
+        });
+        advertiseDetails(item.link);
+      }
+    };
 
     getGroup();
     homePageData();
@@ -241,7 +500,35 @@ export default {
     const _hoisted_31 = {
       class: "btn_box",
     };
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      isLoging,
+      navList1,
+      navList2,
+      toDetails,
+      showDetailsPopul,
+      close,
+      detailsTitle,
+      detailsView,
+      showHeader,
+      showDialog,
+      popupText,
+      pupupValue,
+      okBtns,
+      toLogin,
+      userInfo,
+      userData,
+      fileUrl,
+      key,
+      showBottomBanner,
+      showDialog2,
+      closeDialog,
+      email,
+      okBtns2,
+      bannerList,
+      toBannerDetails,
+    });
+    return (_ctx, _cache) => {
       const _component_my_image = _resolveComponent("my-image");
 
       const _component_van_icon = _resolveComponent("van-icon");
@@ -257,7 +544,7 @@ export default {
           {
             class: "member",
             style: _normalizeStyle({
-              paddingBottom: $setup.showBottomBanner ? "135px" : "65px",
+              paddingBottom: showBottomBanner.value ? "135px" : "65px",
             }),
           },
           [
@@ -269,7 +556,7 @@ export default {
                   onClick:
                     _cache[0] ||
                     (_cache[0] = () =>
-                      $setup.toDetails({
+                      toDetails({
                         path: "PersonalInformation",
                         label: "个人管理",
                       })),
@@ -279,8 +566,8 @@ export default {
                   _createBlock(
                     _component_my_image,
                     {
-                      key: $setup.fileUrl,
-                      url: $setup.fileUrl,
+                      key: fileUrl.value,
+                      url: fileUrl.value,
                     },
                     null,
                     8,
@@ -293,12 +580,12 @@ export default {
                   "p",
                   null,
                   _toDisplayString(
-                    $setup.userInfo.nickname || $setup.userInfo.username
+                    userInfo.value.nickname || userInfo.value.username
                   ),
                   1
                 ),
               ]),
-              !$setup.userInfo.username
+              !userInfo.value.username
                 ? (_openBlock(),
                   _createElementBlock(
                     "div",
@@ -308,7 +595,7 @@ export default {
                       onClick:
                         _cache[1] ||
                         (_cache[1] = (...args) =>
-                          $setup.toLogin && $setup.toLogin(...args)),
+                          toLogin && toLogin(...args)),
                     },
                     " 登录/注册> "
                   ))
@@ -319,7 +606,7 @@ export default {
                 _createElementVNode(
                   "p",
                   _hoisted_5,
-                  _toDisplayString($setup.userData.video_num),
+                  _toDisplayString(userData.value.video_num),
                   1
                 ),
                 _hoisted_6,
@@ -328,7 +615,7 @@ export default {
                 _createElementVNode(
                   "p",
                   _hoisted_8,
-                  _toDisplayString($setup.userData.fans),
+                  _toDisplayString(userData.value.fans),
                   1
                 ),
                 _hoisted_9,
@@ -337,7 +624,7 @@ export default {
                 _createElementVNode(
                   "p",
                   _hoisted_11,
-                  _toDisplayString($setup.userData.like_num),
+                  _toDisplayString(userData.value.like_num),
                   1
                 ),
                 _hoisted_12,
@@ -352,7 +639,7 @@ export default {
                   onClick:
                     _cache[2] ||
                     (_cache[2] = () =>
-                      $setup.toDetails({
+                      toDetails({
                         path: "Recharge",
                         showHeader: "null",
                       })),
@@ -365,7 +652,7 @@ export default {
               _createElementBlock(
                 _Fragment,
                 null,
-                _renderList($setup.navList1, (item, index) => {
+                _renderList(navList1.value, (item, index) => {
                   return (
                     _openBlock(),
                     _createElementBlock(
@@ -373,7 +660,7 @@ export default {
                       {
                         key: index,
                         class: "user-item",
-                        onClick: () => $setup.toDetails(item),
+                        onClick: () => toDetails(item),
                       },
                       [
                         _withDirectives(
@@ -395,14 +682,14 @@ export default {
                 128
               )),
             ]),
-            $setup.bannerList.length
+            bannerList.value.length
               ? (_openBlock(true),
                 _createElementBlock(
                   _Fragment,
                   {
                     key: 0,
                   },
-                  _renderList($setup.bannerList, (item, index) => {
+                  _renderList(bannerList.value, (item, index) => {
                     return (
                       _openBlock(),
                       _createElementBlock(
@@ -410,7 +697,7 @@ export default {
                         {
                           class: "img_banner_box",
                           key: index,
-                          onClick: () => $setup.toBannerDetails(item),
+                          onClick: () => toBannerDetails(item),
                         },
                         [
                           _createVNode(
@@ -431,14 +718,14 @@ export default {
                   128
                 ))
               : _createCommentVNode("", true),
-            $setup.navList2.length
+            navList2.value.length
               ? (_openBlock(),
                 _createElementBlock("div", _hoisted_19, [
                   (_openBlock(true),
                   _createElementBlock(
                     _Fragment,
                     null,
-                    _renderList($setup.navList2, (item, index) => {
+                    _renderList(navList2.value, (item, index) => {
                       return (
                         _openBlock(),
                         _createElementBlock(
@@ -446,7 +733,7 @@ export default {
                           {
                             key: index,
                             class: "user-item",
-                            onClick: () => $setup.toDetails(item),
+                            onClick: () => toDetails(item),
                           },
                           [
                             _withDirectives(
@@ -477,10 +764,10 @@ export default {
             _createVNode(
               _component_van_popup,
               {
-                show: $setup.showDetailsPopul,
+                show: showDetailsPopul.value,
                 "onUpdate:show":
                   _cache[5] ||
-                  (_cache[5] = ($event) => ($setup.showDetailsPopul = $event)),
+                  (_cache[5] = ($event) => (showDetailsPopul.value = $event)),
                 class: "popup_coentent",
                 overlay: false,
                 position: "right",
@@ -492,13 +779,13 @@ export default {
                     {
                       class: _normalizeClass([
                         "details_page",
-                        ["Announcement"].includes($setup.detailsView)
+                        ["Announcement"].includes(detailsView.value)
                           ? "backgroundWhite"
                           : "",
                       ]),
                     },
                     [
-                      $setup.showHeader
+                      showHeader.value
                         ? (_openBlock(),
                           _createElementBlock("div", _hoisted_22, [
                             _createVNode(
@@ -506,7 +793,7 @@ export default {
                               {
                                 size: "22",
                                 name: "arrow-left",
-                                onClick: $setup.close,
+                                onClick: close.value,
                               },
                               null,
                               8,
@@ -515,10 +802,10 @@ export default {
                             _createElementVNode(
                               "span",
                               _hoisted_23,
-                              _toDisplayString($setup.detailsTitle),
+                              _toDisplayString(detailsTitle.value),
                               1
                             ),
-                            $setup.detailsView === "AgentMakesMoney"
+                            detailsView.value === "AgentMakesMoney"
                               ? (_openBlock(),
                                 _createElementBlock(
                                   "span",
@@ -528,7 +815,7 @@ export default {
                                     onClick:
                                       _cache[3] ||
                                       (_cache[3] = () =>
-                                        $setup.toDetails({
+                                        toDetails({
                                           path: "ShareFreeWatch",
                                           showHeader: "null",
                                         })),
@@ -536,7 +823,7 @@ export default {
                                   "开始代理"
                                 ))
                               : _createCommentVNode("", true),
-                            $setup.detailsView === "OnlineService"
+                            detailsView.value === "OnlineService"
                               ? (_openBlock(),
                                 _createElementBlock(
                                   "span",
@@ -546,7 +833,7 @@ export default {
                                     onClick:
                                       _cache[4] ||
                                       (_cache[4] = () =>
-                                        $setup.toDetails({
+                                        toDetails({
                                           label: "加入官方群",
                                         })),
                                   },
@@ -558,10 +845,10 @@ export default {
                       _createElementVNode("div", _hoisted_24, [
                         (_openBlock(),
                         _createBlock(
-                          _resolveDynamicComponent($setup.detailsView),
+                          _resolveDynamicComponent(detailsView.value),
                           {
-                            key: $setup.key,
-                            onClose: $setup.close,
+                            key: key.value,
+                            onClose: close.value,
                           },
                           null,
                           40,
@@ -580,10 +867,10 @@ export default {
             _createVNode(
               _component_van_popup,
               {
-                show: $setup.showDialog,
+                show: showDialog.value,
                 "onUpdate:show":
                   _cache[8] ||
-                  (_cache[8] = ($event) => ($setup.showDialog = $event)),
+                  (_cache[8] = ($event) => (showDialog.value = $event)),
                 round: "",
               },
               {
@@ -592,7 +879,7 @@ export default {
                     _createElementVNode(
                       "div",
                       _hoisted_26,
-                      _toDisplayString($setup.popupText),
+                      _toDisplayString(popupText.value),
                       1
                     ),
                     _withDirectives(
@@ -602,16 +889,16 @@ export default {
                           "onUpdate:modelValue":
                             _cache[6] ||
                             (_cache[6] = ($event) =>
-                              ($setup.pupupValue = $event)),
+                              (pupupValue.value = $event)),
                           type: "text",
                           "max-length": "8",
-                          placeholder: `请输入${$setup.popupText}`,
+                          placeholder: `请输入${popupText.value}`,
                         },
                         null,
                         8,
                         _hoisted_27
                       ),
-                      [[_vModelText, $setup.pupupValue]]
+                      [[_vModelText, pupupValue.value]]
                     ),
                     _createElementVNode(
                       "div",
@@ -620,7 +907,7 @@ export default {
                         onClick:
                           _cache[7] ||
                           (_cache[7] = (...args) =>
-                            $setup.okBtns && $setup.okBtns(...args)),
+                            okBtns && okBtns(...args)),
                       },
                       "确认"
                     ),
@@ -634,10 +921,10 @@ export default {
             _createVNode(
               _component_van_popup,
               {
-                show: $setup.showDialog2,
+                show: showDialog2.value,
                 "onUpdate:show":
                   _cache[12] ||
-                  (_cache[12] = ($event) => ($setup.showDialog2 = $event)),
+                  (_cache[12] = ($event) => (showDialog2.value = $event)),
                 round: "",
               },
               {
@@ -651,7 +938,7 @@ export default {
                         {
                           "onUpdate:modelValue":
                             _cache[9] ||
-                            (_cache[9] = ($event) => ($setup.email = $event)),
+                            (_cache[9] = ($event) => (email.value = $event)),
                           type: "text",
                           "max-length": "36",
                           placeholder: "请输入邮箱账号",
@@ -659,7 +946,7 @@ export default {
                         null,
                         512
                       ),
-                      [[_vModelText, $setup.email]]
+                      [[_vModelText, email.value]]
                     ),
                     _createElementVNode("div", _hoisted_31, [
                       _createElementVNode(
@@ -669,7 +956,7 @@ export default {
                           onClick:
                             _cache[10] ||
                             (_cache[10] = (...args) =>
-                              $setup.okBtns2 && $setup.okBtns2(...args)),
+                              okBtns2 && okBtns2(...args)),
                         },
                         "确认"
                       ),
@@ -680,8 +967,8 @@ export default {
                           onClick:
                             _cache[11] ||
                             (_cache[11] = (...args) =>
-                              $setup.closeDialog &&
-                              $setup.closeDialog(...args)),
+                              closeDialog &&
+                              closeDialog(...args)),
                         },
                         "取消"
                       ),

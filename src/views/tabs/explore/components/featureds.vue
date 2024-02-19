@@ -24,15 +24,22 @@ import _imports_4 from "@/assets/images/zan.png";
 import { ref } from "vue";
 import { getGlobalProperties } from "@/assets/js/utils.js";
 import SwipeComponent from "../../home/tabs/common/SwipeComponent.vue";
+import { useStore } from "vuex";
 export default {
   components: {
     SwipeComponent,
   },
 
-  setup() {
+  setup(props) {
+    let page = ref(1);
+    let showDetailsPopul = ref(false);
+    let menu_id = ref("");
+    let menuTetx = ref("");
     const finished = ref(false);
     let videoList = ref([]);
+    const error = ref(false);
     const loading = ref(false);
+    const store = useStore();
     let showLoding = ref(true);
     const { concentrationApi } = getGlobalProperties().$api;
     videoList.value = localStorage.getItem("FeaturedComponent")
@@ -61,6 +68,31 @@ export default {
     };
 
     getVideoList();
+
+    const onLoad = () => {
+      // loading.value = true;
+      // page.value++;
+      // getVideoList();
+    };
+
+    const menuAll = (item) => {
+      menu_id.value = item.category_id;
+      menuTetx.value = item.name;
+      showDetailsPopul.value = true;
+    };
+
+    const videoPlay = (item) => {
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: "VideoDetails",
+      });
+      store.commit("SET_VIDEO_DETAILS", item);
+    };
+
+    const close = () => {
+      showDetailsPopul.value = false;
+      menuTetx.value = "";
+    };
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-2a78bb55"), (n = n()), _popScopeId(), n
@@ -259,7 +291,24 @@ export default {
     const _hoisted_35 = {
       class: "search_details_page",
     };
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      videoList,
+      loading,
+      onLoad,
+      error,
+      videoPlay,
+      finished,
+      showLoding,
+      showDetailsPopul,
+      menu_id,
+      menuAll,
+      menuTetx,
+      close,
+      page,
+    });
+
+    return (_ctx, _cache) => {
       const _component_my_image = _resolveComponent("my-image");
 
       const _component_search_popup = _resolveComponent("search-popup");
@@ -273,29 +322,29 @@ export default {
         _createBlock(
           _component_van_list,
           {
-            loading: $setup.loading,
+            loading: loading.value,
             "onUpdate:loading":
-              _cache[1] || (_cache[1] = ($event) => ($setup.loading = $event)),
-            error: $setup.error,
+              _cache[1] || (_cache[1] = ($event) => (loading.value = $event)),
+            error: error.value,
             "onUpdate:error":
-              _cache[2] || (_cache[2] = ($event) => ($setup.error = $event)),
-            finished: $setup.finished,
+              _cache[2] || (_cache[2] = ($event) => (error.value = $event)),
+            finished: finished.value,
             "error-text": "请求失败，点击重新加载",
             "finished-text": "-我也是有底线的-",
             "loading-text": "正在获取数据...",
-            onLoad: $setup.onLoad,
+            onLoad: onLoad,
           },
           {
             default: _withCtx(() => [
               _createElementVNode("div", _hoisted_1, [
-                $setup.videoList.length
+                videoList.value.length
                   ? (_openBlock(),
                     _createElementBlock("div", _hoisted_2, [
                       (_openBlock(true),
                       _createElementBlock(
                         _Fragment,
                         null,
-                        _renderList($setup.videoList, (item, index) => {
+                        _renderList(videoList.value, (item, index) => {
                           return (
                             _openBlock(),
                             _createElementBlock(
@@ -314,7 +363,7 @@ export default {
                                     "div",
                                     {
                                       class: "more",
-                                      onClick: () => $setup.menuAll(item),
+                                      onClick: () => menuAll(item),
                                     },
                                     _hoisted_7,
                                     8,
@@ -329,7 +378,7 @@ export default {
                                         key: 0,
                                         class: "video_box",
                                         onClick: () =>
-                                          $setup.videoPlay(item.rows[0]),
+                                          videoPlay(item.rows[0]),
                                       },
                                       [
                                         _createElementVNode("div", _hoisted_9, [
@@ -427,7 +476,7 @@ export default {
                                           "div",
                                           {
                                             onClick: () =>
-                                              $setup.videoPlay(elem),
+                                              videoPlay(elem),
                                             key: elem.id,
                                           },
                                           [
@@ -533,11 +582,11 @@ export default {
                 _createVNode(
                   _component_van_popup,
                   {
-                    show: $setup.showDetailsPopul,
+                    show: showDetailsPopul.value,
                     "onUpdate:show":
                       _cache[0] ||
                       (_cache[0] = ($event) =>
-                        ($setup.showDetailsPopul = $event)),
+                        (showDetailsPopul.value = $event)),
                     class: "popup_coentent",
                     teleport: "#app",
                     overlay: false,
@@ -550,11 +599,11 @@ export default {
                         _createBlock(
                           _component_search_popup,
                           {
-                            searchText: $setup.menuTetx,
-                            menu_id: $setup.menu_id,
+                            searchText: menuTetx.value,
+                            menu_id: menu_id.value,
                             label_id: "",
-                            key: $setup.menu_id,
-                            onClose: $setup.close,
+                            key: menu_id.value,
+                            onClose: close,
                           },
                           null,
                           8,

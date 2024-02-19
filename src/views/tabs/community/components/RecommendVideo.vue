@@ -20,14 +20,82 @@ import _imports_0 from "@/assets/images/community/icon_add_work.png";
 import _imports_1 from "@/assets/images/community/icon_add_50.png";
 import _imports_2 from "@/assets/images/community/icon_replay_fv_delete.png";
 
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
 import SelectVideo from "./SelectVideo.vue";
+import { getGlobalProperties } from "@/assets/js/utils.js";
+import { Toast } from "vant";
 export default {
   props: ["id"],
   components: {
     SelectVideo,
   },
 
-  setup() {
+  setup(props) {
+    const store = useStore();
+    let type = ref(1);
+    let key = ref(1);
+    let showDetailsPopul = ref(false);
+    const { askVideoSubmitApi } = getGlobalProperties().$api;
+
+    const close = () => {
+      showDetailsPopul.value = false;
+    };
+
+    const recommendVideoList = computed(() => {
+      return store.state.recommendVideoList;
+    });
+
+    const showDetails = (i) => {
+      type.value = i;
+      key.value = Math.random();
+      showDetailsPopul.value = true;
+    };
+
+    const submit = () => {
+      if (recommendVideoList.value.length === 0) {
+        Toast("请选择视频");
+        return;
+      }
+
+      if (recommendVideoList.value.length > 10) {
+        Toast("最多推荐十个视频噢！");
+        return;
+      }
+
+      let video_id = [];
+      let params = {
+        video_id: "",
+        ask_video_id: props.id,
+      };
+      recommendVideoList.value.forEach((item) => {
+        video_id.push(item.id);
+      });
+      params.video_id = video_id.join(",");
+      askVideoSubmitApi(params, "get").then((res) => {
+        Toast(res.message);
+
+        if (res.code === 0) {
+          store.commit("SET_RECOMMEND_VIDEO_LIST", []);
+          close();
+        }
+      });
+    };
+
+    const deleteF = (item) => {
+      let arr = recommendVideoList.value.filter((elem) => elem.id !== item.id);
+      console.log(arr);
+      store.commit("SET_RECOMMEND_VIDEO_LIST", arr);
+    };
+
+    const videoPlay = (item) => {
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: "VideoDetails",
+      });
+      store.commit("SET_VIDEO_DETAILS", item);
+    };
+
     const _withScopeId = (n) => (
       _pushScopeId("data-v-c43f2caa"), (n = n()), _popScopeId(), n
     );
@@ -130,7 +198,20 @@ export default {
     const _hoisted_22 = {
       class: "cont_body_app",
     };
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      showDetailsPopul,
+      showDetails,
+      close,
+      recommendVideoList,
+      type,
+      submit,
+      key,
+      videoPlay,
+      deleteF,
+    });
+
+    return (_ctx, _cache) => {
       const _component_my_image = _resolveComponent("my-image");
 
       const _component_no_data = _resolveComponent("no-data");
@@ -151,7 +232,8 @@ export default {
                   {
                     class: "work_btn",
                     onClick:
-                      _cache[0] || (_cache[0] = () => $setup.showDetails(1)),
+                      _cache[0] ||
+                      (_cache[0] = () => showDetails(1)),
                   },
                   _hoisted_7
                 ),
@@ -160,7 +242,8 @@ export default {
                   {
                     class: "pt_btn",
                     onClick:
-                      _cache[1] || (_cache[1] = () => $setup.showDetails(2)),
+                      _cache[1] ||
+                      (_cache[1] = () => showDetails(2)),
                   },
                   _hoisted_9
                 ),
@@ -169,7 +252,7 @@ export default {
                 _hoisted_11,
                 _createTextVNode(
                   " " +
-                    _toDisplayString($setup.recommendVideoList.length) +
+                    _toDisplayString(recommendVideoList.value.length) +
                     "个 ",
                   1
                 ),
@@ -180,7 +263,7 @@ export default {
               _createElementBlock(
                 _Fragment,
                 null,
-                _renderList($setup.recommendVideoList, (item, index) => {
+                _renderList(recommendVideoList.value, (item, index) => {
                   return (
                     _openBlock(),
                     _createElementBlock(
@@ -188,7 +271,7 @@ export default {
                       {
                         key: index + "-" + item.id,
                         class: "info-videoItem",
-                        onClick: () => $setup.videoPlay(item),
+                        onClick: () => videoPlay(item),
                       },
                       [
                         _createElementVNode("div", _hoisted_14, [
@@ -233,7 +316,7 @@ export default {
                           {
                             class: "delete",
                             onClick: _withModifiers(
-                              () => $setup.deleteF(item),
+                              () => deleteF(item),
                               ["stop"]
                             ),
                           },
@@ -249,7 +332,7 @@ export default {
                 }),
                 128
               )),
-              $setup.recommendVideoList.length === 0
+              recommendVideoList.value.length === 0
                 ? (_openBlock(),
                   _createElementBlock("div", _hoisted_20, [
                     _createVNode(_component_no_data, {
@@ -266,7 +349,7 @@ export default {
                 onClick:
                   _cache[2] ||
                   (_cache[2] = (...args) =>
-                    $setup.submit && $setup.submit(...args)),
+                    submit && submit(...args)),
               },
               "确定"
             ),
@@ -274,10 +357,10 @@ export default {
           _createVNode(
             _component_van_popup,
             {
-              show: $setup.showDetailsPopul,
+              show: showDetailsPopul.value,
               "onUpdate:show":
                 _cache[3] ||
-                (_cache[3] = ($event) => ($setup.showDetailsPopul = $event)),
+                (_cache[3] = ($event) => (showDetailsPopul.value = $event)),
               class: "popup_coentent",
               overlay: false,
               teleport: "#app",
@@ -291,9 +374,9 @@ export default {
                     _createBlock(
                       _component_select_video,
                       {
-                        key: $setup.key,
-                        type: $setup.type,
-                        onClose: $setup.close,
+                        key: key.value,
+                        type: type.value,
+                        onClose: close.value,
                       },
                       null,
                       8,

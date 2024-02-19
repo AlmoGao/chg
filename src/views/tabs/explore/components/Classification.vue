@@ -7,6 +7,7 @@ import {
   createElementVNode as _createElementVNode,
   createTextVNode as _createTextVNode,
   normalizeClass as _normalizeClass,
+  createCommentVNode as _createCommentVNode,
   resolveComponent as _resolveComponent,
   withCtx as _withCtx,
   createVNode as _createVNode,
@@ -15,8 +16,17 @@ import {
 } from "vue";
 import _imports_0 from "@/assets/images/mine/video.jpg";
 
+import { ref } from "vue";
 export default {
-  setup() {
+  setup(props) {
+    const activeIndex = ref(0);
+    const swipe = ref(null);
+
+    const tabItemClick = (item, index) => {
+      activeIndex.value = index;
+      swipe.value.swipeTo(index);
+    };
+
     const _withScopeId = (n) => (
       _pushScopeId("data-v-63d5e596"), (n = n()), _popScopeId(), n
     );
@@ -115,7 +125,14 @@ export default {
       key: 0,
       class: "label_item label_item_null",
     };
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      activeIndex,
+      tabItemClick,
+      swipe,
+    });
+
+    return () => {
       const _component_van_swipe_item = _resolveComponent("van-swipe-item");
 
       const _component_van_swipe = _resolveComponent("van-swipe");
@@ -134,9 +151,9 @@ export default {
                   {
                     class: _normalizeClass([
                       "tab_item",
-                      index === $setup.activeIndex ? "active" : "",
+                      index === activeIndex.value ? "active" : "",
                     ]),
-                    onClick: () => $setup.tabItemClick(item, index),
+                    onClick: () => tabItemClick(item, index),
                     key: index,
                   },
                   _hoisted_6,
@@ -209,8 +226,11 @@ export default {
                                   }),
                                   64
                                 )),
-                                (_openBlock(),
-                                _createElementBlock("div", _hoisted_16)),
+                                // eslint-disable-next-line
+                                50 % 3 === 2
+                                  ? (_openBlock(),
+                                    _createElementBlock("div", _hoisted_16))
+                                  : _createCommentVNode("", true),
                               ]),
                             ]),
                           ]),

@@ -12,9 +12,10 @@ import {
 } from "vue";
 import _imports_0 from "@/assets/images/everyday.png";
 
-import Featured from "./components/FeaturedComponent.vue";
-import Classification from "./components/ClassificationComponent.vue";
-import { ref, nextTick } from "vue";
+import Featured from "./components/featureds.vue";
+import Classification from "./components/classifications.vue";
+import { useStore } from "vuex";
+import { ref, nextTick, computed } from "vue";
 export default {
   name: "NoData",
   components: {
@@ -28,9 +29,22 @@ export default {
     },
   },
 
-  setup() {
+  setup(props) {
+    let active = ref(0);
     let shoeLoading = ref(true);
+    active = ref(props.fxActive);
+    const store = useStore();
 
+    const handleShowStack = (path) => {
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: path,
+      });
+    };
+
+    const showBottomBanner = computed(() => {
+      return store.state.showBottomBanner;
+    });
     nextTick(() => {
       shoeLoading.value = false;
     });
@@ -60,7 +74,15 @@ export default {
     const _hoisted_4 = {
       class: "search",
     };
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      active,
+      handleShowStack,
+      shoeLoading,
+      showBottomBanner,
+    });
+
+    return (_ctx, _cache) => {
       const _component_featured = _resolveComponent("featured");
 
       const _component_van_tab = _resolveComponent("van-tab");
@@ -80,16 +102,16 @@ export default {
               class: "everyday",
               onClick:
                 _cache[0] ||
-                (_cache[0] = () => $setup.handleShowStack("VideoMrtj")),
+                (_cache[0] = () => handleShowStack("VideoMrtj")),
             },
             _hoisted_3
           ),
           _createVNode(
             _component_van_tabs,
             {
-              active: $setup.active,
+              active: active.value,
               "onUpdate:active":
-                _cache[1] || (_cache[1] = ($event) => ($setup.active = $event)),
+                _cache[1] || (_cache[1] = ($event) => (active.value = $event)),
               "line-height": "0",
               animated: "",
               swipeable: "",
@@ -112,7 +134,7 @@ export default {
                         {
                           class: "tab_cont webkit-overflow-scrolling-touch",
                           style: _normalizeStyle({
-                            height: $setup.showBottomBanner
+                            height: showBottomBanner.value
                               ? "calc(100vh - 172px)"
                               : "calc(100vh - 102px)",
                           }),
@@ -136,7 +158,7 @@ export default {
                         {
                           class: "tab_cont webkit-overflow-scrolling-touch",
                           style: _normalizeStyle({
-                            height: $setup.showBottomBanner
+                            height: showBottomBanner.value
                               ? "calc(100vh - 172px)"
                               : "calc(100vh - 102px)",
                           }),
@@ -162,7 +184,7 @@ export default {
               placeholder: "搜索",
               onClick:
                 _cache[2] ||
-                (_cache[2] = () => $setup.handleShowStack("VideoSearch")),
+                (_cache[2] = () => handleShowStack("VideoSearch")),
             }),
           ]),
         ])

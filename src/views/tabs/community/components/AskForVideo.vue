@@ -24,6 +24,7 @@ import _imports_3 from "@/assets/images/community/icon_fv_rank_three.png";
 
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
+import { Toast } from "vant";
 import AskForVideoList from "./AskForVideoList.vue";
 import { getGlobalProperties } from "@/assets/js/utils.js";
 import AskForVideoDetails from "./AskForVideoDetails.vue";
@@ -34,18 +35,64 @@ export default {
     AskForVideoDetails,
   },
 
-  setup() {
+  setup(props) {
     const store = useStore();
+    let active = ref(0);
+    let newList = ref([]);
     let hotList = ref([]);
     let recommendList = ref([]);
+    let showDetailsPopul = ref(false);
+    let ask_video_id = ref("");
+    let key = ref(1);
+    let finished1 = ref(false);
+    let error1 = ref(false);
+    let loading1 = ref(false);
     let finished2 = ref(false);
+    let error2 = ref(false);
     let loading2 = ref(false);
+    let page1 = ref(0);
     let page2 = ref(1);
     const showLoading = ref(false);
-    const { askVideoHotApi, askVideoRecommendApi } = getGlobalProperties().$api;
+    const askSearchData = ref({
+      type: "",
+      money: "",
+      confirm_status: "",
+      page: 1,
+    });
+    const showSearch = ref(false);
+    const stopPropagation = ref(true);
+    const {
+      askVideoNewApi,
+      askVideoHotApi,
+      askVideoRecommendApi,
+      askVideoSearchApi,
+    } = getGlobalProperties().$api;
     let isWant = computed(() => {
       return store.state.userInfo.want.split(",");
     });
+
+    const getAskVideoNew = () => {
+      askVideoNewApi(
+        {
+          page: page1.value,
+        },
+        "get"
+      ).then((res) => {
+        showLoading.value = false;
+
+        if (res.code === 0) {
+          res.data.rows.forEach((item) => {
+            item.isWant = isWant.value.includes(item.id + "");
+          });
+          newList.value = newList.value.concat(res.data.rows);
+          loading1.value = false;
+
+          if (res.data.rows.length === 0) {
+            finished1.value = true;
+          }
+        }
+      });
+    };
 
     const getAskVideoHot = () => {
       askVideoHotApi(
@@ -79,9 +126,170 @@ export default {
       });
     };
 
+    const close = () => {
+      showDetailsPopul.value = false;
+    };
+
+    const showDetails = (item) => {
+      showDetailsPopul.value = true;
+      key.value = Math.random();
+      ask_video_id.value = item.id;
+    };
+
+    const toAutorDetails = (item) => {
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: "HotAuthorInfo",
+      });
+      store.commit("SET_VIDEO_DETAILS", item);
+    };
+
     getAskVideoHot(); // getAskVideoNew();
 
     getAskVideoRecommend();
+
+    const change = (index) => {
+      stopPropagation.value = true;
+      active.value = index;
+
+      if (index === 2) {
+        stopPropagation.value = false;
+      }
+    };
+
+    const showSearchFun = () => {
+      showSearch.value = true;
+      askSearchData.value.page = 1;
+    };
+
+    const askSearchFun = (num, type) => {
+      askSearchData.value[type] = num;
+    };
+
+    const isSearch = ref(false);
+
+    const askSearch = () => {
+      isSearch.value = true;
+      showSearch.value = false;
+      showLoading.value = true; // loading1.value = true;
+      // loading2.value = true;
+
+      if (active.value === 0) {
+        if (askSearchData.value.page === 1) {
+          newList.value = [];
+        }
+
+        if (
+          askSearchData.value.money === "" &&
+          askSearchData.value.confirm_status === ""
+        ) {
+          isSearch.value = false;
+          newList.value = []; // loading1.value = true;
+
+          page1.value = 1;
+          getAskVideoNew();
+          return;
+        }
+      } else {
+        if (askSearchData.value.page === 1) {
+          hotList.value = [];
+        }
+
+        if (
+          askSearchData.value.type === "" &&
+          askSearchData.value.money === "" &&
+          askSearchData.value.confirm_status === ""
+        ) {
+          isSearch.value = false;
+          hotList.value = []; // loading2.value = true;
+
+          page2.value = 1;
+          getAskVideoHot();
+          return;
+        }
+      }
+
+      let params = {
+        money: askSearchData.value.money,
+        confirm_status: askSearchData.value.confirm_status,
+        page: askSearchData.value.page,
+      };
+
+      if (active.value === 1) {
+        params.type = askSearchData.value.type;
+      }
+
+      askVideoSearchApi(params, "get").then((res) => {
+        showLoading.value = false;
+
+        if (res.code === 0) {
+          loading1.value = false;
+          loading2.value = false;
+          console.log(res);
+
+          if (active.value === 0) {
+            res.data.rows.forEach((item) => {
+              item.isWant = isWant.value.includes(item.id + "");
+            });
+            newList.value = newList.value.concat(res.data.rows);
+
+            if (res.data.rows.length === 0) {
+              finished1.value = true;
+            }
+          } else {
+            res.data.rows.forEach((item) => {
+              item.isWant = isWant.value.includes(item.id + "");
+            });
+            hotList.value = hotList.value.concat(res.data.rows);
+
+            if (res.data.rows.length === 0) {
+              finished2.value = true;
+            }
+          }
+        }
+      });
+    };
+
+    const reset = () => {
+      askSearchData.value = {
+        type: "",
+        money: "",
+        confirm_status: "",
+        page: 1,
+      };
+    };
+
+    const swiper = ref(null);
+
+    const onClickTab = (index) => {
+      swiper.value.swipeTo(index);
+    };
+
+    const onLoad1 = () => {
+      if (!isSearch.value) {
+        loading1.value = true;
+        page1.value++;
+        getAskVideoNew();
+      } else {
+        askSearchData.value.page++;
+        askSearch("fy");
+      }
+    };
+
+    const onLoad2 = () => {
+      if (!isSearch.value) {
+        loading2.value = true;
+        page2.value++;
+        getAskVideoHot();
+      } else {
+        askSearchData.value.page++;
+        askSearch("fy");
+      }
+    };
+
+    const showBottomBanner = computed(() => {
+      return store.state.showBottomBanner;
+    });
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-9e6f72b8"), (n = n()), _popScopeId(), n
@@ -226,7 +434,42 @@ export default {
     const _hoisted_30 = {
       class: "search_btns bottom_btns",
     };
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      active,
+      newList,
+      hotList,
+      recommendList,
+      showDetailsPopul,
+      close,
+      showDetails,
+      ask_video_id,
+      toAutorDetails,
+      key,
+      finished1,
+      error1,
+      loading1,
+      onLoad1,
+      finished2,
+      error2,
+      loading2,
+      onLoad2,
+      stopPropagation,
+      change,
+      showSearch,
+      showSearchFun,
+      askSearchFun,
+      askSearchData,
+      askSearch,
+      reset,
+      onClickTab,
+      swiper,
+      showLoading,
+      showBottomBanner,
+      Toast,
+    });
+
+    return (_ctx, _cache) => {
       const _component_van_tab = _resolveComponent("van-tab");
 
       const _component_van_tabs = _resolveComponent("van-tabs");
@@ -258,15 +501,15 @@ export default {
             _createVNode(
               _component_van_tabs,
               {
-                active: $setup.active,
+                active: active.value,
                 "onUpdate:active":
                   _cache[0] ||
-                  (_cache[0] = ($event) => ($setup.active = $event)),
+                  (_cache[0] = ($event) => (active.value = $event)),
                 "line-height": "0",
                 swipeable: "",
                 animated: "",
                 shrink: "",
-                onChange: $setup.onClickTab,
+                onChange: onClickTab,
                 "title-active-color": "#fd5c18",
                 "title-inactive-color": "#CCCCCC",
                 color: "transparent",
@@ -289,13 +532,13 @@ export default {
               8,
               ["active", "onChange"]
             ),
-            $setup.showLoading
+            showLoading.value
               ? (_openBlock(),
                 _createBlock(_component_Loading, {
                   key: 0,
                 }))
               : _createCommentVNode("", true),
-            $setup.active !== 2
+            active.value !== 2
               ? (_openBlock(),
                 _createElementBlock(
                   "div",
@@ -305,7 +548,7 @@ export default {
                     onClick:
                       _cache[1] ||
                       (_cache[1] = (...args) =>
-                        $setup.showSearchFun && $setup.showSearchFun(...args)),
+                        showSearchFun && showSearchFun(...args)),
                   },
                   _hoisted_5
                 ))
@@ -314,9 +557,9 @@ export default {
               _component_van_swipe,
               {
                 class: "my-swipe",
-                onChange: $setup.change,
+                onChange: change,
                 ref: "swiper",
-                "stop-propagation": $setup.stopPropagation,
+                "stop-propagation": stopPropagation.value,
                 loop: false,
                 "show-indicators": false,
               },
@@ -329,7 +572,7 @@ export default {
                         {
                           class: "tabs_cont",
                           style: _normalizeStyle({
-                            height: $setup.showBottomBanner
+                            height: showBottomBanner.value
                               ? "calc(100vh - 382px)"
                               : "calc(100vh - 312px)",
                           }),
@@ -339,24 +582,24 @@ export default {
                             _createVNode(
                               _component_van_list,
                               {
-                                loading: $setup.loading1,
+                                loading: loading1.value,
                                 "onUpdate:loading":
                                   _cache[2] ||
                                   (_cache[2] = ($event) =>
-                                    ($setup.loading1 = $event)),
-                                error: $setup.error1,
+                                    (loading1.value = $event)),
+                                error: error1.value,
                                 "onUpdate:error":
                                   _cache[3] ||
                                   (_cache[3] = ($event) =>
-                                    ($setup.error1 = $event)),
-                                finished: $setup.finished1,
+                                    (error1.value = $event)),
+                                finished: finished1.value,
                                 offset: 20,
                                 "error-text": "请求失败，点击重新加载",
-                                "finished-text": $setup.showLoading
+                                "finished-text": showLoading.value
                                   ? ""
                                   : "-我也是有底线的-",
                                 "loading-text": "正在获取数据...",
-                                onLoad: $setup.onLoad1,
+                                onLoad: onLoad1,
                               },
                               {
                                 default: _withCtx(() => [
@@ -365,7 +608,7 @@ export default {
                                     _Fragment,
                                     null,
                                     _renderList(
-                                      $setup.newList,
+                                      newList.value,
                                       (item, index) => {
                                         return (
                                           _openBlock(),
@@ -374,7 +617,7 @@ export default {
                                             {
                                               key: index,
                                               onClick: () =>
-                                                $setup.showDetails(item),
+                                                showDetails(item),
                                               data: item,
                                             },
                                             null,
@@ -412,7 +655,7 @@ export default {
                         {
                           class: "tabs_cont",
                           style: _normalizeStyle({
-                            height: $setup.showBottomBanner
+                            height: showBottomBanner.value
                               ? "calc(100vh - 382px)"
                               : "calc(100vh - 312px)",
                           }),
@@ -422,24 +665,24 @@ export default {
                             _createVNode(
                               _component_van_list,
                               {
-                                loading: $setup.loading2,
+                                loading: loading2.value,
                                 "onUpdate:loading":
                                   _cache[4] ||
                                   (_cache[4] = ($event) =>
-                                    ($setup.loading2 = $event)),
-                                error: $setup.error2,
+                                    (loading2.value = $event)),
+                                error: error2.value,
                                 "onUpdate:error":
                                   _cache[5] ||
                                   (_cache[5] = ($event) =>
-                                    ($setup.error2 = $event)),
-                                finished: $setup.finished2,
+                                    (error2.value = $event)),
+                                finished: finished2.value,
                                 offset: 20,
                                 "error-text": "请求失败，点击重新加载",
-                                "finished-text": $setup.showLoading
+                                "finished-text": showLoading.value
                                   ? ""
                                   : "-我也是有底线的-",
                                 "loading-text": "正在获取数据...",
-                                onLoad: $setup.onLoad2,
+                                onLoad: onLoad2,
                               },
                               {
                                 default: _withCtx(() => [
@@ -448,7 +691,7 @@ export default {
                                     _Fragment,
                                     null,
                                     _renderList(
-                                      $setup.hotList,
+                                      hotList.value,
                                       (item, index) => {
                                         return (
                                           _openBlock(),
@@ -457,7 +700,7 @@ export default {
                                             {
                                               key: index,
                                               onClick: () =>
-                                                $setup.showDetails(item),
+                                                showDetails(item),
                                               data: item,
                                             },
                                             null,
@@ -495,7 +738,7 @@ export default {
                         {
                           class: "tabs_cont",
                           style: _normalizeStyle({
-                            height: $setup.showBottomBanner
+                            height: showBottomBanner.value
                               ? "calc(100vh - 382px)"
                               : "calc(100vh - 312px)",
                           }),
@@ -505,14 +748,14 @@ export default {
                           _createElementBlock(
                             _Fragment,
                             null,
-                            _renderList($setup.recommendList, (item, index) => {
+                            _renderList(recommendList.value, (item, index) => {
                               return (
                                 _openBlock(),
                                 _createElementBlock(
                                   "div",
                                   {
                                     class: "bd_box",
-                                    onClick: () => $setup.toAutorDetails(item),
+                                    onClick: () => toAutorDetails(item),
                                     key: index,
                                   },
                                   [
@@ -607,10 +850,10 @@ export default {
           _createVNode(
             _component_van_popup,
             {
-              show: $setup.showDetailsPopul,
+              show: showDetailsPopul.value,
               "onUpdate:show":
                 _cache[6] ||
-                (_cache[6] = ($event) => ($setup.showDetailsPopul = $event)),
+                (_cache[6] = ($event) => (showDetailsPopul.value = $event)),
               class: "popup_coentent",
               overlay: false,
               teleport: "#app",
@@ -625,7 +868,7 @@ export default {
                       {
                         size: "22",
                         name: "arrow-left",
-                        onClick: $setup.close,
+                        onClick: close.value,
                       },
                       null,
                       8,
@@ -638,8 +881,8 @@ export default {
                     _createBlock(
                       _component_ask_for_video_details,
                       {
-                        key: $setup.key,
-                        id: $setup.ask_video_id,
+                        key: key.value,
+                        id: ask_video_id.value,
                       },
                       null,
                       8,
@@ -657,32 +900,32 @@ export default {
             _component_van_popup,
             {
               teleport: "#app",
-              show: $setup.showSearch,
+              show: showSearch.value,
               "onUpdate:show":
                 _cache[16] ||
-                (_cache[16] = ($event) => ($setup.showSearch = $event)),
+                (_cache[16] = ($event) => (showSearch.value = $event)),
               position: "top",
             },
             {
               default: _withCtx(() => [
                 _createElementVNode("div", _hoisted_23, [
-                  $setup.active === 1
+                  active.value === 1
                     ? (_openBlock(),
                       _createElementBlock("div", _hoisted_24, "排序"))
                     : _createCommentVNode("", true),
-                  $setup.active === 1
+                  active.value === 1
                     ? (_openBlock(),
                       _createElementBlock("div", _hoisted_25, [
                         _createElementVNode(
                           "span",
                           {
                             class: _normalizeClass(
-                              $setup.askSearchData.type === 1 ? "active" : ""
+                              askSearchData.value.type === 1 ? "active" : ""
                             ),
                             onClick:
                               _cache[7] ||
                               (_cache[7] = () =>
-                                $setup.askSearchFun(1, "type")),
+                                askSearchFun(1, "type")),
                           },
                           "想看",
                           2
@@ -691,12 +934,12 @@ export default {
                           "span",
                           {
                             class: _normalizeClass(
-                              $setup.askSearchData.type === 2 ? "active" : ""
+                              askSearchData.value.type === 2 ? "active" : ""
                             ),
                             onClick:
                               _cache[8] ||
                               (_cache[8] = () =>
-                                $setup.askSearchFun(2, "type")),
+                                askSearchFun(2, "type")),
                           },
                           "赏金",
                           2
@@ -705,12 +948,12 @@ export default {
                           "span",
                           {
                             class: _normalizeClass(
-                              $setup.askSearchData.type === 3 ? "active" : ""
+                              askSearchData.value.type === 3 ? "active" : ""
                             ),
                             onClick:
                               _cache[9] ||
                               (_cache[9] = () =>
-                                $setup.askSearchFun(3, "type")),
+                                askSearchFun(3, "type")),
                           },
                           "回复",
                           2
@@ -723,11 +966,11 @@ export default {
                       "span",
                       {
                         class: _normalizeClass(
-                          $setup.askSearchData.money === 1 ? "active" : ""
+                          askSearchData.value.money === 1 ? "active" : ""
                         ),
                         onClick:
                           _cache[10] ||
-                          (_cache[10] = () => $setup.askSearchFun(1, "money")),
+                          (_cache[10] = () => askSearchFun(1, "money")),
                       },
                       "有赏金",
                       2
@@ -736,11 +979,11 @@ export default {
                       "span",
                       {
                         class: _normalizeClass(
-                          $setup.askSearchData.money === 0 ? "active" : ""
+                          askSearchData.value.money === 0 ? "active" : ""
                         ),
                         onClick:
                           _cache[11] ||
-                          (_cache[11] = () => $setup.askSearchFun(0, "money")),
+                          (_cache[11] = () => askSearchFun(0, "money")),
                       },
                       "无赏金",
                       2
@@ -752,14 +995,14 @@ export default {
                       "span",
                       {
                         class: _normalizeClass(
-                          $setup.askSearchData.confirm_status === 1
+                          askSearchData.value.confirm_status === 1
                             ? "active"
                             : ""
                         ),
                         onClick:
                           _cache[12] ||
                           (_cache[12] = () =>
-                            $setup.askSearchFun(1, "confirm_status")),
+                            askSearchFun(1, "confirm_status")),
                       },
                       "已采纳",
                       2
@@ -768,14 +1011,14 @@ export default {
                       "span",
                       {
                         class: _normalizeClass(
-                          $setup.askSearchData.confirm_status === 0
+                          askSearchData.value.confirm_status === 0
                             ? "active"
                             : ""
                         ),
                         onClick:
                           _cache[13] ||
                           (_cache[13] = () =>
-                            $setup.askSearchFun(0, "confirm_status")),
+                            askSearchFun(0, "confirm_status")),
                       },
                       "未采纳",
                       2
@@ -789,7 +1032,7 @@ export default {
                         onClick:
                           _cache[14] ||
                           (_cache[14] = (...args) =>
-                            $setup.reset && $setup.reset(...args)),
+                            reset && reset(...args)),
                       },
                       "重置"
                     ),
@@ -800,7 +1043,7 @@ export default {
                         onClick:
                           _cache[15] ||
                           (_cache[15] = (...args) =>
-                            $setup.askSearch && $setup.askSearch(...args)),
+                            askSearch && askSearch(...args)),
                       },
                       "确定"
                     ),

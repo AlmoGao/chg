@@ -16,26 +16,45 @@ import {
   pushScopeId as _pushScopeId,
   popScopeId as _popScopeId,
 } from "vue";
-
 import SwiperCore, { Scrollbar, Autoplay } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/scss";
-SwiperCore.use([Scrollbar, Autoplay]);
 import { ref } from "vue";
+
 import { getGlobalProperties } from "@/assets/js/utils.js";
+import { useStore } from "vuex";
+
+SwiperCore.use([Scrollbar, Autoplay]);
 export default {
+  name: "classificationComponent",
   components: {
     Swiper,
     SwiperSlide,
   },
 
-  setup() {
+  setup(props) {
+    const store = useStore();
+    let activeIndex = ref(0);
+    let showDetailsPopul = ref(false);
+    let searchText = ref("");
     let menuList = ref([]);
+    let labelList = ref([]);
     let hotAuthorList = ref([]);
+    let popupType = ref(1); // let user_id = ref("");
 
     let menu_id = ref("");
+    let label_id = ref("");
     let menuTetx = ref("");
     const { homeMenuApi, hotAuthorApi } = getGlobalProperties().$api;
+    let swipe = ref(null);
+
+    const tabItemClick = (item, index) => {
+      activeIndex.value = index;
+      menu_id.value = item.id;
+      label_id.value = "";
+      menuTetx.value = item.name;
+      swipe.value.swipeTo(index);
+    };
 
     const getMenuList = () => {
       homeMenuApi("", "get").then((res) => {
@@ -61,6 +80,32 @@ export default {
     };
 
     getHotAuthor();
+
+    const labelSearch = (item) => {
+      searchText.value = item.name;
+      label_id.value = item.id;
+      popupType.value = 1;
+      showDetailsPopul.value = true;
+    };
+
+    const toAutorDetails = (item) => {
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: "HotAuthorInfo",
+      });
+      store.commit("SET_VIDEO_DETAILS", item);
+    };
+
+    const menuAll = () => {
+      popupType.value = 1;
+      label_id.value = "";
+      searchText.value = menuTetx.value;
+      showDetailsPopul.value = true;
+    };
+
+    const close = () => {
+      showDetailsPopul.value = false; // searchText.value = "";
+    };
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-0a300d23"), (n = n()), _popScopeId(), n
@@ -132,7 +177,27 @@ export default {
     const _hoisted_17 = {
       class: "search_details_page",
     };
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      activeIndex,
+      tabItemClick,
+      swipe,
+      menuList,
+      labelList,
+      hotAuthorList,
+      close,
+      showDetailsPopul,
+      searchText,
+      labelSearch,
+      toAutorDetails,
+      popupType,
+      menu_id,
+      label_id,
+      menuAll,
+      menuTetx,
+    });
+
+    return (_ctx, _cache) => {
       const _component_my_image = _resolveComponent("my-image");
 
       const _component_swiper_slide = _resolveComponent("swiper-slide");
@@ -155,7 +220,7 @@ export default {
             _createElementBlock(
               _Fragment,
               null,
-              _renderList($setup.menuList, (item, index) => {
+              _renderList(menuList.value, (item, index) => {
                 return (
                   _openBlock(),
                   _createElementBlock(
@@ -164,9 +229,9 @@ export default {
                       key: index,
                       class: _normalizeClass([
                         "tab_item",
-                        index === $setup.activeIndex ? "active" : "",
+                        index === activeIndex.value ? "active" : "",
                       ]),
-                      onClick: () => $setup.tabItemClick(item, index),
+                      onClick: () => tabItemClick(item, index),
                     },
                     [
                       _hoisted_4,
@@ -195,7 +260,7 @@ export default {
                   _createElementBlock(
                     _Fragment,
                     null,
-                    _renderList($setup.menuList, (i, d) => {
+                    _renderList(menuList.value, (i, d) => {
                       return (
                         _openBlock(),
                         _createBlock(
@@ -216,8 +281,8 @@ export default {
                                         onClick:
                                           _cache[0] ||
                                           (_cache[0] = (...args) =>
-                                            $setup.menuAll &&
-                                            $setup.menuAll(...args)),
+                                            menuAll &&
+                                            menuAll(...args)),
                                       },
                                       "查看全部"
                                     ),
@@ -249,7 +314,7 @@ export default {
                                             _Fragment,
                                             null,
                                             _renderList(
-                                              $setup.hotAuthorList,
+                                              hotAuthorList.value,
                                               (a) => {
                                                 return (
                                                   _openBlock(),
@@ -265,7 +330,7 @@ export default {
                                                           "li",
                                                           {
                                                             onClick: () =>
-                                                              $setup.toAutorDetails(
+                                                              toAutorDetails(
                                                                 a
                                                               ),
                                                           },
@@ -330,7 +395,7 @@ export default {
                                           {
                                             key: c,
                                             onClick: () =>
-                                              $setup.labelSearch(b),
+                                              labelSearch(b),
                                             class: "label_item",
                                           },
                                           _toDisplayString(b.name),
@@ -341,8 +406,11 @@ export default {
                                     }),
                                     128
                                   )),
-                                  (_openBlock(),
-                                  _createElementBlock("div", _hoisted_16)),
+                                  // eslint-disable-next-line
+                                  50 % 3 === 2
+                                    ? (_openBlock(),
+                                      _createElementBlock("div", _hoisted_16))
+                                    : _createCommentVNode("", true),
                                 ]),
                               ]),
                             ]),
@@ -363,10 +431,10 @@ export default {
           _createVNode(
             _component_van_popup,
             {
-              show: $setup.showDetailsPopul,
+              show: showDetailsPopul.value,
               "onUpdate:show":
                 _cache[1] ||
-                (_cache[1] = ($event) => ($setup.showDetailsPopul = $event)),
+                (_cache[1] = ($event) => (showDetailsPopul.value = $event)),
               class: "popup_coentent",
               teleport: "#app",
               overlay: false,
@@ -375,16 +443,16 @@ export default {
             {
               default: _withCtx(() => [
                 _createElementVNode("div", _hoisted_17, [
-                  $setup.popupType === 1
+                  popupType.value === 1
                     ? (_openBlock(),
                       _createBlock(
                         _component_search_popup,
                         {
                           key: 0,
-                          searchText: $setup.searchText,
-                          menu_id: $setup.menu_id,
-                          label_id: $setup.label_id,
-                          onClose: $setup.close,
+                          searchText: searchText.value,
+                          menu_id: menu_id.value,
+                          label_id: label_id.value,
+                          onClose: close.value,
                         },
                         null,
                         8,

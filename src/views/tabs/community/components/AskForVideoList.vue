@@ -17,6 +17,11 @@ import {
 } from "vue";
 import _imports_0 from "@/assets/images/community/xk_icon.png";
 import _imports_1 from "@/assets/images/coin.png";
+
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
+import { getGlobalProperties } from "@/assets/js/utils.js";
+import { Toast } from "vant";
 export default {
   props: {
     data: {
@@ -25,7 +30,57 @@ export default {
     },
   },
 
-  setup() {
+  setup(props) {
+    const store = useStore();
+    let dataItem = computed(() => {
+      // 计算属性初始化加10
+      return ref(props.data);
+    });
+    const { askVideoWantApi } = getGlobalProperties().$api;
+
+    const getaskVideoWant = (item) => {
+      // if (item.isWant) {
+      //   return;
+      // }
+      const params = {
+        ask_video_id: item.id,
+      };
+      askVideoWantApi(params, "get").then((res) => {
+        Toast(res.message);
+
+        if (res.code === 0) {
+          item.isWant = !item.isWant;
+
+          if (item.isWant) {
+            item.want_num++;
+          } else {
+            item.want_num--;
+          }
+
+          store.dispatch("getUserInfo");
+        }
+      });
+    };
+
+    const toAutorDetails = (item) => {
+      if (item.isWant === "null") return;
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: "HotAuthorInfo",
+      });
+      store.commit("SET_VIDEO_DETAILS", item);
+    };
+
+    const videoPlay = (item) => {
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: "VideoDetails",
+      });
+      store.commit("SET_VIDEO_DETAILS", {
+        id: item.video_id,
+      });
+    };
+
     const _withScopeId = (n) => (
       _pushScopeId("data-v-70b88005"), (n = n()), _popScopeId(), n
     );
@@ -99,7 +154,15 @@ export default {
       key: 1,
       class: "coin",
     };
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      dataItem: dataItem.value,
+      toAutorDetails,
+      getaskVideoWant,
+      videoPlay,
+    });
+
+    return (_ctx, _cache) => {
       const _component_my_image = _resolveComponent("my-image");
 
       return (
@@ -112,7 +175,7 @@ export default {
               onClick:
                 _cache[1] ||
                 (_cache[1] = _withModifiers(
-                  () => $setup.toAutorDetails($setup.dataItem),
+                  () => toAutorDetails(dataItem.value),
                   ["stop"]
                 )),
             },
@@ -121,7 +184,7 @@ export default {
                 _createVNode(
                   _component_my_image,
                   {
-                    url: $setup.dataItem.user_image,
+                    url: dataItem.value.user_image,
                   },
                   null,
                   8,
@@ -133,17 +196,17 @@ export default {
                   _createElementVNode(
                     "p",
                     null,
-                    _toDisplayString($setup.dataItem.nickname),
+                    _toDisplayString(dataItem.value.nickname),
                     1
                   ),
                   _createElementVNode(
                     "p",
                     null,
-                    _toDisplayString($setup.dataItem.want_num) + "人想看",
+                    _toDisplayString(dataItem.value.want_num) + "人想看",
                     1
                   ),
                 ]),
-                $setup.dataItem.isWant !== "null"
+                dataItem.value.isWant !== "null"
                   ? (_openBlock(),
                     _createElementBlock(
                       "div",
@@ -151,12 +214,12 @@ export default {
                         key: 0,
                         class: _normalizeClass([
                           "right",
-                          $setup.dataItem.isWant ? "active" : "",
+                          dataItem.value.isWant ? "active" : "",
                         ]),
                         onClick:
                           _cache[0] ||
                           (_cache[0] = _withModifiers(
-                            () => $setup.getaskVideoWant($setup.dataItem),
+                            () => getaskVideoWant(dataItem.value),
                             ["stop"]
                           )),
                       },
@@ -166,7 +229,7 @@ export default {
                           "span",
                           null,
                           _toDisplayString(
-                            $setup.dataItem.isWant ? "已求" : "想看"
+                            dataItem.value.isWant ? "已求" : "想看"
                           ),
                           1
                         ),
@@ -181,24 +244,24 @@ export default {
             _createElementVNode(
               "p",
               _hoisted_7,
-              _toDisplayString($setup.dataItem.content),
+              _toDisplayString(dataItem.value.content),
               1
             ),
-            $setup.dataItem.image && $setup.dataItem.image.length
+            dataItem.value.image && dataItem.value.image.length
               ? (_openBlock(),
                 _createElementBlock("div", _hoisted_8, [
                   (_openBlock(true),
                   _createElementBlock(
                     _Fragment,
                     null,
-                    _renderList($setup.dataItem.image, (item) => {
+                    _renderList(dataItem.value.image, (item) => {
                       return (
                         _openBlock(),
                         _createElementBlock(
                           "div",
                           {
                             class: _normalizeClass(
-                              "details_img_" + $setup.dataItem.image.length
+                              "details_img_" + dataItem.value.image.length
                             ),
                             key: item,
                           },
@@ -221,14 +284,14 @@ export default {
                   )),
                 ]))
               : _createCommentVNode("", true),
-            $setup.dataItem.video_title
+            dataItem.value.video_title
               ? (_openBlock(),
                 _createElementBlock("div", _hoisted_9, [
                   _createElementVNode("div", _hoisted_10, [
                     _createVNode(
                       _component_my_image,
                       {
-                        url: $setup.dataItem.video_image,
+                        url: dataItem.value.video_image,
                       },
                       null,
                       8,
@@ -239,15 +302,15 @@ export default {
                     _createElementVNode(
                       "p",
                       null,
-                      _toDisplayString($setup.dataItem.video_title),
+                      _toDisplayString(dataItem.value.video_title),
                       1
                     ),
                     _createElementVNode(
                       "p",
                       null,
-                      _toDisplayString($setup.dataItem.video_nickname) +
+                      _toDisplayString(dataItem.value.video_nickname) +
                         " " +
-                        _toDisplayString($setup.dataItem.video_count) +
+                        _toDisplayString(dataItem.value.video_count) +
                         "次播放",
                       1
                     ),
@@ -255,12 +318,12 @@ export default {
                 ]))
               : _createCommentVNode("", true),
             _createElementVNode("div", _hoisted_12, [
-              $setup.dataItem.money > 0
+              dataItem.value.money > 0
                 ? (_openBlock(),
                   _createElementBlock("div", _hoisted_13, [
                     _hoisted_14,
                     _createTextVNode(
-                      " " + _toDisplayString($setup.dataItem.money) + "赏银 ",
+                      " " + _toDisplayString(dataItem.value.money) + "赏银 ",
                       1
                     ),
                   ]))

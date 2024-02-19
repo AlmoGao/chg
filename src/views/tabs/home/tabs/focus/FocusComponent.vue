@@ -20,13 +20,85 @@ import _imports_2 from "@/assets/images/comment.png";
 import _imports_3 from "@/assets/images/share.png";
 
 import { ref } from "vue";
+import { useStore } from "vuex";
+import { getGlobalProperties } from "@/assets/js/utils.js";
 export default {
-  setup() {
+  setup(props) {
+    const store = useStore();
+    const { fansApi } = getGlobalProperties().$api;
     let videoList = ref([]);
+    let page = ref(0);
+    const error = ref(false);
+    const loading = ref(false);
+    const finished = ref(false);
+    const refreshing = ref(false);
+
+    const onLoad = () => {
+      loading.value = true;
+      page.value++;
+      getVideoList();
+    };
 
     videoList.value = localStorage.getItem("FocusComponent")
       ? JSON.parse(localStorage.getItem("FocusComponent"))
       : [];
+
+    const getVideoList = () => {
+      fansApi(
+        {
+          page: page.value,
+        },
+        "get"
+      ).then((res) => {
+        if (res.code === 0) {
+          refreshing.value = false;
+
+          if (page.value === 1) {
+            localStorage.setItem(
+              "FocusComponent",
+              JSON.stringify(res.data.rows.slice(0, 3))
+            );
+          }
+
+          videoList.value = videoList.value.concat(res.data.rows);
+          loading.value = false;
+
+          if (res.data.rows.length === 0) {
+            finished.value = true;
+          }
+        }
+      });
+    };
+
+    const videoPlay = (item) => {
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: "VideoDetails",
+      });
+      store.commit("SET_VIDEO_DETAILS", item);
+    };
+
+    const toAutorDetails = (item) => {
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: "HotAuthorInfo",
+      });
+      store.commit("SET_VIDEO_DETAILS", item);
+    };
+
+    const showShare = (item) => {
+      store.commit("SET_SHOW_SHARE_POPUP", {
+        show: true,
+        videoDetails: item,
+      });
+    };
+
+    const onRefresh = () => {
+      videoList.value = [];
+      loading.value = true;
+      page.value = 1;
+      getVideoList();
+    };
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-c1056348"), (n = n()), _popScopeId(), n
@@ -155,7 +227,21 @@ export default {
       key: 1,
       class: "no-data",
     };
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      videoList,
+      loading,
+      onLoad,
+      error,
+      videoPlay,
+      finished,
+      toAutorDetails,
+      showShare,
+      onRefresh,
+      refreshing,
+    });
+
+    return (_ctx, _cache) => {
       const _component_loading = _resolveComponent("loading");
 
       const _component_my_image = _resolveComponent("my-image");
@@ -171,46 +257,46 @@ export default {
         _createBlock(
           _component_van_pull_refresh,
           {
-            modelValue: $setup.refreshing,
+            modelValue: refreshing.value,
             "onUpdate:modelValue":
               _cache[2] ||
-              (_cache[2] = ($event) => ($setup.refreshing = $event)),
+              (_cache[2] = ($event) => (refreshing.value = $event)),
             "head-height": 80,
-            onRefresh: $setup.onRefresh,
+            onRefresh: onRefresh,
           },
           {
             loading: _withCtx(() => [_createVNode(_component_loading)]),
             default: _withCtx(() => [
-              $setup.refreshing
+              refreshing.value
                 ? (_openBlock(), _createElementBlock("div", _hoisted_1))
                 : _createCommentVNode("", true),
               _createVNode(
                 _component_van_list,
                 {
-                  loading: $setup.loading,
+                  loading: loading.value,
                   "onUpdate:loading":
                     _cache[0] ||
-                    (_cache[0] = ($event) => ($setup.loading = $event)),
-                  error: $setup.error,
+                    (_cache[0] = ($event) => (loading.value = $event)),
+                  error: error.value,
                   "onUpdate:error":
                     _cache[1] ||
-                    (_cache[1] = ($event) => ($setup.error = $event)),
-                  finished: $setup.finished,
+                    (_cache[1] = ($event) => (error.value = $event)),
+                  finished: finished.value,
                   "error-text": "请求失败，点击重新加载",
                   "finished-text": "-我也是有底线的-",
                   "loading-text": "正在获取数据...",
-                  onLoad: $setup.onLoad,
+                  onLoad: onLoad,
                 },
                 {
                   default: _withCtx(() => [
-                    $setup.videoList && $setup.videoList.length
+                    videoList.value && videoList.value.length
                       ? (_openBlock(),
                         _createElementBlock("div", _hoisted_2, [
                           (_openBlock(true),
                           _createElementBlock(
                             _Fragment,
                             null,
-                            _renderList($setup.videoList, (item) => {
+                            _renderList(videoList.value, (item) => {
                               return (
                                 _openBlock(),
                                 _createElementBlock(
@@ -226,7 +312,7 @@ export default {
                                       {
                                         class: "featured-avItem-header",
                                         onClick: () =>
-                                          $setup.toAutorDetails(item),
+                                          toAutorDetails(item),
                                       },
                                       [
                                         _createElementVNode("div", _hoisted_5, [
@@ -262,7 +348,8 @@ export default {
                                       "div",
                                       {
                                         class: "featured-avItem-cover",
-                                        onClick: () => $setup.videoPlay(item),
+                                        onClick: () =>
+                                          videoPlay(item),
                                       },
                                       [
                                         _hoisted_8,
@@ -338,7 +425,8 @@ export default {
                                         "div",
                                         {
                                           class: "avItem-bottom-item",
-                                          onClick: () => $setup.showShare(item),
+                                          onClick: () =>
+                                            showShare(item),
                                         },
                                         _hoisted_21,
                                         8,
@@ -352,7 +440,7 @@ export default {
                             128
                           )),
                         ]))
-                      : !$setup.loading
+                      : !loading.value
                       ? (_openBlock(),
                         _createElementBlock("div", _hoisted_22, [
                           _createVNode(_component_no_data, {

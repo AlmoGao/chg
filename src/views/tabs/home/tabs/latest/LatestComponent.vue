@@ -21,18 +21,27 @@ import _imports_2 from "@/assets/images/eyeopen.png";
 import _imports_3 from "@/assets/images/zan.png";
 
 import { getGlobalProperties } from "@/assets/js/utils.js";
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
+import { Toast } from "vant";
 export default {
-  setup() {
-    const { newApi } = getGlobalProperties().$api;
+  setup(props) {
+    const store = useStore();
+    const { newApi, focusSaveApi } = getGlobalProperties().$api;
     let page = ref(1);
     const finished = ref(false);
     let videoList = ref([]);
+    const error = ref(false);
     const loading = ref(false);
     const refreshing = ref(false);
     videoList.value = localStorage.getItem("LatestComponent")
       ? JSON.parse(localStorage.getItem("LatestComponent"))
       : [];
+    let isFocus = computed(() => {
+      return store.state.userInfo.focus_user
+        ? store.state.userInfo.focus_user.split(",")
+        : [];
+    });
 
     const getVideoList = () => {
       newApi(
@@ -65,6 +74,57 @@ export default {
     };
 
     getVideoList();
+
+    const onLoad = () => {
+      loading.value = true;
+      page.value++;
+      getVideoList();
+    };
+
+    const focusSave = (item) => {
+      // if (userInfo.value.focus_user.indexOf(item.author_id) !== -1) {
+      //   return;
+      // }
+      const params = {
+        user_id: item.author_id,
+      };
+      focusSaveApi(params, "get").then((res) => {
+        // Toast(res.message);
+        if (res.code === 0) {
+          item.isFocus = !item.isFocus;
+          store.dispatch("getUserInfo");
+          getVideoList();
+        }
+      });
+    };
+
+    const videoPlay = (item) => {
+      store.commit("SET_VIDEO_DETAILS", item);
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: "VideoDetails",
+      });
+    };
+
+    let userInfo = computed(() => {
+      return store.state.userInfo;
+    });
+
+    const toAutorDetails = (item) => {
+      item.user_id = item.author_id;
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: "HotAuthorInfo",
+      });
+      store.commit("SET_VIDEO_DETAILS", item);
+    };
+
+    const onRefresh = () => {
+      videoList.value = [];
+      loading.value = true;
+      page.value = 1;
+      getVideoList();
+    };
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-5d3bb09f"), (n = n()), _popScopeId(), n
@@ -167,7 +227,24 @@ export default {
         -1
       )
     );
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      videoList,
+      videoPlay,
+      focusSave,
+      userInfo,
+      loading,
+      onLoad,
+      error,
+      finished,
+      toAutorDetails,
+      onRefresh,
+      refreshing,
+      Toast,
+      isFocus,
+    });
+
+    return (_ctx, _cache) => {
       const _component_loading = _resolveComponent("loading");
 
       const _component_my_image = _resolveComponent("my-image");
@@ -181,35 +258,35 @@ export default {
         _createBlock(
           _component_van_pull_refresh,
           {
-            modelValue: $setup.refreshing,
+            modelValue: refreshing.value,
             "onUpdate:modelValue":
               _cache[2] ||
-              (_cache[2] = ($event) => ($setup.refreshing = $event)),
+              (_cache[2] = ($event) => (refreshing.value = $event)),
             "head-height": 80,
-            onRefresh: $setup.onRefresh,
+            onRefresh: onRefresh,
           },
           {
             loading: _withCtx(() => [_createVNode(_component_loading)]),
             default: _withCtx(() => [
-              $setup.refreshing
+              refreshing.value
                 ? (_openBlock(), _createElementBlock("div", _hoisted_1))
                 : _createCommentVNode("", true),
               _createVNode(
                 _component_van_list,
                 {
-                  loading: $setup.loading,
+                  loading: loading.value,
                   "onUpdate:loading":
                     _cache[0] ||
-                    (_cache[0] = ($event) => ($setup.loading = $event)),
-                  error: $setup.error,
+                    (_cache[0] = ($event) => (loading.value = $event)),
+                  error: error.value,
                   "onUpdate:error":
                     _cache[1] ||
-                    (_cache[1] = ($event) => ($setup.error = $event)),
-                  finished: $setup.finished,
+                    (_cache[1] = ($event) => (error.value = $event)),
+                  finished: finished.value,
                   "error-text": "请求失败，点击重新加载",
                   "finished-text": "-我也是有底线的-",
                   "loading-text": "正在获取数据...",
-                  onLoad: $setup.onLoad,
+                  onLoad: onLoad,
                 },
                 {
                   default: _withCtx(() => [
@@ -219,7 +296,7 @@ export default {
                         _createElementBlock(
                           _Fragment,
                           null,
-                          _renderList($setup.videoList, (elem) => {
+                          _renderList(videoList.value, (elem) => {
                             return (
                               _openBlock(),
                               _createElementBlock(
@@ -227,7 +304,7 @@ export default {
                                 {
                                   class: "featured-avItem-cover",
                                   key: elem.id,
-                                  onClick: () => $setup.videoPlay(elem),
+                                  onClick: () => videoPlay(elem),
                                 },
                                 [
                                   _createElementVNode("div", _hoisted_5, [

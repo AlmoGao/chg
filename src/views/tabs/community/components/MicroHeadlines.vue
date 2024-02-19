@@ -15,6 +15,7 @@ import {
 } from "vue";
 
 import { ref, computed } from "vue";
+import { Toast } from "vant";
 import MicroHeadlinesList from "./MicroHeadlinesList.vue";
 import { getGlobalProperties } from "@/assets/js/utils.js";
 import MicroHeadlinesDetails from "./MicroHeadlinesDetails.vue";
@@ -26,16 +27,46 @@ export default {
     MicroHeadlinesDetails,
   },
 
-  setup() {
+  setup(props) {
     const store = useStore();
+    let active = ref(0);
+    let newList = ref([]);
     let hotList = ref([]);
+    let head_lines_id = ref("");
+    let showDetailsPopul = ref(false);
+    let finished1 = ref(false);
+    let error1 = ref(false);
+    let loading1 = ref(false);
     let finished2 = ref(false);
+    let error2 = ref(false);
     let loading2 = ref(false);
+    let page1 = ref(0);
     let page2 = ref(1);
-    const { headLineHotApi } = getGlobalProperties().$api;
+    const { headLineNewApi, headLineHotApi } = getGlobalProperties().$api;
     let isFocus = computed(() => {
       return store.state.userInfo.focus_user.split(",");
     });
+
+    const getHeadLineNew = () => {
+      headLineNewApi(
+        {
+          page: page1.value,
+        },
+        "get"
+      ).then((res) => {
+        if (res.code === 0) {
+          res.data.rows.forEach((item) => {
+            item.isFocus = isFocus.value.includes(item.user_id + "");
+          });
+          newList.value = newList.value.concat(res.data.rows);
+          loading1.value = false;
+
+          if (res.data.rows.length === 0) {
+            finished1.value = true;
+          }
+        }
+      });
+    };
 
     const getHeadLineHot = () => {
       headLineHotApi(
@@ -59,6 +90,58 @@ export default {
     };
 
     getHeadLineHot(); // getHeadLineNew();
+
+    const onLoad1 = () => {
+      loading1.value = true;
+      page1.value++;
+      getHeadLineNew();
+    };
+
+    const onLoad2 = () => {
+      loading2.value = true;
+      page2.value++;
+      getHeadLineHot();
+    };
+
+    const childGetList = () => {
+      page1.value = 1;
+      page2.value = 1;
+      newList.value = [];
+      hotList.value = [];
+      getHeadLineNew();
+      getHeadLineHot();
+    };
+
+    const close = () => {
+      showDetailsPopul.value = false;
+      childGetList();
+    };
+
+    const showDetails = (item) => {
+      showDetailsPopul.value = true;
+      head_lines_id.value = item.id;
+    };
+
+    const stopPropagation = ref(false);
+
+    const change = (index) => {
+      stopPropagation.value = true;
+      active.value = index;
+
+      if (index === 0) {
+        stopPropagation.value = false;
+      }
+    };
+
+    const swiper = ref(null);
+
+    const onClickTab = (index) => {
+      swiper.value.swipeTo(index);
+    };
+
+    const showBottomBanner = computed(() => {
+      return store.state.showBottomBanner;
+    });
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-6257ccc2"), (n = n()), _popScopeId(), n
@@ -97,7 +180,33 @@ export default {
     const _hoisted_8 = {
       class: "cont_body_app",
     };
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      active,
+      newList,
+      hotList,
+      showDetailsPopul,
+      close,
+      showDetails,
+      head_lines_id,
+      finished1,
+      error1,
+      loading1,
+      onLoad1,
+      finished2,
+      error2,
+      loading2,
+      onLoad2,
+      childGetList,
+      stopPropagation,
+      change,
+      onClickTab,
+      swiper,
+      showBottomBanner,
+      Toast,
+    });
+
+    return (_ctx, _cache) => {
       const _component_van_tab = _resolveComponent("van-tab");
 
       const _component_van_tabs = _resolveComponent("van-tabs");
@@ -126,15 +235,15 @@ export default {
             _createVNode(
               _component_van_tabs,
               {
-                active: $setup.active,
+                active: active.value,
                 "onUpdate:active":
                   _cache[0] ||
-                  (_cache[0] = ($event) => ($setup.active = $event)),
+                  (_cache[0] = ($event) => (active.value = $event)),
                 "line-height": "0",
                 swipeable: "",
                 animated: "",
                 shrink: "",
-                onChange: $setup.onClickTab,
+                onChange: onClickTab,
                 "title-active-color": "#fd5c18",
                 "title-inactive-color": "#CCCCCC",
                 color: "transparent",
@@ -158,8 +267,8 @@ export default {
               _component_van_swipe,
               {
                 class: "my-swipe",
-                onChange: $setup.change,
-                "stop-propagation": $setup.stopPropagation,
+                onChange: change,
+                "stop-propagation": stopPropagation.value,
                 loop: false,
                 ref: "swiper",
                 "show-indicators": false,
@@ -173,7 +282,7 @@ export default {
                         {
                           class: "tabs_cont",
                           style: _normalizeStyle({
-                            height: $setup.showBottomBanner
+                            height: showBottomBanner.value
                               ? "calc(100vh - 382px)"
                               : "calc(100vh - 312px)",
                           }),
@@ -183,22 +292,22 @@ export default {
                             _createVNode(
                               _component_van_list,
                               {
-                                loading: $setup.loading1,
+                                loading: loading1.value,
                                 "onUpdate:loading":
                                   _cache[1] ||
                                   (_cache[1] = ($event) =>
-                                    ($setup.loading1 = $event)),
-                                error: $setup.error1,
+                                    (loading1.value = $event)),
+                                error: error1.value,
                                 "onUpdate:error":
                                   _cache[2] ||
                                   (_cache[2] = ($event) =>
-                                    ($setup.error1 = $event)),
-                                finished: $setup.finished1,
+                                    (error1.value = $event)),
+                                finished: finished1.value,
                                 offset: 20,
                                 "error-text": "请求失败，点击重新加载",
                                 "finished-text": "-我也是有底线的-",
                                 "loading-text": "正在获取数据...",
-                                onLoad: $setup.onLoad1,
+                                onLoad: onLoad1,
                               },
                               {
                                 default: _withCtx(() => [
@@ -207,7 +316,7 @@ export default {
                                     _Fragment,
                                     null,
                                     _renderList(
-                                      $setup.newList,
+                                      newList.value,
                                       (item, index) => {
                                         return (
                                           _openBlock(),
@@ -217,7 +326,7 @@ export default {
                                               key: index,
                                               data: item,
                                               onClick: () =>
-                                                $setup.showDetails(item),
+                                                showDetails(item),
                                             },
                                             null,
                                             8,
@@ -248,7 +357,7 @@ export default {
                         {
                           class: "tabs_cont",
                           style: _normalizeStyle({
-                            height: $setup.showBottomBanner
+                            height: showBottomBanner.value
                               ? "calc(100vh - 382px)"
                               : "calc(100vh - 312px)",
                           }),
@@ -258,22 +367,22 @@ export default {
                             _createVNode(
                               _component_van_list,
                               {
-                                loading: $setup.loading2,
+                                loading: loading2.value,
                                 "onUpdate:loading":
                                   _cache[3] ||
                                   (_cache[3] = ($event) =>
-                                    ($setup.loading2 = $event)),
-                                error: $setup.error2,
+                                    (loading2.value = $event)),
+                                error: error2.value,
                                 "onUpdate:error":
                                   _cache[4] ||
                                   (_cache[4] = ($event) =>
-                                    ($setup.error2 = $event)),
-                                finished: $setup.finished2,
+                                    (error2.value = $event)),
+                                finished: finished2.value,
                                 offset: 20,
                                 "error-text": "请求失败，点击重新加载",
                                 "finished-text": "-我也是有底线的-",
                                 "loading-text": "正在获取数据...",
-                                onLoad: $setup.onLoad2,
+                                onLoad: onLoad2,
                               },
                               {
                                 default: _withCtx(() => [
@@ -282,7 +391,7 @@ export default {
                                     _Fragment,
                                     null,
                                     _renderList(
-                                      $setup.hotList,
+                                      hotList.value,
                                       (item, index) => {
                                         return (
                                           _openBlock(),
@@ -292,7 +401,7 @@ export default {
                                               key: index,
                                               data: item,
                                               onClick: () =>
-                                                $setup.showDetails(item),
+                                                showDetails(item),
                                             },
                                             null,
                                             8,
@@ -326,10 +435,10 @@ export default {
           _createVNode(
             _component_van_popup,
             {
-              show: $setup.showDetailsPopul,
+              show: showDetailsPopul.value,
               "onUpdate:show":
                 _cache[5] ||
-                (_cache[5] = ($event) => ($setup.showDetailsPopul = $event)),
+                (_cache[5] = ($event) => (showDetailsPopul.value = $event)),
               class: "popup_coentent",
               overlay: false,
               teleport: "#app",
@@ -344,7 +453,7 @@ export default {
                       {
                         size: "22",
                         name: "arrow-left",
-                        onClick: $setup.close,
+                        onClick: close.value,
                       },
                       null,
                       8,
@@ -357,9 +466,9 @@ export default {
                     _createBlock(
                       _component_microHeadlines_details,
                       {
-                        onChildGetList: $setup.childGetList,
-                        key: $setup.head_lines_id,
-                        id: $setup.head_lines_id,
+                        onChildGetList: childGetList.value,
+                        key: head_lines_id.value,
+                        id: head_lines_id.value,
                       },
                       null,
                       8,

@@ -6,8 +6,11 @@ import {
   toDisplayString as _toDisplayString,
   openBlock as _openBlock,
   createElementBlock as _createElementBlock,
+  pushScopeId as _pushScopeId,
+  popScopeId as _popScopeId,
 } from "vue";
 
+import { ref, computed } from "vue";
 export default {
   props: {
     data: {
@@ -16,14 +19,30 @@ export default {
     },
   },
 
-  setup() {
+  setup(props, { emit }) {
+    const dataItem = computed(() => {
+      // 计算属性初始化加10
+      return ref(props.data);
+    });
+
+    const _withScopeId = (n) => (
+      _pushScopeId("data-v-a9b9c138"), (n = n()), _popScopeId(), n
+    );
+
     const _hoisted_1 = {
       class: "comicsItem",
     };
     const _hoisted_2 = {
       class: "img_cont",
     };
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      dataItem: dataItem.value,
+      emit,
+      _withScopeId
+    });
+
+    return () => {
       const _component_my_image = _resolveComponent("my-image");
 
       return (
@@ -33,7 +52,7 @@ export default {
             _createVNode(
               _component_my_image,
               {
-                url: $setup.dataItem.image,
+                url: dataItem.value.image,
               },
               null,
               8,
@@ -43,7 +62,7 @@ export default {
           _createElementVNode(
             "p",
             null,
-            _toDisplayString($setup.dataItem.title),
+            _toDisplayString(dataItem.value.title),
             1
           ),
         ])

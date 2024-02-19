@@ -10,6 +10,8 @@ import {
   toDisplayString as _toDisplayString,
   withCtx as _withCtx,
   createBlock as _createBlock,
+  pushScopeId as _pushScopeId,
+  popScopeId as _popScopeId,
 } from "vue";
 
 import SwiperCore, { Scrollbar, Autoplay } from "swiper";
@@ -24,11 +26,20 @@ export default {
     SwiperSlide,
   },
 
-  setup() {
+  setup(props) {
+    let activeIndex = ref(0);
+    let showDetailsPopul = ref(false);
+    let searchText = ref("");
     let menuList = ref([]);
     let labelList = ref([]);
     let hotAuthorList = ref([]);
     const { homeMenuApi, labelApi, hotAuthorApi } = getGlobalProperties().$api;
+    let swipe = ref(null);
+
+    const tabItemClick = (item, index) => {
+      activeIndex.value = index;
+      swipe.value.swipeTo(index);
+    };
 
     const getMenuList = () => {
       homeMenuApi("", "get").then((res) => {
@@ -60,6 +71,19 @@ export default {
 
     getHotAuthor();
 
+    const labelSearch = (item) => {
+      searchText.value = item.name;
+      showDetailsPopul.value = true;
+    };
+
+    const close = () => {
+      showDetailsPopul.value = false;
+    };
+
+    const _withScopeId = (n) => (
+      _pushScopeId("data-v-48469729"), (n = n()), _popScopeId(), n
+    );
+
     const _hoisted_1 = {
       class: "classification",
     };
@@ -72,7 +96,22 @@ export default {
     const _hoisted_4 = {
       class: "search_details_page",
     };
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      activeIndex,
+      tabItemClick,
+      swipe,
+      menuList,
+      labelList,
+      hotAuthorList,
+      close,
+      showDetailsPopul,
+      searchText,
+      labelSearch,
+      _withScopeId,
+    });
+
+    return (_ctx, _cache) => {
       const _component_my_image = _resolveComponent("my-image");
 
       const _component_swiper_slide = _resolveComponent("swiper-slide");
@@ -104,7 +143,7 @@ export default {
                 _createElementBlock(
                   _Fragment,
                   null,
-                  _renderList($setup.hotAuthorList, (a, index) => {
+                  _renderList(hotAuthorList.value, (a, index) => {
                     return (
                       _openBlock(),
                       _createBlock(
@@ -150,10 +189,10 @@ export default {
           _createVNode(
             _component_van_popup,
             {
-              show: $setup.showDetailsPopul,
+              show: showDetailsPopul.value,
               "onUpdate:show":
                 _cache[0] ||
-                (_cache[0] = ($event) => ($setup.showDetailsPopul = $event)),
+                (_cache[0] = ($event) => (showDetailsPopul.value = $event)),
               class: "popup_coentent",
               teleport: "#app",
               overlay: false,
@@ -165,8 +204,8 @@ export default {
                   _createVNode(
                     _component_search_popup,
                     {
-                      searchText: $setup.searchText,
-                      onClose: $setup.close,
+                      searchText: searchText.value,
+                      onClose: close.value,
                     },
                     null,
                     8,

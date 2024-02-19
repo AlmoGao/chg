@@ -4,6 +4,8 @@ import {
   createStaticVNode as _createStaticVNode,
   openBlock as _openBlock,
   createElementBlock as _createElementBlock,
+  pushScopeId as _pushScopeId,
+  popScopeId as _popScopeId,
 } from "vue";
 import _imports_0 from "@/assets/images/avatar.jpeg";
 import _imports_1 from "@/assets/images/chuang.png";
@@ -13,7 +15,9 @@ import _imports_4 from "@/assets/images/like.png";
 import _imports_5 from "@/assets/images/comment.png";
 import _imports_6 from "@/assets/images/share.png";
 
-// const _withScopeId = n => (_pushScopeId("data-v-680a296b"), n = n(), _popScopeId(), n);
+const _withScopeId = (n) => (
+  _pushScopeId("data-v-680a296b"), (n = n()), _popScopeId(), n
+);
 
 const _hoisted_1 = {
   class: "featured-avItem",
@@ -60,6 +64,7 @@ export default {
       });
     };
 
+    console.log(_withScopeId);
     return () => {
       return (
         _openBlock(),

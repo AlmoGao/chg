@@ -18,6 +18,7 @@ import {
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import { getGlobalProperties } from "@/assets/js/utils.js";
+import { Toast } from "vant";
 export default {
   name: "HotAuthorInfo",
   props: {
@@ -30,11 +31,12 @@ export default {
     },
   },
 
-  setup(props) {
-    const { autoerVideoApi } = getGlobalProperties().$api;
+  setup(props, { emit }) {
+    const { autoerVideoApi, focusSaveApi } = getGlobalProperties().$api;
     const store = useStore();
     let page = ref(1);
     let finished = ref(false);
+    let error = ref(false);
     let loading = ref(false);
     let videoList = ref([]);
     let authorInfo = ref({});
@@ -74,6 +76,40 @@ export default {
     };
 
     getAuthorInfo();
+
+    const onLoad = () => {
+      loading.value = true;
+      page.value++;
+      getAuthorInfo();
+    };
+
+    const videoPlay = (item) => {
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: "VideoDetails",
+      });
+      store.commit("SET_VIDEO_DETAILS", item);
+    };
+
+    const focusSave = () => {
+      // if (authorInfo.value.isFocus) {
+      //   return;
+      // }
+      const params = {
+        user_id: user_id.value.value,
+      };
+      focusSaveApi(params, "get").then((res) => {
+        // Toast(res.message);
+        if (res.code === 0) {
+          authorInfo.value.isFocus = !authorInfo.value.isFocus;
+          store.dispatch("getUserInfo");
+        }
+      });
+    };
+
+    const close = () => {
+      emit("close");
+    };
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-f468fee0"), (n = n()), _popScopeId(), n
@@ -196,7 +232,22 @@ export default {
       key: 1,
       class: "no-data",
     };
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      detailsTitle,
+      close,
+      videoList,
+      videoPlay,
+      loading,
+      onLoad,
+      error,
+      finished,
+      authorInfo,
+      focusSave,
+      Toast,
+    });
+
+    return () => {
       const _component_van_icon = _resolveComponent("van-icon");
 
       const _component_my_image = _resolveComponent("my-image");
@@ -218,7 +269,7 @@ export default {
               {
                 size: "22",
                 name: "arrow-left",
-                onClick: $setup.close,
+                onClick: close.value,
               },
               null,
               8,
@@ -227,7 +278,7 @@ export default {
             _createElementVNode(
               "span",
               _hoisted_3,
-              _toDisplayString($setup.detailsTitle || "个人信息"),
+              _toDisplayString(detailsTitle.value || "个人信息"),
               1
             ),
           ]),
@@ -236,13 +287,13 @@ export default {
               _createElementVNode("div", _hoisted_6, [
                 _createElementVNode("div", _hoisted_7, [
                   _createElementVNode("div", _hoisted_8, [
-                    $setup.authorInfo.top_image
+                    authorInfo.value.top_image
                       ? (_openBlock(),
                         _createElementBlock("div", _hoisted_9, [
                           _createVNode(
                             _component_my_image,
                             {
-                              url: $setup.authorInfo.top_image,
+                              url: authorInfo.value.top_image,
                             },
                             null,
                             8,
@@ -258,7 +309,7 @@ export default {
                       _createElementVNode(
                         "div",
                         _hoisted_13,
-                        _toDisplayString($setup.authorInfo.fans),
+                        _toDisplayString(authorInfo.value.fans),
                         1
                       ),
                       _hoisted_14,
@@ -267,7 +318,7 @@ export default {
                       _createElementVNode(
                         "div",
                         _hoisted_16,
-                        _toDisplayString($setup.authorInfo.focus),
+                        _toDisplayString(authorInfo.value.focus),
                         1
                       ),
                       _hoisted_17,
@@ -276,7 +327,7 @@ export default {
                       _createElementVNode(
                         "div",
                         _hoisted_19,
-                        _toDisplayString($setup.authorInfo.video_num),
+                        _toDisplayString(authorInfo.value.video_num),
                         1
                       ),
                       _hoisted_20,
@@ -289,15 +340,15 @@ export default {
                       onClick:
                         _cache[0] ||
                         (_cache[0] = (...args) =>
-                          $setup.focusSave && $setup.focusSave(...args)),
+                          focusSave && focusSave(...args)),
                       style: _normalizeStyle({
-                        background: $setup.authorInfo.isFocus
+                        background: authorInfo.value.isFocus
                           ? "#5B5B5B"
                           : "#FF5026",
                       }),
                     },
                     _toDisplayString(
-                      $setup.authorInfo.isFocus ? "已关注" : "关注"
+                      authorInfo.value.isFocus ? "已关注" : "关注"
                     ),
                     5
                   ),
@@ -307,7 +358,7 @@ export default {
                 "div",
                 _hoisted_21,
                 " 采花阁官方.优质" +
-                  _toDisplayString($setup.authorInfo.user_label || "创作者"),
+                  _toDisplayString(authorInfo.value.user_label || "创作者"),
                 1
               ),
               _createVNode(
@@ -329,27 +380,27 @@ export default {
                       },
                       {
                         default: _withCtx(() => [
-                          $setup.videoList.length
+                          videoList.value.length
                             ? (_openBlock(),
                               _createElementBlock("div", _hoisted_22, [
                                 _createVNode(
                                   _component_van_list,
                                   {
-                                    loading: $setup.loading,
+                                    loading: loading.value,
                                     "onUpdate:loading":
                                       _cache[1] ||
                                       (_cache[1] = ($event) =>
-                                        ($setup.loading = $event)),
-                                    error: $setup.error,
+                                        (loading.value = $event)),
+                                    error: error.value,
                                     "onUpdate:error":
                                       _cache[2] ||
                                       (_cache[2] = ($event) =>
-                                        ($setup.error = $event)),
-                                    finished: $setup.finished,
+                                        (error.value = $event)),
+                                    finished: finished.value,
                                     "error-text": "请求失败，点击重新加载",
                                     "finished-text": "-我也是有底线的-",
                                     "loading-text": "正在获取数据...",
-                                    onLoad: $setup.onLoad,
+                                    onLoad: onLoad,
                                   },
                                   {
                                     default: _withCtx(() => [
@@ -358,7 +409,7 @@ export default {
                                         _Fragment,
                                         null,
                                         _renderList(
-                                          $setup.videoList,
+                                          videoList.value,
                                           (item, index) => {
                                             return (
                                               _openBlock(),
@@ -368,7 +419,7 @@ export default {
                                                   key: index,
                                                   class: "info-videoItem",
                                                   onClick: () =>
-                                                    $setup.videoPlay(item),
+                                                    videoPlay(item),
                                                 },
                                                 [
                                                   _createElementVNode(

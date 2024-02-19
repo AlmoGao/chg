@@ -24,6 +24,7 @@ import { getGlobalProperties } from "@/assets/js/utils.js";
 import SwipeComponent from "../common/SwipeComponent.vue";
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
+import { Toast } from "vant";
 export default {
   components: {
     SwipeComponent,
@@ -31,9 +32,10 @@ export default {
 
   setup(props, { emit }) {
     const store = useStore();
-    const { recommendApi } = getGlobalProperties().$api;
+    const { recommendApi, focusSaveApi } = getGlobalProperties().$api;
     let page = ref(0);
     let videoList = ref([]);
+    const error = ref(false);
     const loading = ref(false);
     const finished = ref(false);
     const refreshing = ref(false);
@@ -83,10 +85,76 @@ export default {
       });
     };
 
+    const focusSave = async (item) => {
+      // if (item.isFocus) {
+      //   return;
+      // }
+      const params = {
+        user_id: item.user_id,
+      };
+      focusSaveApi(params, "get").then((res) => {
+        // Toast(res.message);
+        if (res.code === 0) {
+          item.isFocus = !item.isFocus;
+          store.dispatch("getUserInfo");
+          page.value = 1;
+          getVideoList();
+        }
+      });
+    };
+
+    const onLoad = () => {
+      loading.value = true;
+      page.value++;
+      getVideoList(); //   error.value = true;
+    };
+
     if (page.value === 0 && videoList.value.length !== 0) {
       page.value++;
       getVideoList();
     }
+
+    const toManhua = () => {
+      // Toast("正在收集，敬请期待！");
+      emit("toManhua");
+    }; // getVideoList();
+
+    const videoPlay = (item) => {
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: "VideoDetails",
+      });
+      store.commit("SET_VIDEO_DETAILS", item);
+    };
+
+    const toAutorDetails = (item) => {
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: "HotAuthorInfo",
+      });
+      store.commit("SET_VIDEO_DETAILS", item);
+    };
+
+    const toDetails = (type) => {
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: type,
+      });
+    };
+
+    const showShare = (item) => {
+      store.commit("SET_SHOW_SHARE_POPUP", {
+        show: true,
+        videoDetails: item,
+      });
+    };
+
+    const onRefresh = () => {
+      videoList.value = [];
+      loading.value = true;
+      page.value = 1;
+      getVideoList();
+    };
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-091de83b"), (n = n()), _popScopeId(), n
@@ -200,7 +268,25 @@ export default {
     );
 
     const _hoisted_25 = ["onClick"];
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      videoList,
+      loading,
+      onLoad,
+      error,
+      videoPlay,
+      finished,
+      focusSave,
+      toAutorDetails,
+      showShare,
+      toManhua,
+      toDetails,
+      onRefresh,
+      refreshing,
+      Toast,
+    });
+
+    return (_ctx, _cache) => {
       const _component_loading = _resolveComponent("loading");
 
       const _component_SwipeComponent = _resolveComponent("SwipeComponent");
@@ -218,12 +304,12 @@ export default {
         _createBlock(
           _component_van_pull_refresh,
           {
-            modelValue: $setup.refreshing,
+            modelValue: refreshing.value,
             "onUpdate:modelValue":
               _cache[5] ||
-              (_cache[5] = ($event) => ($setup.refreshing = $event)),
+              (_cache[5] = ($event) => (refreshing.value = $event)),
             "head-height": 80,
-            onRefresh: $setup.onRefresh,
+            onRefresh: onRefresh,
           },
           {
             loading: _withCtx(() => [_createVNode(_component_loading)]),
@@ -231,19 +317,19 @@ export default {
               _createVNode(
                 _component_van_list,
                 {
-                  loading: $setup.loading,
+                  loading: loading.value,
                   "onUpdate:loading":
                     _cache[3] ||
-                    (_cache[3] = ($event) => ($setup.loading = $event)),
-                  error: $setup.error,
+                    (_cache[3] = ($event) => (loading.value = $event)),
+                  error: error.value,
                   "onUpdate:error":
                     _cache[4] ||
-                    (_cache[4] = ($event) => ($setup.error = $event)),
-                  finished: $setup.finished,
+                    (_cache[4] = ($event) => (error.value = $event)),
+                  finished: finished.value,
                   "error-text": "请求失败，点击重新加载",
                   "finished-text": "-我也是有底线的-",
                   "loading-text": "正在获取数据...",
-                  onLoad: $setup.onLoad,
+                  onLoad: onLoad,
                 },
                 {
                   default: _withCtx(() => [
@@ -258,7 +344,7 @@ export default {
                           onClick:
                             _cache[0] ||
                             (_cache[0] = () =>
-                              $setup.toDetails("ShareFreeWatch")),
+                              toDetails("ShareFreeWatch")),
                           class: "featured-part-item column fensiruan",
                         },
                         _hoisted_4
@@ -268,7 +354,8 @@ export default {
                         {
                           onClick:
                             _cache[1] ||
-                            (_cache[1] = () => $setup.toDetails("Recharge")),
+                            (_cache[1] = () =>
+                              toDetails("Recharge")),
                           class: "featured-part-item column heji",
                         },
                         _hoisted_6
@@ -279,7 +366,7 @@ export default {
                           onClick:
                             _cache[2] ||
                             (_cache[2] = (...args) =>
-                              $setup.toManhua && $setup.toManhua(...args)),
+                              toManhua && toManhua(...args)),
                           class: "featured-part-item column chengrenmanhua",
                         },
                         _hoisted_8
@@ -290,14 +377,14 @@ export default {
                       _createElementBlock(
                         _Fragment,
                         null,
-                        _renderList($setup.videoList, (item) => {
+                        _renderList(videoList.value, (item) => {
                           return (
                             _openBlock(),
                             _createElementBlock(
                               "div",
                               {
                                 key: item.id,
-                                onClick: () => $setup.videoPlay(item),
+                                onClick: () => videoPlay(item),
                                 class: "video_item",
                               },
                               [
@@ -341,7 +428,7 @@ export default {
                                   {
                                     class: "vider_user",
                                     onClick: _withModifiers(
-                                      () => $setup.toAutorDetails(item),
+                                      () => toAutorDetails(item),
                                       ["stop"]
                                     ),
                                   },
@@ -382,7 +469,7 @@ export default {
                                         "span",
                                         {
                                           onClick: _withModifiers(
-                                            () => $setup.focusSave(item),
+                                            () => focusSave(item),
                                             ["stop"]
                                           ),
                                           style: _normalizeStyle({
@@ -410,7 +497,7 @@ export default {
                                         "img",
                                         {
                                           onClick: _withModifiers(
-                                            () => $setup.showShare(item),
+                                            () => showShare(item),
                                             ["stop"]
                                           ),
                                           src: _imports_2,

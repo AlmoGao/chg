@@ -16,10 +16,87 @@ import {
   popScopeId as _popScopeId,
 } from "vue";
 
+import { ref } from "vue";
+import { Toast } from "vant";
+import { getGlobalProperties } from "@/assets/js/utils.js";
+import { useStore } from "vuex";
 export default {
   props: ["id"],
 
-  setup() {
+  setup(props) {
+    const store = useStore();
+    const { askVideoRewardListApi, askVideoRewardApi } =
+      getGlobalProperties().$api;
+    let showDialog = ref(false);
+    let moneyValue = ref("");
+    let rewardList = ref([]);
+    let finished = ref(false);
+    let error = ref(false);
+    let loading = ref(false);
+    let page = ref(0);
+    let total_money = ref("");
+
+    const showDsPopup = () => {
+      moneyValue.value = "";
+      showDialog.value = true;
+    };
+
+    const getAskVideoRewardList = () => {
+      askVideoRewardListApi(
+        {
+          ask_video_id: props.id,
+          page: page.value,
+        },
+        "get"
+      ).then((res) => {
+        if (res.code === 0) {
+          total_money.value = res.data.total_money;
+          rewardList.value = rewardList.value.concat(res.data.rows);
+          loading.value = false;
+
+          if (res.data.rows.length === 0) {
+            finished.value = true;
+          }
+        }
+      });
+    }; // getAskVideoRewardList();
+
+    const onLoad = () => {
+      loading.value = true;
+      page.value++;
+      getAskVideoRewardList();
+    };
+
+    const okBtns = () => {
+      if (moneyValue.value === "") {
+        Toast("打赏金额不能为空");
+        return;
+      }
+
+      const params = {
+        ask_video_id: props.id,
+        money: moneyValue.value,
+      };
+      askVideoRewardApi(params).then((res) => {
+        Toast(res.message);
+
+        if (res.code === 0) {
+          page.value = 1;
+          rewardList.value = [];
+          getAskVideoRewardList();
+        }
+      });
+      showDialog.value = false;
+    };
+
+    const toAutorDetails = (item) => {
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: "HotAuthorInfo",
+      });
+      store.commit("SET_VIDEO_DETAILS", item);
+    };
+
     const _withScopeId = (n) => (
       _pushScopeId("data-v-3a0cce2c"), (n = n()), _popScopeId(), n
     );
@@ -60,7 +137,22 @@ export default {
         -1
       )
     );
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      showDialog,
+      moneyValue,
+      showDsPopup,
+      okBtns,
+      rewardList,
+      finished,
+      error,
+      loading,
+      onLoad,
+      total_money,
+      toAutorDetails,
+    });
+
+    return (_ctx, _cache) => {
       const _component_my_image = _resolveComponent("my-image");
 
       const _component_van_list = _resolveComponent("van-list");
@@ -77,27 +169,27 @@ export default {
               _createElementVNode(
                 "div",
                 _hoisted_2,
-                "共追加了" + _toDisplayString($setup.total_money) + "赏银",
+                "共追加了" + _toDisplayString(total_money.value) + "赏银",
                 1
               ),
               _createElementVNode("div", _hoisted_3, [
                 _createVNode(
                   _component_van_list,
                   {
-                    loading: $setup.loading,
+                    loading: loading.value,
                     "onUpdate:loading":
                       _cache[0] ||
-                      (_cache[0] = ($event) => ($setup.loading = $event)),
-                    error: $setup.error,
+                      (_cache[0] = ($event) => (loading.value = $event)),
+                    error: error.value,
                     "onUpdate:error":
                       _cache[1] ||
-                      (_cache[1] = ($event) => ($setup.error = $event)),
-                    finished: $setup.finished,
+                      (_cache[1] = ($event) => (error.value = $event)),
+                    finished: finished.value,
                     offset: 20,
                     "error-text": "请求失败，点击重新加载",
                     "finished-text": "-我也是有底线的-",
                     "loading-text": "正在获取数据...",
-                    onLoad: $setup.onLoad,
+                    onLoad: onLoad,
                   },
                   {
                     default: _withCtx(() => [
@@ -105,7 +197,7 @@ export default {
                       _createElementBlock(
                         _Fragment,
                         null,
-                        _renderList($setup.rewardList, (item, index) => {
+                        _renderList(rewardList.value, (item, index) => {
                           return (
                             _openBlock(),
                             _createElementBlock(
@@ -120,7 +212,7 @@ export default {
                                   {
                                     class: "user_box",
                                     onClick: _withModifiers(
-                                      () => $setup.toAutorDetails(item),
+                                      () => toAutorDetails(item),
                                       ["stop"]
                                     ),
                                   },
@@ -184,7 +276,7 @@ export default {
                   onClick:
                     _cache[2] ||
                     (_cache[2] = (...args) =>
-                      $setup.showDsPopup && $setup.showDsPopup(...args)),
+                      showDsPopup && showDsPopup(...args)),
                 },
                 "追加赏金"
               ),
@@ -192,10 +284,10 @@ export default {
             _createVNode(
               _component_van_popup,
               {
-                show: $setup.showDialog,
+                show: showDialog.value,
                 "onUpdate:show":
                   _cache[5] ||
-                  (_cache[5] = ($event) => ($setup.showDialog = $event)),
+                  (_cache[5] = ($event) => (showDialog.value = $event)),
                 round: "",
               },
               {
@@ -209,7 +301,7 @@ export default {
                           "onUpdate:modelValue":
                             _cache[3] ||
                             (_cache[3] = ($event) =>
-                              ($setup.moneyValue = $event)),
+                              (moneyValue.value = $event)),
                           type: "text",
                           "max-length": "8",
                           placeholder: "请输入打赏金额",
@@ -217,7 +309,7 @@ export default {
                         null,
                         512
                       ),
-                      [[_vModelText, $setup.moneyValue]]
+                      [[_vModelText, moneyValue.value]]
                     ),
                     _createElementVNode(
                       "div",
@@ -226,7 +318,7 @@ export default {
                         onClick:
                           _cache[4] ||
                           (_cache[4] = (...args) =>
-                            $setup.okBtns && $setup.okBtns(...args)),
+                            okBtns && okBtns(...args)),
                       },
                       "确认"
                     ),

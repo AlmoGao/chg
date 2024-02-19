@@ -25,12 +25,43 @@ export default {
     ComicsItemDetails,
   },
 
-  setup() {
-    const { comicsHotApi } = getGlobalProperties().$api;
+  setup(props, { emit }) {
+    const { comicsNewApi, comicsHotApi } = getGlobalProperties().$api;
+    const topNavIndex = ref(0);
+    const swiper = ref(null);
+    const showDetailsPopul = ref(false);
+    const key = ref("");
+    const comicsNewList = ref([]);
     const comicsHotList = ref([]);
+    const page = ref(0);
+    const finished = ref(false);
+    const error = ref(false);
+    const loading = ref(false);
     const page1 = ref(1);
     const finished1 = ref(false);
+    const error1 = ref(false);
     const loading1 = ref(false);
+    const comics_id = ref("");
+
+    const getComicsNew = () => {
+      comicsNewApi(
+        {
+          page: page.value,
+        },
+        "get"
+      ).then((res) => {
+        console.log(res);
+
+        if (res.code === 0) {
+          comicsNewList.value = comicsNewList.value.concat(res.data.rows);
+          loading.value = false;
+
+          if (res.data.rows.length === 0) {
+            finished.value = true;
+          }
+        }
+      });
+    };
 
     const getComicsHot = () => {
       comicsHotApi(
@@ -52,7 +83,42 @@ export default {
       });
     }; // getComicsNew();
 
+    const onLoad = () => {
+      loading.value = true;
+      page.value++;
+      getComicsNew();
+    };
+
     getComicsHot();
+
+    const onLoad1 = () => {
+      loading1.value = true;
+      page1.value++;
+      getComicsHot();
+    };
+
+    const close = (type) => {
+      showDetailsPopul.value = false;
+
+      if (type !== 1) {
+        emit("close");
+      }
+    };
+
+    const change = (index) => {
+      topNavIndex.value = index;
+    };
+
+    const topNavClick = (index) => {
+      swiper.value.swipeTo(index);
+    };
+
+    const toDetails = (item) => {
+      console.log(item);
+      comics_id.value = item.id;
+      key.value = Math.random();
+      showDetailsPopul.value = true;
+    };
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-4feda0f8"), (n = n()), _popScopeId(), n
@@ -107,7 +173,30 @@ export default {
     const _hoisted_14 = {
       class: "details_page",
     };
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      close,
+      change,
+      swiper,
+      topNavIndex,
+      topNavClick,
+      showDetailsPopul,
+      toDetails,
+      key,
+      comicsNewList,
+      comicsHotList,
+      finished,
+      error,
+      loading,
+      onLoad,
+      finished1,
+      error1,
+      loading1,
+      onLoad1,
+      comics_id,
+    });
+
+    return (_ctx, _cache) => {
       const _component_van_icon = _resolveComponent("van-icon");
 
       const _component_comics_item = _resolveComponent("comics-item");
@@ -133,7 +222,7 @@ export default {
               {
                 size: "22",
                 name: "arrow-left",
-                onClick: $setup.close,
+                onClick: close.value,
               },
               null,
               8,
@@ -148,10 +237,11 @@ export default {
                 {
                   class: _normalizeClass([
                     "top_nav_item",
-                    $setup.topNavIndex === 0 ? "active" : "",
+                    topNavIndex.value === 0 ? "active" : "",
                   ]),
                   onClick:
-                    _cache[0] || (_cache[0] = () => $setup.topNavClick(0)),
+                    _cache[0] ||
+                    (_cache[0] = () => topNavClick(0)),
                 },
                 " 最新排序 ",
                 2
@@ -161,10 +251,11 @@ export default {
                 {
                   class: _normalizeClass([
                     "top_nav_item",
-                    $setup.topNavIndex === 1 ? "active" : "",
+                    topNavIndex.value === 1 ? "active" : "",
                   ]),
                   onClick:
-                    _cache[1] || (_cache[1] = () => $setup.topNavClick(1)),
+                    _cache[1] ||
+                    (_cache[1] = () => topNavClick(1)),
                 },
                 " 最热排序 ",
                 2
@@ -174,7 +265,7 @@ export default {
               _component_van_swipe,
               {
                 class: "my-swipe",
-                onChange: $setup.change,
+                onChange: change,
                 loop: false,
                 ref: "swiper",
                 "show-indicators": false,
@@ -187,20 +278,20 @@ export default {
                         _createVNode(
                           _component_van_list,
                           {
-                            loading: $setup.loading,
+                            loading: loading.value,
                             "onUpdate:loading":
                               _cache[2] ||
                               (_cache[2] = ($event) =>
-                                ($setup.loading = $event)),
-                            error: $setup.error,
+                                (loading.value = $event)),
+                            error: error.value,
                             "onUpdate:error":
                               _cache[3] ||
-                              (_cache[3] = ($event) => ($setup.error = $event)),
-                            finished: $setup.finished,
+                              (_cache[3] = ($event) => (error.value = $event)),
+                            finished: finished.value,
                             "error-text": "请求失败，点击重新加载",
                             "finished-text": "-我也是有底线的-",
                             "loading-text": "正在获取数据...",
-                            onLoad: $setup.onLoad,
+                            onLoad: onLoad,
                           },
                           {
                             default: _withCtx(() => [
@@ -209,7 +300,7 @@ export default {
                                 _createElementBlock(
                                   _Fragment,
                                   null,
-                                  _renderList($setup.comicsNewList, (item) => {
+                                  _renderList(comicsNewList.value, (item) => {
                                     return (
                                       _openBlock(),
                                       _createElementBlock(
@@ -217,7 +308,8 @@ export default {
                                         {
                                           class: "item",
                                           key: item.id,
-                                          onClick: () => $setup.toDetails(item),
+                                          onClick: () =>
+                                            toDetails(item),
                                         },
                                         [
                                           _createVNode(
@@ -237,7 +329,7 @@ export default {
                                   }),
                                   128
                                 )),
-                                $setup.comicsNewList.length % 3 === 2
+                                comicsNewList.value.length % 3 === 2
                                   ? (_openBlock(),
                                     _createElementBlock("div", _hoisted_9))
                                   : _createCommentVNode("", true),
@@ -258,20 +350,20 @@ export default {
                         _createVNode(
                           _component_van_list,
                           {
-                            loading: $setup.loading,
+                            loading: loading.value,
                             "onUpdate:loading":
                               _cache[4] ||
                               (_cache[4] = ($event) =>
-                                ($setup.loading = $event)),
-                            error: $setup.error,
+                                (loading.value = $event)),
+                            error: error.value,
                             "onUpdate:error":
                               _cache[5] ||
-                              (_cache[5] = ($event) => ($setup.error = $event)),
-                            finished: $setup.finished,
+                              (_cache[5] = ($event) => (error.value = $event)),
+                            finished: finished.value,
                             "error-text": "请求失败，点击重新加载",
                             "finished-text": "-我也是有底线的-",
                             "loading-text": "正在获取数据...",
-                            onLoad: $setup.onLoad,
+                            onLoad: onLoad,
                           },
                           {
                             default: _withCtx(() => [
@@ -280,7 +372,7 @@ export default {
                                 _createElementBlock(
                                   _Fragment,
                                   null,
-                                  _renderList($setup.comicsHotList, (item) => {
+                                  _renderList(comicsHotList.value, (item) => {
                                     return (
                                       _openBlock(),
                                       _createElementBlock(
@@ -288,7 +380,8 @@ export default {
                                         {
                                           class: "item",
                                           key: item.id,
-                                          onClick: () => $setup.toDetails(item),
+                                          onClick: () =>
+                                            toDetails(item),
                                         },
                                         [
                                           _createVNode(
@@ -308,7 +401,7 @@ export default {
                                   }),
                                   128
                                 )),
-                                $setup.comicsHotList.length % 3 === 2
+                                comicsHotList.value.length % 3 === 2
                                   ? (_openBlock(),
                                     _createElementBlock("div", _hoisted_13))
                                   : _createCommentVNode("", true),
@@ -333,10 +426,10 @@ export default {
           _createVNode(
             _component_van_popup,
             {
-              show: $setup.showDetailsPopul,
+              show: showDetailsPopul.value,
               "onUpdate:show":
                 _cache[6] ||
-                (_cache[6] = ($event) => ($setup.showDetailsPopul = $event)),
+                (_cache[6] = ($event) => (showDetailsPopul.value = $event)),
               class: "popup_coentent",
               overlay: false,
               position: "right",
@@ -348,9 +441,9 @@ export default {
                   _createBlock(
                     _component_comics_item_details,
                     {
-                      comics_id: $setup.comics_id,
-                      onClose: $setup.close,
-                      key: $setup.key,
+                      comics_id: comics_id.value,
+                      onClose: close.value,
+                      key: key.value,
                     },
                     null,
                     8,

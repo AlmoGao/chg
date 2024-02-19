@@ -21,6 +21,7 @@ import _imports_3 from "@/assets/images/zan.png";
 import { getGlobalProperties } from "@/assets/js/utils.js";
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
+import { Toast } from "vant";
 export default {
   props: {
     searchText: {
@@ -28,13 +29,17 @@ export default {
       default: "",
     },
     menu_id: {
-      type: Number,
-      default: 0,
+      type: [Number, String],
+      default: "",
     },
   },
 
-  setup(props) {
+  setup(props, { emit }) {
     const store = useStore();
+    const searchText = computed(() => {
+      // 计算属性初始化加10
+      return ref(props.searchText);
+    });
     const menu_id = computed(() => {
       // 计算属性初始化加10
       return ref(props.menu_id);
@@ -42,13 +47,16 @@ export default {
     let isFocus = computed(() => {
       return store.state.userInfo.focus_user.split(",");
     });
-    const { newApi } = getGlobalProperties().$api;
+    const { newApi, focusSaveApi } = getGlobalProperties().$api;
     let page = ref(1);
     const finished = ref(false);
     let videoList = ref([]);
+    const error = ref(false);
     const loading = ref(false);
+    let detailsTitle = ref("");
 
     const getVideoList = () => {
+      detailsTitle = searchText.value.value;
       newApi(
         {
           page: page.value,
@@ -71,6 +79,44 @@ export default {
     };
 
     getVideoList();
+
+    const onLoad = () => {
+      loading.value = true;
+      page.value++;
+      getVideoList();
+    };
+
+    const focusSave = (item) => {
+      // if (item.isFocus) {
+      //   return;
+      // }
+      const params = {
+        user_id: item.author_id,
+      };
+      focusSaveApi(params, "get").then((res) => {
+        // Toast(res.message);
+        if (res.code === 0) {
+          item.isFocus = !item.isFocus;
+          store.dispatch("getUserInfo");
+        }
+      });
+    };
+
+    const videoPlay = (item) => {
+      store.commit("SET_VIDEO_DETAILS", item);
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: "VideoDetails",
+      });
+    };
+
+    const close = () => {
+      emit("close");
+    };
+
+    let userInfo = computed(() => {
+      return store.state.userInfo;
+    });
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-e1b81ffc"), (n = n()), _popScopeId(), n
@@ -204,7 +250,22 @@ export default {
         -1
       )
     );
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      videoList,
+      videoPlay,
+      focusSave,
+      userInfo,
+      loading,
+      onLoad,
+      error,
+      finished,
+      detailsTitle,
+      close,
+      Toast,
+    });
+
+    return () => {
       const _component_van_icon = _resolveComponent("van-icon");
 
       const _component_my_image = _resolveComponent("my-image");
@@ -221,7 +282,7 @@ export default {
                 {
                   size: "22",
                   name: "arrow-left",
-                  onClick: $setup.close,
+                  onClick: close.value,
                 },
                 null,
                 8,
@@ -230,7 +291,7 @@ export default {
               _createElementVNode(
                 "span",
                 _hoisted_2,
-                _toDisplayString($setup.detailsTitle),
+                _toDisplayString(detailsTitle.value),
                 1
               ),
             ]),
@@ -239,7 +300,7 @@ export default {
               _createElementBlock(
                 _Fragment,
                 null,
-                _renderList($setup.videoList, (item, index) => {
+                _renderList(videoList.value, (item, index) => {
                   return (
                     _openBlock(),
                     _createElementBlock(
@@ -293,16 +354,16 @@ export default {
                                 class: "recommendItem-focus",
                                 style: _normalizeStyle({
                                   background:
-                                    $setup.userInfo.focus_user.indexOf(
+                                    userInfo.value.focus_user.indexOf(
                                       item.author_id
                                     ) !== -1
                                       ? "#5B5B5B"
                                       : "#FF5026",
                                 }),
-                                onClick: () => $setup.focusSave(item),
+                                onClick: () => focusSave(item),
                               },
                               _toDisplayString(
-                                $setup.userInfo.focus_user.indexOf(
+                                userInfo.value.focus_user.indexOf(
                                   item.author_id
                                 ) === -1
                                   ? "关注"
@@ -326,7 +387,7 @@ export default {
                                   {
                                     class: "featured-avItem-cover",
                                     key: elem.id,
-                                    onClick: () => $setup.videoPlay(elem),
+                                    onClick: () => videoPlay(elem),
                                   },
                                   [
                                     _createElementVNode("div", _hoisted_14, [

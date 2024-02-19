@@ -35,11 +35,21 @@ export default {
   },
   props: ["comics_id"],
 
-  setup(props) {
-    const { comicsDetailsApi, comicsSimilarApi } = getGlobalProperties().$api;
+  setup(props, { emit }) {
+    const { comicsDetailsApi, comicsSimilarApi, comicsLikeApi } =
+      getGlobalProperties().$api;
     const store = useStore();
+    const topNavIndex = ref(0);
+    const swiper = ref(null);
+    const showDetailsPopul = ref(false);
+    const showDetailsPopul1 = ref(false);
+    const key = ref("");
+    const key1 = ref("");
     const detailsData = ref({});
     const similarList = ref([]);
+    const comics_directory_id = ref("");
+    const directoryList = ref([]);
+    const comics_id = ref("");
     let isComicsLike = computed(() => {
       return store.state.userInfo.comics_like.split(",");
     });
@@ -78,6 +88,77 @@ export default {
     };
 
     getComicsSimilar();
+
+    const comicsLike = () => {
+      // if (detailsData.value.isComicsLike) return;
+      comicsLikeApi(
+        {
+          comics_id: props.comics_id,
+        },
+        "get"
+      ).then((res) => {
+        console.log(res);
+
+        if (res.code === 0) {
+          detailsData.value.isComicsLike = !detailsData.value.isComicsLike;
+          store.dispatch("getUserInfo");
+        }
+      });
+    };
+
+    const getComicsDirectory = (list) => {
+      directoryList.value = list;
+    };
+
+    const close = () => {
+      if (showDetailsPopul.value) {
+        showDetailsPopul.value = false;
+      } else {
+        emit("close", 1);
+      }
+    };
+
+    const close1 = () => {
+      showDetailsPopul1.value = false;
+    };
+
+    const change = (index) => {
+      topNavIndex.value = index;
+    };
+
+    const topNavClick = (index) => {
+      swiper.value.swipeTo(index);
+    };
+
+    const toDetails = (item) => {
+      console.log(item);
+      comics_id.value = item.id;
+      key.value = Math.random();
+      showDetailsPopul.value = true;
+    };
+
+    const toFenxian = () => {
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: "ShareFreeWatch",
+      });
+    };
+
+    const isVip = computed(() => {
+      return store.state.userInfo.is_vip;
+    });
+
+    const startReading = (item) => {
+      console.log(item);
+
+      if (item.is_free === 0 && item.money === 0 && isVip.value === 0) {
+        store.commit("SETSHOE_KT_VIP", true);
+      } else {
+        comics_directory_id.value = item.id;
+        key1.value = Math.random();
+        showDetailsPopul1.value = true;
+      }
+    };
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-00ba2920"), (n = n()), _popScopeId(), n
@@ -192,7 +273,31 @@ export default {
     const _hoisted_29 = {
       class: "details_page",
     };
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      close,
+      close1,
+      change,
+      swiper,
+      topNavIndex,
+      topNavClick,
+      showDetailsPopul,
+      showDetailsPopul1,
+      toDetails,
+      key,
+      key1,
+      toFenxian,
+      startReading,
+      detailsData,
+      similarList,
+      comics_directory_id,
+      comicsLike,
+      getComicsDirectory,
+      directoryList,
+      comics_id,
+    });
+
+    return (_ctx, _cache) => {
       const _component_my_image = _resolveComponent("my-image");
 
       const _component_van_icon = _resolveComponent("van-icon");
@@ -225,8 +330,8 @@ export default {
               _createBlock(
                 _component_my_image,
                 {
-                  url: $setup.detailsData.image,
-                  key: $setup.detailsData.image,
+                  url: detailsData.value.image,
+                  key: detailsData.value.image,
                 },
                 null,
                 8,
@@ -238,7 +343,7 @@ export default {
               {
                 size: "22",
                 name: "arrow-left",
-                onClick: $setup.close,
+                onClick: close.value,
               },
               null,
               8,
@@ -247,7 +352,7 @@ export default {
             _createElementVNode(
               "span",
               _hoisted_4,
-              _toDisplayString($setup.detailsData.title),
+              _toDisplayString(detailsData.value.title),
               1
             ),
             _createElementVNode("div", _hoisted_5, [
@@ -255,24 +360,24 @@ export default {
                 "span",
                 null,
                 _toDisplayString(
-                  $setup.detailsData.comics_status === 1 ? "连载" : "完结"
+                  detailsData.value.comics_status === 1 ? "连载" : "完结"
                 ) +
                   "," +
-                  _toDisplayString($setup.detailsData.nickname),
+                  _toDisplayString(detailsData.value.nickname),
                 1
               ),
               _hoisted_6,
               _createElementVNode(
                 "span",
                 null,
-                _toDisplayString($setup.detailsData.comics_num) + "话",
+                _toDisplayString(detailsData.value.comics_num) + "话",
                 1
               ),
               _createElementVNode(
                 "span",
                 _hoisted_7,
                 _toDisplayString(
-                  $setup.detailsData.comics_status === 1 ? "连载中" : "已完结"
+                  detailsData.value.comics_status === 1 ? "连载中" : "已完结"
                 ),
                 1
               ),
@@ -285,10 +390,10 @@ export default {
                 {
                   class: _normalizeClass([
                     "top_nav_item",
-                    $setup.topNavIndex === 0 ? "active" : "",
+                    topNavIndex.value === 0 ? "active" : "",
                   ]),
                   onClick:
-                    _cache[0] || (_cache[0] = () => $setup.topNavClick(0)),
+                    _cache[0] || (_cache[0] = () => topNavClick(0)),
                 },
                 " 作品 ",
                 2
@@ -298,10 +403,10 @@ export default {
                 {
                   class: _normalizeClass([
                     "top_nav_item",
-                    $setup.topNavIndex === 1 ? "active" : "",
+                    topNavIndex.value === 1 ? "active" : "",
                   ]),
                   onClick:
-                    _cache[1] || (_cache[1] = () => $setup.topNavClick(1)),
+                    _cache[1] || (_cache[1] = () => topNavClick(1)),
                 },
                 " 目录 ",
                 2
@@ -311,7 +416,7 @@ export default {
               _component_van_swipe,
               {
                 class: "my-swipe",
-                onChange: $setup.change,
+                onChange: change,
                 loop: false,
                 ref: "swiper",
                 "show-indicators": false,
@@ -324,14 +429,14 @@ export default {
                         _createElementVNode(
                           "div",
                           _hoisted_11,
-                          _toDisplayString($setup.detailsData.content),
+                          _toDisplayString(detailsData.value.content),
                           1
                         ),
                         _createElementVNode("div", _hoisted_12, [
                           _createElementVNode(
                             "span",
                             null,
-                            _toDisplayString($setup.detailsData.count) +
+                            _toDisplayString(detailsData.value.count) +
                               "次浏览",
                             1
                           ),
@@ -339,7 +444,7 @@ export default {
                           _createElementVNode(
                             "span",
                             null,
-                            _toDisplayString($setup.detailsData.like_num) +
+                            _toDisplayString(detailsData.value.like_num) +
                               "喜欢",
                             1
                           ),
@@ -350,7 +455,7 @@ export default {
                           _createElementBlock(
                             _Fragment,
                             null,
-                            _renderList($setup.similarList, (item) => {
+                            _renderList(similarList.value, (item) => {
                               return (
                                 _openBlock(),
                                 _createElementBlock(
@@ -358,7 +463,7 @@ export default {
                                   {
                                     class: "item",
                                     key: item.id,
-                                    onClick: () => $setup.toDetails(item),
+                                    onClick: () => toDetails(item),
                                   },
                                   [
                                     _createVNode(
@@ -378,7 +483,7 @@ export default {
                             }),
                             128
                           )),
-                          $setup.similarList.length % 3 === 2
+                          similarList.value.length % 3 === 2
                             ? (_openBlock(),
                               _createElementBlock("div", _hoisted_17))
                             : _createCommentVNode("", true),
@@ -393,10 +498,10 @@ export default {
                         _createVNode(
                           _component_comics_content,
                           {
-                            comics_id: $setup.props.comics_id,
-                            comics_status: $setup.detailsData.comics_status,
-                            onStartReading: $setup.startReading,
-                            onGetComicsDirectory: $setup.getComicsDirectory,
+                            comics_id: props.value.comics_id,
+                            comics_status: detailsData.value.comics_status,
+                            onStartReading: startReading,
+                            onGetComicsDirectory: getComicsDirectory,
                           },
                           null,
                           8,
@@ -424,10 +529,10 @@ export default {
                   onClick:
                     _cache[2] ||
                     (_cache[2] = (...args) =>
-                      $setup.comicsLike && $setup.comicsLike(...args)),
+                      comicsLike && comicsLike(...args)),
                 },
                 [
-                  $setup.detailsData.isComicsLike
+                  detailsData.value.isComicsLike
                     ? (_openBlock(), _createElementBlock("img", _hoisted_20))
                     : (_openBlock(), _createElementBlock("img", _hoisted_21)),
                   _hoisted_22,
@@ -439,7 +544,7 @@ export default {
                   onClick:
                     _cache[3] ||
                     (_cache[3] = (...args) =>
-                      $setup.toFenxian && $setup.toFenxian(...args)),
+                      toFenxian && toFenxian(...args)),
                 },
                 _hoisted_25
               ),
@@ -449,7 +554,7 @@ export default {
                   onClick:
                     _cache[4] ||
                     (_cache[4] = () =>
-                      $setup.startReading($setup.directoryList[0])),
+                      startReading(directoryList.value[0])),
                 },
                 _hoisted_27
               ),
@@ -458,10 +563,10 @@ export default {
           _createVNode(
             _component_van_popup,
             {
-              show: $setup.showDetailsPopul,
+              show: showDetailsPopul.value,
               "onUpdate:show":
                 _cache[5] ||
-                (_cache[5] = ($event) => ($setup.showDetailsPopul = $event)),
+                (_cache[5] = ($event) => (showDetailsPopul.value = $event)),
               class: "popup_coentent",
               overlay: false,
               position: "right",
@@ -473,9 +578,9 @@ export default {
                   _createBlock(
                     _component_comics_item_details,
                     {
-                      onClose: $setup.close,
-                      comics_id: $setup.comics_id,
-                      key: $setup.key,
+                      onClose: close.value,
+                      comics_id: comics_id.value,
+                      key: key.value,
                     },
                     null,
                     8,
@@ -491,10 +596,10 @@ export default {
           _createVNode(
             _component_van_popup,
             {
-              show: $setup.showDetailsPopul1,
+              show: showDetailsPopul1.value,
               "onUpdate:show":
                 _cache[6] ||
-                (_cache[6] = ($event) => ($setup.showDetailsPopul1 = $event)),
+                (_cache[6] = ($event) => (showDetailsPopul1.value = $event)),
               class: "popup_coentent",
               overlay: false,
               position: "right",
@@ -506,11 +611,11 @@ export default {
                   _createBlock(
                     _component_comics_contents_details,
                     {
-                      comics_id: $setup.props.comics_id,
-                      comics_status: $setup.detailsData.comics_status,
-                      comics_directory_id: $setup.comics_directory_id,
-                      onClose: $setup.close1,
-                      key: $setup.key1,
+                      comics_id: props.value.comics_id,
+                      comics_status: detailsData.value.comics_status,
+                      comics_directory_id: comics_directory_id.value,
+                      onClose: close1,
+                      key: key1.value,
                     },
                     null,
                     8,

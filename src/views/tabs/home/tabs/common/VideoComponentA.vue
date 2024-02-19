@@ -12,6 +12,7 @@ import {
 import _imports_0 from "@/assets/images/mine/video.jpg";
 import _imports_1 from "@/assets/images/mine/share.png";
 
+import { ref } from "vue";
 export default {
   name: "NoData",
   props: {
@@ -21,7 +22,13 @@ export default {
     },
   },
 
-  setup() {
+  setup(props) {
+    const item = ref(props.itemData);
+    console.log({
+      props,
+      item,
+    });
+
     const _withScopeId = (n) => (
       _pushScopeId("data-v-4daafcf2"), (n = n()), _popScopeId(), n
     );
@@ -84,7 +91,9 @@ export default {
         -1
       )
     );
-    return (_ctx, _cache, $props, $setup) => {
+
+ 
+    return () => {
       const _component_my_image = _resolveComponent("my-image");
 
       return (
@@ -94,7 +103,7 @@ export default {
             _createVNode(
               _component_my_image,
               {
-                url: $setup.item.image,
+                url: item.value.image,
               },
               null,
               8,
@@ -107,7 +116,7 @@ export default {
               _createElementVNode(
                 "p",
                 _hoisted_6,
-                _toDisplayString($setup.item.title),
+                _toDisplayString(item.value.title),
                 1
               ),
               _hoisted_7,

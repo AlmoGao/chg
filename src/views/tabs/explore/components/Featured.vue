@@ -1,6 +1,7 @@
 <script>
 import {
   createElementVNode as _createElementVNode,
+  createTextVNode as _createTextVNode,
   renderList as _renderList,
   Fragment as _Fragment,
   openBlock as _openBlock,
@@ -75,34 +76,38 @@ const _hoisted_8 = /*#__PURE__*/ _createStaticVNode(
 );
 
 const _hoisted_11 = [_hoisted_8];
-export function render() {
-  return (
-    _openBlock(),
-    _createElementBlock("div", _hoisted_1, [
-      _hoisted_2,
-      _createElementVNode("div", _hoisted_3, [
-        _createElementVNode("div", _hoisted_4, [
-          _hoisted_5,
-          _createElementVNode("div", _hoisted_7, [
-            (_openBlock(),
-            _createElementBlock(
-              _Fragment,
-              null,
-              _renderList(4, (i) => {
-                return _createElementVNode(
-                  "div",
-                  {
-                    key: i,
-                  },
-                  _hoisted_11
-                );
-              }),
-              64
-            )),
+console.log(_createTextVNode);
+
+export default {
+  setup() {
+    return (
+      _openBlock(),
+      _createElementBlock("div", _hoisted_1, [
+        _hoisted_2,
+        _createElementVNode("div", _hoisted_3, [
+          _createElementVNode("div", _hoisted_4, [
+            _hoisted_5,
+            _createElementVNode("div", _hoisted_7, [
+              (_openBlock(),
+              _createElementBlock(
+                _Fragment,
+                null,
+                _renderList(4, (i) => {
+                  return _createElementVNode(
+                    "div",
+                    {
+                      key: i,
+                    },
+                    _hoisted_11
+                  );
+                }),
+                64
+              )),
+            ]),
           ]),
         ]),
-      ]),
-    ])
-  );
-}
+      ])
+    );
+  },
+};
 </script>

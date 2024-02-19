@@ -14,12 +14,15 @@ import {
 import _imports_0 from "@/assets/images/home_logo.png";
 import _imports_1 from "@/assets/images/everyday.png";
 
+import { computed, ref } from "vue";
 import FocusComponent from "./tabs/focus/FocusComponent.vue";
 import RecommondComponent from "./tabs/recommond/RecommondComponent.vue";
 import LatestComponent from "./tabs/latest/LatestComponent.vue";
 import StudioVideo from "./tabs/studio/StudioVideo.vue";
 import todaysHeadlines from "./tabs/todays/todaysHeadlines.vue";
 import AdultComics from "./tabs/adultComics/AdultComics.vue";
+import { useStore } from "vuex";
+import { Dialog } from "vant";
 export default {
   components: {
     FocusComponent,
@@ -31,7 +34,89 @@ export default {
   },
   name: "HomeView",
 
-  setup() {
+  setup(props, { emit }) {
+    const store = useStore(); // store.dispatch("getUserInfo");
+
+    const active = ref(1);
+    const showAdultComicsPopul = ref(false);
+    const skeletonLoading = ref(true);
+    const showBottomBanner = computed(() => {
+      return store.state.showBottomBanner;
+    });
+    let navs = ref([
+      {
+        name: "关注",
+        id: "gz",
+        component: "FocusComponent",
+      },
+      {
+        name: "推荐",
+        id: "tj",
+        component: "RecommondComponent",
+      },
+      {
+        name: "制片厂",
+        id: "zpc",
+        component: "StudioVideo",
+      },
+      {
+        name: "今日头条",
+        id: "jrtt",
+        component: "todaysHeadlines",
+      },
+      {
+        name: "最新",
+        id: "zx",
+        component: "LatestComponent",
+      },
+    ]);
+    let currentComponent = computed(() => {
+      return navs.value[active.value]["component"];
+    });
+
+    const skeletonF = () => {
+      skeletonLoading.value = false;
+    }; // const { homeMenuApi, labelApi, recommendApi, fansApi, emphasisApi, movieMakerApi } = getGlobalProperties().$api;
+
+    const handleShowStack = (path) => {
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: path,
+      });
+    }; // const getMenu = () => {
+    //   fansApi(" ", "get").then((res) => {
+    //     console.log(res);
+    //     if (res.code === 0) {
+    //     }
+    //   });
+    // };
+    // getMenu()
+
+    const toFaxian = () => {
+      emit("toFaxian");
+    };
+
+    const releaseValue = () => {
+      Dialog.alert({
+        title: "温馨提示",
+        showCancelButton: true,
+        confirmButtonText: "下载APP",
+        cancelButtonText: "确认",
+        className: "okAlertPopup",
+        message: "请下载采花阁APP使用上传功能！",
+      }).then(() => {
+        window.open(store.state.baseUrl.h5_download_url);
+      });
+    };
+
+    const toManhua = () => {
+      showAdultComicsPopul.value = true;
+    };
+
+    const close = () => {
+      showAdultComicsPopul.value = false;
+    };
+
     const _withScopeId = (n) => (
       _pushScopeId("data-v-0dbb8f3f"), (n = n()), _popScopeId(), n
     );
@@ -81,7 +166,24 @@ export default {
     const _hoisted_7 = {
       class: "details_page",
     };
-    return (_ctx, _cache, $props, $setup) => {
+
+    console.log({
+      props,
+      navs,
+      active,
+      currentComponent,
+      handleShowStack,
+      toFaxian,
+      releaseValue,
+      toManhua,
+      showAdultComicsPopul,
+      close,
+      showBottomBanner,
+      skeletonLoading,
+      skeletonF,
+    });
+
+    return (_ctx, _cache) => {
       const _component_van_skeleton = _resolveComponent("van-skeleton");
 
       const _component_van_search = _resolveComponent("van-search");
@@ -119,7 +221,7 @@ export default {
               {
                 title: "",
                 row: 10,
-                loading: $setup.skeletonLoading,
+                loading: skeletonLoading.value,
               },
               null,
               8,
@@ -136,7 +238,8 @@ export default {
                     placeholder: "视频｜创作",
                     onClick:
                       _cache[0] ||
-                      (_cache[0] = () => $setup.handleShowStack("VideoSearch")),
+                      (_cache[0] = () =>
+                        handleShowStack("VideoSearch")),
                   }),
                 ]),
                 _createElementVNode(
@@ -145,7 +248,8 @@ export default {
                     class: "everyday",
                     onClick:
                       _cache[1] ||
-                      (_cache[1] = () => $setup.handleShowStack("VideoMrtj")),
+                      (_cache[1] = () =>
+                        handleShowStack("VideoMrtj")),
                   },
                   _hoisted_5
                 ),
@@ -154,10 +258,10 @@ export default {
                 _createVNode(
                   _component_van_tabs,
                   {
-                    active: $setup.active,
+                    active: active.value,
                     "onUpdate:active":
                       _cache[2] ||
-                      (_cache[2] = ($event) => ($setup.active = $event)),
+                      (_cache[2] = ($event) => (active.value = $event)),
                     swipeable: "",
                     animated: "",
                     background: "#282828",
@@ -180,7 +284,7 @@ export default {
                               {
                                 class: "cont_body",
                                 style: _normalizeStyle({
-                                  height: $setup.showBottomBanner
+                                  height: showBottomBanner.value
                                     ? "calc(100vh - 220px)"
                                     : "calc(100vh - 150px)",
                                 }),
@@ -205,7 +309,7 @@ export default {
                               {
                                 class: "cont_body",
                                 style: _normalizeStyle({
-                                  height: $setup.showBottomBanner
+                                  height: showBottomBanner.value
                                     ? "calc(100vh - 220px)"
                                     : "calc(100vh - 150px)",
                                 }),
@@ -214,8 +318,8 @@ export default {
                                 _createVNode(
                                   _component_recommond_component,
                                   {
-                                    onToManhua: $setup.toManhua,
-                                    onSkeletonF: $setup.skeletonF,
+                                    onToManhua: toManhua,
+                                    onSkeletonF: skeletonF,
                                   },
                                   null,
                                   8,
@@ -241,7 +345,7 @@ export default {
                               {
                                 class: "cont_body",
                                 style: _normalizeStyle({
-                                  height: $setup.showBottomBanner
+                                  height: showBottomBanner.value
                                     ? "calc(100vh - 220px)"
                                     : "calc(100vh - 150px)",
                                 }),
@@ -266,7 +370,7 @@ export default {
                               {
                                 class: "cont_body",
                                 style: _normalizeStyle({
-                                  height: $setup.showBottomBanner
+                                  height: showBottomBanner.value
                                     ? "calc(100vh - 220px)"
                                     : "calc(100vh - 150px)",
                                 }),
@@ -291,7 +395,7 @@ export default {
                               {
                                 class: "cont_body",
                                 style: _normalizeStyle({
-                                  height: $setup.showBottomBanner
+                                  height: showBottomBanner.value
                                     ? "calc(100vh - 220px)"
                                     : "calc(100vh - 150px)",
                                 }),
@@ -313,7 +417,7 @@ export default {
                   _component_van_icon,
                   {
                     name: "wap-nav",
-                    onClick: $setup.toFaxian,
+                    onClick: toFaxian,
                   },
                   null,
                   8,
@@ -323,11 +427,11 @@ export default {
               _createVNode(
                 _component_van_popup,
                 {
-                  show: $setup.showAdultComicsPopul,
+                  show: showAdultComicsPopul.value,
                   "onUpdate:show":
                     _cache[3] ||
                     (_cache[3] = ($event) =>
-                      ($setup.showAdultComicsPopul = $event)),
+                      (showAdultComicsPopul.value = $event)),
                   class: "popup_coentent",
                   overlay: false,
                   position: "right",
@@ -338,7 +442,7 @@ export default {
                       _createVNode(
                         _component_AdultComics,
                         {
-                          onClose: $setup.close,
+                          onClose: close.value,
                         },
                         null,
                         8,

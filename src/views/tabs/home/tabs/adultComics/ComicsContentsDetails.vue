@@ -27,9 +27,10 @@ export default {
   },
   props: ["comics_directory_id", "comics_id", "comics_status"],
 
-  setup(props) {
+  setup(props, { emit }) {
     const { comicsPayApi } = getGlobalProperties().$api;
     const store = useStore();
+    const showMl = ref(false);
     const detailsData = ref({});
     const showLoading = ref(true);
     const directoryList = ref([]);
@@ -54,6 +55,38 @@ export default {
     };
 
     comicsPay(props.comics_directory_id);
+
+    const close = () => {
+      emit("close");
+    };
+
+    const toFenxian = () => {
+      store.commit("SET_LOGIN_POPUP", {
+        show: true,
+        type: "ShareFreeWatch",
+      });
+    };
+
+    const lockMl = () => {
+      showMl.value = true;
+    };
+
+    const startReading = (item) => {
+      comicsPay(item.id);
+      showMl.value = false;
+    };
+
+    const getComicsDirectory = (list) => {
+      directoryList.value = list;
+    };
+
+    const prev = () => {
+      comicsPay(directoryList.value[detailsData.value.sort + 1].id);
+    };
+
+    const next = () => {
+      comicsPay(directoryList.value[detailsData.value.sort - 1].id);
+    };
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-06073402"), (n = n()), _popScopeId(), n
@@ -165,7 +198,22 @@ export default {
         -1
       )
     );
-    return (_ctx, _cache, $props, $setup) => {
+    console.log({
+      props,
+      close,
+      toFenxian,
+      showMl,
+      lockMl,
+      detailsData,
+      showLoading,
+      startReading,
+      getComicsDirectory,
+      directoryList,
+      prev,
+      next,
+    });
+
+    return (_ctx, _cache) => {
       const _component_van_icon = _resolveComponent("van-icon");
 
       const _component_Loading = _resolveComponent("Loading");
@@ -185,7 +233,7 @@ export default {
               {
                 size: "22",
                 name: "arrow-left",
-                onClick: $setup.close,
+                onClick: close.value,
               },
               null,
               8,
@@ -194,7 +242,7 @@ export default {
             _hoisted_3,
           ]),
           _createElementVNode("div", _hoisted_4, [
-            $setup.showLoading
+            showLoading.value
               ? (_openBlock(),
                 _createBlock(_component_Loading, {
                   key: 0,
@@ -204,7 +252,7 @@ export default {
             _createElementBlock(
               _Fragment,
               null,
-              _renderList($setup.detailsData.image_list, (item) => {
+              _renderList(detailsData.value.image_list, (item) => {
                 return (
                   _openBlock(),
                   _createElementBlock(
@@ -230,8 +278,8 @@ export default {
               128
             )),
           ]),
-          $setup.directoryList.length &&
-          $setup.directoryList[0].sort < $setup.detailsData.sort
+          directoryList.value.length &&
+          directoryList.value[0].sort < detailsData.value.sort
             ? (_openBlock(),
               _createElementBlock(
                 "div",
@@ -240,15 +288,15 @@ export default {
                   onClick:
                     _cache[0] ||
                     (_cache[0] = (...args) =>
-                      $setup.next && $setup.next(...args)),
+                      next && next(...args)),
                   class: "CartoonViewPage-next",
                 },
                 _hoisted_7
               ))
             : _createCommentVNode("", true),
-          $setup.directoryList.length &&
-          $setup.directoryList[$setup.directoryList.length - 1].sort >
-            $setup.detailsData.sort
+          directoryList.value.length &&
+          directoryList.value[directoryList.value.length - 1].sort >
+            detailsData.value.sort
             ? (_openBlock(),
               _createElementBlock(
                 "div",
@@ -258,7 +306,7 @@ export default {
                   onClick:
                     _cache[1] ||
                     (_cache[1] = (...args) =>
-                      $setup.prev && $setup.prev(...args)),
+                      prev && prev(...args)),
                 },
                 _hoisted_10
               ))
@@ -270,7 +318,7 @@ export default {
                 onClick:
                   _cache[2] ||
                   (_cache[2] = (...args) =>
-                    $setup.lockMl && $setup.lockMl(...args)),
+                    lockMl && lockMl(...args)),
               },
               _hoisted_14
             ),
@@ -280,7 +328,7 @@ export default {
                 onClick:
                   _cache[3] ||
                   (_cache[3] = (...args) =>
-                    $setup.toFenxian && $setup.toFenxian(...args)),
+                    toFenxian && toFenxian(...args)),
               },
               _hoisted_17
             ),
@@ -288,9 +336,9 @@ export default {
           _createVNode(
             _component_van_popup,
             {
-              show: $setup.showMl,
+              show: showMl.value,
               "onUpdate:show":
-                _cache[4] || (_cache[4] = ($event) => ($setup.showMl = $event)),
+                _cache[4] || (_cache[4] = ($event) => (showMl.value = $event)),
               position: "bottom",
             },
             {
@@ -300,10 +348,10 @@ export default {
                   _createVNode(
                     _component_comics_content,
                     {
-                      comics_status: $setup.props.comics_status,
-                      comics_id: $setup.props.comics_id,
-                      onStartReading: $setup.startReading,
-                      onGetComicsDirectory: $setup.getComicsDirectory,
+                      comics_status: props.value.comics_status,
+                      comics_id: props.value.comics_id,
+                      onStartReading: startReading,
+                      onGetComicsDirectory: getComicsDirectory,
                     },
                     null,
                     8,
