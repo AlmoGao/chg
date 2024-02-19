@@ -284,7 +284,7 @@ export default {
                           style: _normalizeStyle({
                             height: showBottomBanner.value
                               ? "calc(100vh - 382px)"
-                              : "calc(100vh - 312px)",
+                              : "calc(100vh - 180px)",
                           }),
                         },
                         [
@@ -359,7 +359,7 @@ export default {
                           style: _normalizeStyle({
                             height: showBottomBanner.value
                               ? "calc(100vh - 382px)"
-                              : "calc(100vh - 312px)",
+                              : "calc(100vh - 180px)",
                           }),
                         },
                         [

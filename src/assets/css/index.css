@@ -906,7 +906,7 @@
 }
 
 .bounty_list .bonuty_box {
-    height: calc(100vh - 200px);
+    height: calc(100vh - 180px);
     overflow-x: hidden;
     overflow-y: auto
 }
@@ -6107,7 +6107,7 @@ background-color: rgba(0,0,0,0)!important;
 
 .askForVideo .tabs_cont {
     padding: 10px 15px;
-    height: calc(100vh - 312px);
+    height: calc(100vh - 212px);
     overflow-y: auto;
     overflow-x: hidden
 }

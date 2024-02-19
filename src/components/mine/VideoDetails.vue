@@ -848,6 +848,8 @@ export default {
     });
 
     return (_ctx, _cache) => {
+      const _component_video_banner = _resolveComponent("video-banner");
+
       const _component_my_header = _resolveComponent("my-header");
 
       const _component_van_icon = _resolveComponent("van-icon");
@@ -889,6 +891,7 @@ export default {
               ["onClick"]
             ),
           ]),
+          _createVNode(_component_video_banner),
           _createElementVNode("div", _hoisted_3, [
             _withDirectives(
               _createElementVNode("div", _hoisted_4, _hoisted_6, 512),

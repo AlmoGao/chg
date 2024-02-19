@@ -159,7 +159,7 @@ export default {
                   {
                     default: _withCtx(() => [
                       _createElementVNode("div", _hoisted_6, [
-                        _createVNode(_component_SwipeComponent),
+                        // _createVNode(_component_SwipeComponent),
                         _createVNode(_component_AskForVideo),
                       ]),
                     ]),
@@ -174,7 +174,7 @@ export default {
                   {
                     default: _withCtx(() => [
                       _createElementVNode("div", _hoisted_7, [
-                        _createVNode(_component_SwipeComponent),
+                        // _createVNode(_component_SwipeComponent),
                         _createVNode(_component_MicroHeadlines),
                       ]),
                     ]),

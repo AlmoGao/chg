@@ -99,6 +99,7 @@ import HomeView from "./home/HomeView.vue";
 import ExploreComponent from "./explore/ExploreComponent.vue";
 import CommunityView from "./community/CommunityView.vue";
 import MemberView from "./member/MemberView.vue";
+import StoryView from "./story/StoryView.vue"
 import { ref, computed, reactive, shallowRef } from "vue";
 import Fingerprint2 from "fingerprintjs2";
 import md5 from "js-md5";
@@ -295,14 +296,14 @@ export default {
         unactive: "./static/staticshequ2.png",
       },
       {
+        name: "小说",
+        active: "./static/staticshequ.png",
+        unactive: "./static/staticshequ2.png",
+      },
+      {
         name: "我的",
         active: "./static/staticme.png",
         unactive: "./static/staticme2.png",
-      },
-      {
-        name: "下载APP",
-        active: "./static/staticicon-down.png",
-        unactive: "./static/staticicon-down.png",
       },
     ]);
     let fxActive = ref(0);
@@ -320,10 +321,11 @@ export default {
         currentTabComponent.value = ExploreComponent;
       } else if (active.value === 2) {
         currentTabComponent.value = CommunityView;
-      } else if (active.value === 3) {
-        currentTabComponent.value = MemberView;
       } else if (active.value === 4) {
-        location.href = store.state.baseUrl.download_url;
+        currentTabComponent.value = MemberView;
+      } else if (active.value === 3) {
+        // location.href = store.state.baseUrl.download_url;
+        currentTabComponent.value = StoryView;
       }
     };
 
