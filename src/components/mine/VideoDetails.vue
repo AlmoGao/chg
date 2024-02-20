@@ -429,7 +429,7 @@ export default {
     });
 
     const close = () => {
-      if (player.dispose) {
+      if (player && player.dispose) {
         player.pause();
         player.dispose();
       }
