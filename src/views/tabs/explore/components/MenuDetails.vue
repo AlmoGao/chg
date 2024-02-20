@@ -250,20 +250,6 @@ export default {
         -1
       )
     );
-    console.log({
-      props,
-      videoList,
-      videoPlay,
-      focusSave,
-      userInfo,
-      loading,
-      onLoad,
-      error,
-      finished,
-      detailsTitle,
-      close,
-      Toast,
-    });
 
     return () => {
       const _component_van_icon = _resolveComponent("van-icon");

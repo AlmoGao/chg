@@ -180,31 +180,6 @@ export default {
     const _hoisted_8 = {
       class: "cont_body_app",
     };
-    console.log({
-      props,
-      active,
-      newList,
-      hotList,
-      showDetailsPopul,
-      close,
-      showDetails,
-      head_lines_id,
-      finished1,
-      error1,
-      loading1,
-      onLoad1,
-      finished2,
-      error2,
-      loading2,
-      onLoad2,
-      childGetList,
-      stopPropagation,
-      change,
-      onClickTab,
-      swiper,
-      showBottomBanner,
-      Toast,
-    });
 
     return (_ctx, _cache) => {
       const _component_van_tab = _resolveComponent("van-tab");

@@ -106,16 +106,6 @@ export default {
     const _hoisted_6 = {
       class: "item",
     };
-    console.log({
-      props,
-      inviteLogList,
-      loading,
-      onLoad,
-      error,
-      finished,
-      getMyDate,
-      _createCommentVNode,
-    });
 
     return (_ctx, _cache) => {
       const _component_van_list = _resolveComponent("van-list");

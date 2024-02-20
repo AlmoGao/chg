@@ -130,24 +130,6 @@ export default {
         getAuthorInfo();
       }
     });
-    console.log({
-      props,
-      detailsTitle,
-      close,
-      videoList,
-      videoPlay,
-      loading,
-      onLoad,
-      error,
-      finished,
-      authorInfo,
-      focusSave,
-      showDetailsPopul,
-      close1,
-      videoId,
-      showLoading,
-      Toast
-    });
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-c2a4778c"), (n = n()), _popScopeId(), n

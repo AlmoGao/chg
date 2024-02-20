@@ -185,21 +185,7 @@ const _hoisted_17 = /*#__PURE__*/_withScopeId(() => /*#__PURE__*/_createElementV
 }, null, -1));
 
 const _hoisted_18 = ["onClick"];
-    console.log({
-      props,
-      videoList,
-      loading,
-      onLoad,
-      error,
-      videoPlay,
-      finished,
-      focusSave,
-      toAutorDetails,
-      showShare,
-      onRefresh,
-      refreshing,
-      Toast
-    })
+
 
     return (_ctx, _cache) => {
       const _component_loading = _resolveComponent("loading");

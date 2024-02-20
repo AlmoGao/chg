@@ -93,13 +93,6 @@ export default {
     const _hoisted_7 = {
       class: "tab_cont webkit-overflow-scrolling-touch",
     };
-    console.log({
-      props,
-      active,
-      handleShowStack,
-      releaseValue,
-    });
-
     return (_ctx, _cache) => {
       const _component_SwipeComponent = _resolveComponent("SwipeComponent");
 

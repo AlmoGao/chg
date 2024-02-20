@@ -141,7 +141,6 @@ export default {
         },
         "get"
       ).then((res) => {
-        // console.log("res", res);
         if (res.code === 0) {
           if (res.data.rows.length) {
             store.commit("SET_SHOW_BOTTOM_BANNER", true);
@@ -210,7 +209,6 @@ export default {
 
     const getStart = () => {
       startApi("", "get").then((res) => {
-        console.log(res);
 
         if (res.code === 0 && res.data && res.data.start_url) {
           startImg.value = res.data.start_url;

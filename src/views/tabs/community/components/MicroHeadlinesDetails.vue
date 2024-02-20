@@ -307,21 +307,6 @@ export default {
         -1
       )
     );
-    console.log({
-      props,
-      toAutorDetails,
-      detailData,
-      getMyDate,
-      fileUrl,
-      showInput,
-      send,
-      message,
-      inputSend,
-      focusSave,
-      getHeadLineCommentLike,
-      showLoading,
-      emit,
-    });
 
     return (_ctx, _cache) => {
       const _component_Loading = _resolveComponent("Loading");

@@ -38,7 +38,6 @@ export default {
 
     const tabItemClick = (item, index) => {
       activeIndex.value = index;
-      console.error('????3333', swipe.value)
       swipe.value.swipeTo(index);
     };
 
@@ -97,20 +96,6 @@ export default {
     const _hoisted_4 = {
       class: "search_details_page",
     };
-    console.log({
-      props,
-      activeIndex,
-      tabItemClick,
-      swipe,
-      menuList,
-      labelList,
-      hotAuthorList,
-      close,
-      showDetailsPopul,
-      searchText,
-      labelSearch,
-      _withScopeId,
-    });
 
     return (_ctx, _cache) => {
       const _component_my_image = _resolveComponent("my-image");

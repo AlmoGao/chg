@@ -323,43 +323,6 @@ export default {
     const _hoisted_18 = {
       class: "cont_body_app",
     };
-    console.log({
-      props,
-      close,
-      videoPlay,
-      showDetailsPopul,
-      myQpList,
-      myLikeList,
-      myTjList,
-      wfbdList,
-      wxhdList,
-      onLoad1,
-      error1,
-      finished1,
-      loading1,
-      onLoad2,
-      error2,
-      finished2,
-      loading2,
-      onLoad3,
-      error3,
-      finished3,
-      loading3,
-      onLoad4,
-      error4,
-      finished4,
-      loading4,
-      onLoad5,
-      error5,
-      finished5,
-      loading5,
-      key,
-      ask_video_id,
-      showDetails,
-      head_lines_id,
-      type,
-      isMy,
-    });
 
     return (_ctx, _cache) => {
       const _component_van_icon = _resolveComponent("van-icon");

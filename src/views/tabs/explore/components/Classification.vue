@@ -24,7 +24,6 @@ export default {
 
     const tabItemClick = (item, index) => {
       activeIndex.value = index;
-      console.error('????1111', swipe.value)
       swipe.value.swipeTo(index);
     };
 
@@ -126,13 +125,6 @@ export default {
       key: 0,
       class: "label_item label_item_null",
     };
-    console.log({
-      props,
-      activeIndex,
-      tabItemClick,
-      swipe,
-    });
-
     return () => {
       const _component_van_swipe_item = _resolveComponent("van-swipe-item");
 

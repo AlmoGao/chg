@@ -137,20 +137,6 @@ export default {
         -1
       )
     );
-    console.log({
-      props,
-      showDialog,
-      moneyValue,
-      showDsPopup,
-      okBtns,
-      rewardList,
-      finished,
-      error,
-      loading,
-      onLoad,
-      total_money,
-      toAutorDetails,
-    });
 
     return (_ctx, _cache) => {
       const _component_my_image = _resolveComponent("my-image");

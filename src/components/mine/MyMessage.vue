@@ -124,20 +124,6 @@ export default {
       key: 0,
       class: "no-data",
     };
-    console.log({
-      props,
-      active,
-      messageList,
-      getMyDate,
-      getMessageList,
-      noData,
-      loading,
-      onLoad,
-      error,
-      finished,
-      change,
-      _withScopeId,
-    });
 
     return (_ctx, _cache) => {
       const _component_van_list = _resolveComponent("van-list");

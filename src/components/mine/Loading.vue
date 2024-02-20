@@ -27,7 +27,6 @@ export default {
     };
 
     const _hoisted_3 = /*#__PURE__*/ _createTextVNode(" 正在获取数据...");
-    console.log(_withScopeId)
     return () => {
       const _component_van_loading = _resolveComponent("van-loading");
 

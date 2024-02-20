@@ -74,13 +74,6 @@ export default {
     const _hoisted_4 = {
       class: "search",
     };
-    console.log({
-      props,
-      active,
-      handleShowStack,
-      shoeLoading,
-      showBottomBanner,
-    });
 
     return (_ctx, _cache) => {
       const _component_featured = _resolveComponent("featured");

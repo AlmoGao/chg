@@ -167,21 +167,6 @@ export default {
       class: "details_page",
     };
 
-    console.log({
-      props,
-      navs,
-      active,
-      currentComponent,
-      handleShowStack,
-      toFaxian,
-      releaseValue,
-      toManhua,
-      showAdultComicsPopul,
-      close,
-      showBottomBanner,
-      skeletonLoading,
-      skeletonF,
-    });
 
     return (_ctx, _cache) => {
       const _component_van_skeleton = _resolveComponent("van-skeleton");

@@ -83,19 +83,6 @@ export default {
     const rule_url = computed(() => {
       return store.state.userInfo.rule_url;
     });
-    console.log({
-      props,
-      close,
-      showDialog,
-      ruleDetails,
-      commissioDetails,
-      rule_url,
-      commissionLogList,
-      loading,
-      onLoad,
-      error,
-      finished,
-    });
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-dae1bf88"), (n = n()), _popScopeId(), n

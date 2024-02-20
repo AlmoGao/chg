@@ -23,7 +23,6 @@ export default {
     const _hoisted_2 = {
       class: "cont",
     };
-    console.log(_withScopeId)
     return () => {
       const _component_van_loading = _resolveComponent("van-loading");
 

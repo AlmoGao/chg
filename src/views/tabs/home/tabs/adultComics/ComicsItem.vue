@@ -35,12 +35,6 @@ export default {
     const _hoisted_2 = {
       class: "img_cont",
     };
-    console.log({
-      props,
-      dataItem: dataItem.value,
-      emit,
-      _withScopeId
-    });
 
     return () => {
       const _component_my_image = _resolveComponent("my-image");

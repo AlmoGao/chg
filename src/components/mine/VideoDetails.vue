@@ -147,7 +147,6 @@ export default {
       }
 
       if (player) {
-        console.log(player);
         player.dispose();
       } // options.value.poster = detailsData.value.image;
       // poster="${options.value.poster}"
@@ -509,7 +508,6 @@ export default {
       feedbackSaveApi(params).then((res) => {
         showToast(res.message);
       });
-      console.log(checked);
     };
 
     const noPlay = () => {
@@ -796,57 +794,6 @@ export default {
     const _hoisted_55 = {
       class: "cont_body_app",
     };
-    console.log({
-      props,
-      close,
-      tjList,
-      inputSend,
-      showInput,
-      send,
-      detailsData,
-      likeVideo,
-      message,
-      focusSave,
-      getMyDate,
-      videoPlay,
-      bannerList,
-      toBannerDetails,
-      userInfo,
-      commentList,
-      isLike,
-      isFocus,
-      loading,
-      onLoad,
-      error,
-      finished,
-      change,
-      active,
-      options,
-      showSearchPopup,
-      close1,
-      label_name,
-      key,
-      labelSearch,
-      searchText,
-      showLoading,
-      showDialog,
-      list,
-      toggle,
-      checked,
-      fkMessage,
-      noPlayOk,
-      noPlay,
-      showAskVideo,
-      showAskVideoDetails,
-      ask_video_id,
-      askVideo,
-      close2,
-      close3,
-      videoBoxId,
-      store,
-      isFullscreen,
-    });
-
     return (_ctx, _cache) => {
       const _component_video_banner = _resolveComponent("video-banner");
 

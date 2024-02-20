@@ -33,7 +33,6 @@ export default {
 
   setup(__props) {
     // const showStack = isShowStack;
-    console.log(_withScopeId);
     return () => {
       return (
         _openBlock(),

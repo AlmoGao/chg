@@ -291,23 +291,6 @@ export default {
     const _hoisted_35 = {
       class: "search_details_page",
     };
-    console.log({
-      props,
-      videoList,
-      loading,
-      onLoad,
-      error,
-      videoPlay,
-      finished,
-      showLoding,
-      showDetailsPopul,
-      menu_id,
-      menuAll,
-      menuTetx,
-      close,
-      page,
-    });
-
     return (_ctx, _cache) => {
       const _component_my_image = _resolveComponent("my-image");
 

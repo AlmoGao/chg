@@ -193,13 +193,6 @@ export default {
       class: "pinduoduo-vd-shareLayer-btn",
     };
     const _hoisted_20 = ["data-clipboard-text"];
-    console.log({
-      showDetailsPopul,
-      qrUrl,
-      copy,
-      downImg,
-      videoDetails,
-    });
 
     return (_ctx, _cache) => {
       const _component_my_image = _resolveComponent("my-image");

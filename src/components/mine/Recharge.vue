@@ -319,26 +319,6 @@ export default {
     const _hoisted_37 = ["onClick"];
     const _hoisted_38 = ["src"];
 
-    console.log({
-      props,
-      close,
-      active,
-      showDetailsPopul,
-      fileUrl,
-      userInfo,
-      depositDetais,
-      depositList,
-      vipList,
-      toDetails,
-      showPay,
-      pay,
-      money,
-      payList,
-      pagePatList,
-      depositPay,
-      payActiveIndex,
-      payItemClick,
-    });
 
     return (_ctx, _cache) => {
       const _component_van_icon = _resolveComponent("van-icon");

@@ -500,34 +500,7 @@ export default {
     const _hoisted_31 = {
       class: "btn_box",
     };
-    console.log({
-      props,
-      isLoging,
-      navList1,
-      navList2,
-      toDetails,
-      showDetailsPopul,
-      close,
-      detailsTitle,
-      detailsView,
-      showHeader,
-      showDialog,
-      popupText,
-      pupupValue,
-      okBtns,
-      toLogin,
-      userInfo,
-      userData,
-      fileUrl,
-      key,
-      showBottomBanner,
-      showDialog2,
-      closeDialog,
-      email,
-      okBtns2,
-      bannerList,
-      toBannerDetails,
-    });
+
     return (_ctx, _cache) => {
       const _component_my_image = _resolveComponent("my-image");
 

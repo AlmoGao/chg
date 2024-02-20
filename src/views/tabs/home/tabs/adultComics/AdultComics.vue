@@ -50,7 +50,6 @@ export default {
         },
         "get"
       ).then((res) => {
-        console.log(res);
 
         if (res.code === 0) {
           comicsNewList.value = comicsNewList.value.concat(res.data.rows);
@@ -70,7 +69,6 @@ export default {
         },
         "get"
       ).then((res) => {
-        console.log(res);
 
         if (res.code === 0) {
           comicsHotList.value = comicsHotList.value.concat(res.data.rows);
@@ -114,7 +112,6 @@ export default {
     };
 
     const toDetails = (item) => {
-      console.log(item);
       comics_id.value = item.id;
       key.value = Math.random();
       showDetailsPopul.value = true;
@@ -173,28 +170,6 @@ export default {
     const _hoisted_14 = {
       class: "details_page",
     };
-    console.log({
-      props,
-      close,
-      change,
-      swiper,
-      topNavIndex,
-      topNavClick,
-      showDetailsPopul,
-      toDetails,
-      key,
-      comicsNewList,
-      comicsHotList,
-      finished,
-      error,
-      loading,
-      onLoad,
-      finished1,
-      error1,
-      loading1,
-      onLoad1,
-      comics_id,
-    });
 
     return (_ctx, _cache) => {
       const _component_van_icon = _resolveComponent("van-icon");

@@ -54,7 +54,6 @@ export default {
     );
 
     const _hoisted_3 = [_hoisted_2];
-    console.log(props);
     return () => {
       return _openBlock(), _createElementBlock("div", _hoisted_1, _hoisted_3);
     };

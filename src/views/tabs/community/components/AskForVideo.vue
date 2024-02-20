@@ -102,7 +102,6 @@ export default {
         "get"
       ).then((res) => {
         showLoading.value = false;
-        console.log(res);
 
         if (res.code === 0) {
           res.data.rows.forEach((item) => {
@@ -225,7 +224,6 @@ export default {
         if (res.code === 0) {
           loading1.value = false;
           loading2.value = false;
-          console.log(res);
 
           if (active.value === 0) {
             res.data.rows.forEach((item) => {
@@ -434,40 +432,6 @@ export default {
     const _hoisted_30 = {
       class: "search_btns bottom_btns",
     };
-    console.log({
-      props,
-      active,
-      newList,
-      hotList,
-      recommendList,
-      showDetailsPopul,
-      close,
-      showDetails,
-      ask_video_id,
-      toAutorDetails,
-      key,
-      finished1,
-      error1,
-      loading1,
-      onLoad1,
-      finished2,
-      error2,
-      loading2,
-      onLoad2,
-      stopPropagation,
-      change,
-      showSearch,
-      showSearchFun,
-      askSearchFun,
-      askSearchData,
-      askSearch,
-      reset,
-      onClickTab,
-      swiper,
-      showLoading,
-      showBottomBanner,
-      Toast,
-    });
 
     return (_ctx, _cache) => {
       const _component_van_tab = _resolveComponent("van-tab");

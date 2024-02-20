@@ -64,7 +64,6 @@ export default {
       });
     };
 
-    console.log(_withScopeId);
     return () => {
       return (
         _openBlock(),

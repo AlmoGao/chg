@@ -89,21 +89,6 @@ export default {
       emit("close");
     };
 
-    console.log({
-      props,
-      videoDetails,
-      close,
-      isYdguize,
-      ydgzClick,
-      faBuAskVideo,
-      content,
-      money,
-      showAskVideoGz,
-      close1,
-      toGz,
-      isVip,
-      _createCommentVNode
-    });
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-1a703d84"), (n = n()), _popScopeId(), n

@@ -52,7 +52,6 @@ export default {
       menu_id.value = item.id;
       label_id.value = "";
       menuTetx.value = item.name;
-      console.error('???', _component_van_swipe)
       swipe.value.swipeTo(index);
     };
 
@@ -177,25 +176,6 @@ export default {
     const _hoisted_17 = {
       class: "search_details_page",
     };
-    console.log({
-      props,
-      activeIndex,
-      tabItemClick,
-      swipe,
-      menuList,
-      labelList,
-      hotAuthorList,
-      close,
-      showDetailsPopul,
-      searchText,
-      labelSearch,
-      toAutorDetails,
-      popupType,
-      menu_id,
-      label_id,
-      menuAll,
-      menuTetx,
-    });
 
     const _component_my_image = _resolveComponent("my-image");
 

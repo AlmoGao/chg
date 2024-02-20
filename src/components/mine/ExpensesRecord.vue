@@ -93,23 +93,6 @@ export default {
       showDetailsPopul.value = false;
     };
 
-    console.log({
-      props,
-      payLogList,
-      loading,
-      onLoad,
-      error,
-      finished,
-      getMyDate,
-      actions,
-      onSelect,
-      showPopover,
-      typeText,
-      search,
-      showDetailsPopul,
-      close,
-      toDetails,
-    });
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-12f3b031"), (n = n()), _popScopeId(), n

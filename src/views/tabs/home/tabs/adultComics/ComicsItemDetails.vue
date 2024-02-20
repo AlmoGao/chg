@@ -61,7 +61,6 @@ export default {
         },
         "get"
       ).then((res) => {
-        console.log(res);
 
         if (res.code === 0) {
           res.data.isComicsLike = isComicsLike.value.includes(res.data.id + "");
@@ -79,7 +78,6 @@ export default {
         },
         "get"
       ).then((res) => {
-        console.log(res);
 
         if (res.code === 0) {
           similarList.value = res.data;
@@ -97,7 +95,6 @@ export default {
         },
         "get"
       ).then((res) => {
-        console.log(res);
 
         if (res.code === 0) {
           detailsData.value.isComicsLike = !detailsData.value.isComicsLike;
@@ -131,7 +128,6 @@ export default {
     };
 
     const toDetails = (item) => {
-      console.log(item);
       comics_id.value = item.id;
       key.value = Math.random();
       showDetailsPopul.value = true;
@@ -149,7 +145,6 @@ export default {
     });
 
     const startReading = (item) => {
-      console.log(item);
 
       if (item.is_free === 0 && item.money === 0 && isVip.value === 0) {
         store.commit("SETSHOE_KT_VIP", true);
@@ -273,29 +268,6 @@ export default {
     const _hoisted_29 = {
       class: "details_page",
     };
-    console.log({
-      props,
-      close,
-      close1,
-      change,
-      swiper,
-      topNavIndex,
-      topNavClick,
-      showDetailsPopul,
-      showDetailsPopul1,
-      toDetails,
-      key,
-      key1,
-      toFenxian,
-      startReading,
-      detailsData,
-      similarList,
-      comics_directory_id,
-      comicsLike,
-      getComicsDirectory,
-      directoryList,
-      comics_id,
-    });
 
     return (_ctx, _cache) => {
       const _component_my_image = _resolveComponent("my-image");

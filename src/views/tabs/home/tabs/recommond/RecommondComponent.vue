@@ -267,23 +267,7 @@ export default {
     );
 
     const _hoisted_25 = ["onClick"];
-    console.log({
-      props,
-      videoList,
-      loading,
-      onLoad,
-      error,
-      videoPlay,
-      finished,
-      focusSave,
-      toAutorDetails,
-      showShare,
-      toManhua,
-      toDetails,
-      onRefresh,
-      refreshing,
-      Toast,
-    });
+
 
     return (_ctx, _cache) => {
       const _component_loading = _resolveComponent("loading");

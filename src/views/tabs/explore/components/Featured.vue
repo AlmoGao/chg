@@ -76,7 +76,6 @@ const _hoisted_8 = /*#__PURE__*/ _createStaticVNode(
 );
 
 const _hoisted_11 = [_hoisted_8];
-console.log(_createTextVNode);
 
 export default {
   setup() {

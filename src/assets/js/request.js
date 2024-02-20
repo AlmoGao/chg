@@ -47,7 +47,6 @@ service.interceptors.response.use(
   (res) => {
     res.data = decrypt(res.data);
     res.data = JSON.parse(res.data);
-    console.log(res.config.url + "======   ", res.data);
     document.getElementById("loading").style.display = "none";
     if (res.data.code !== 0) {
       // Toast(res.data.message);
@@ -65,7 +64,6 @@ service.interceptors.response.use(
   },
   (err) => {
     var config = err.config;
-    console.log(config);
     // 判断是否配置了重试
     if (!config || !config.retry) return Promise.reject(err);
 
@@ -88,7 +86,6 @@ service.interceptors.response.use(
 
     //重试次数自增
     config.__retryCount += 1;
-    console.log(config.url + " 自动重试第" + config.__retryCount + "次");
 
     //延时处理
     var backoff = new Promise(function (resolve) {

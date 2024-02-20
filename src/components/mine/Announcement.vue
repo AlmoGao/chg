@@ -30,12 +30,6 @@ export default {
       });
     };
 
-    getNoticeList();
-    console.log({
-      props,
-      noticeList,
-    });
-
     const _withScopeId = (n) => (
       _pushScopeId("data-v-36ac5da4"), (n = n()), _popScopeId(), n
     );

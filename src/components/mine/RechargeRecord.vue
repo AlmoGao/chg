@@ -173,21 +173,6 @@ export default {
       class: "",
     };
 
-    console.log({
-      props,
-      payLogList,
-      loading,
-      onLoad,
-      error,
-      finished,
-      getMyDate,
-      showDetailsPopul,
-      close,
-      toDetails,
-      copy,
-      statusText,
-      _withScopeId,
-    });
 
     return (_ctx, _cache) => {
       const _component_van_list = _resolveComponent("van-list");

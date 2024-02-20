@@ -18,10 +18,6 @@ export default {
       emit("close");
     };
 
-    console.log({
-      props,
-      close,
-    });
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-db4f7c6e"), (n = n()), _popScopeId(), n

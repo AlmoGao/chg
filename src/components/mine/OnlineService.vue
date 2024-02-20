@@ -118,17 +118,6 @@ export default {
       class: "questionDetail",
     };
 
-    console.log({
-      props,
-      showDetailsPopul,
-      toDetails,
-      close,
-      detailsTitle,
-      content,
-      list,
-      toKefu,
-    });
-
     return (_ctx, _cache) => {
       const _component_van_icon = _resolveComponent("van-icon");
 

@@ -227,19 +227,7 @@ export default {
       key: 1,
       class: "no-data",
     };
-    console.log({
-      props,
-      videoList,
-      loading,
-      onLoad,
-      error,
-      videoPlay,
-      finished,
-      toAutorDetails,
-      showShare,
-      onRefresh,
-      refreshing,
-    });
+
 
     return (_ctx, _cache) => {
       const _component_loading = _resolveComponent("loading");

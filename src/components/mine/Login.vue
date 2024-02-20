@@ -49,7 +49,6 @@ export default {
       if (!store.state.userInfo.username) {
         params.value.nickname = store.state.userInfo.nickname;
         modifyUserApi(params.value).then((res) => {
-          console.log(res);
 
           if (res.code === 0) {
             window.location = "/";
@@ -84,7 +83,6 @@ export default {
       }
 
       loginApi(params.value).then((res) => {
-        console.log(res);
 
         if (res.code === 0) {
           store.commit("SET_USER_INFO", res.data);
@@ -96,13 +94,6 @@ export default {
       });
     };
 
-    console.log({
-      props,
-      close,
-      register,
-      params,
-      login,
-    });
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-6aac36f8"), (n = n()), _popScopeId(), n

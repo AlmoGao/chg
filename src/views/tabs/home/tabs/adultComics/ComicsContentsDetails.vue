@@ -45,7 +45,6 @@ export default {
         },
         "get"
       ).then((res) => {
-        console.log(res);
         showLoading.value = false;
 
         if (res.code === 0) {
@@ -198,20 +197,6 @@ export default {
         -1
       )
     );
-    console.log({
-      props,
-      close,
-      toFenxian,
-      showMl,
-      lockMl,
-      detailsData,
-      showLoading,
-      startReading,
-      getComicsDirectory,
-      directoryList,
-      prev,
-      next,
-    });
 
     return (_ctx, _cache) => {
       const _component_van_icon = _resolveComponent("van-icon");

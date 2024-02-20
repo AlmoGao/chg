@@ -19,7 +19,6 @@ const _hoisted_1 = /*#__PURE__*/ _createStaticVNode(
 
 const _hoisted_12 = [_hoisted_1];
 
-console.log(_createElementVNode, _withScopeId);
 
 export default {
   setup() {

@@ -232,20 +232,6 @@ export default {
       key: 1,
       class: "no-data",
     };
-    console.log({
-      props,
-      detailsTitle,
-      close,
-      videoList,
-      videoPlay,
-      loading,
-      onLoad,
-      error,
-      finished,
-      authorInfo,
-      focusSave,
-      Toast,
-    });
 
     return () => {
       const _component_van_icon = _resolveComponent("van-icon");

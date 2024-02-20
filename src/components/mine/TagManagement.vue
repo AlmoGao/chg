@@ -105,16 +105,6 @@ export default {
       )
     );
 
-    console.log({
-      props,
-      close,
-      add,
-      showDialog,
-      okBtns,
-      labelLists,
-      edit,
-      labelValue,
-    });
 
     return (_ctx, _cache) => {
       const _component_van_icon = _resolveComponent("van-icon");

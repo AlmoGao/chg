@@ -227,22 +227,7 @@ export default {
         -1
       )
     );
-    console.log({
-      props,
-      videoList,
-      videoPlay,
-      focusSave,
-      userInfo,
-      loading,
-      onLoad,
-      error,
-      finished,
-      toAutorDetails,
-      onRefresh,
-      refreshing,
-      Toast,
-      isFocus,
-    });
+
 
     return (_ctx, _cache) => {
       const _component_loading = _resolveComponent("loading");

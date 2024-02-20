@@ -193,23 +193,6 @@ export default {
     const _hoisted_20 = {
       class: "cont_body",
     };
-    console.log({
-      props,
-      close,
-      videoList,
-      loading,
-      onLoad,
-      error,
-      videoPlay,
-      finished,
-      getMyDate,
-      showDetailsPopul,
-      close1,
-      videoId,
-      type,
-      toAutorDetails,
-      showShare,
-    });
 
     return (_ctx, _cache) => {
       const _component_van_icon = _resolveComponent("van-icon");

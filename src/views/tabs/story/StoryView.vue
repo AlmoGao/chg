@@ -31,7 +31,6 @@ const list = ref([]);
 const info = ref()
 
 const onLoad = () => {
-  console.error("加载");
   setTimeout(() => {
     loading.value = false;
     list.value.push(...[1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);

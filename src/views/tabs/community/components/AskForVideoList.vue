@@ -154,13 +154,6 @@ export default {
       key: 1,
       class: "coin",
     };
-    console.log({
-      props,
-      dataItem: dataItem.value,
-      toAutorDetails,
-      getaskVideoWant,
-      videoPlay,
-    });
 
     return (_ctx, _cache) => {
       const _component_my_image = _resolveComponent("my-image");

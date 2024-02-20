@@ -24,10 +24,7 @@ export default {
 
   setup(props) {
     const item = ref(props.itemData);
-    console.log({
-      props,
-      item,
-    });
+
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-4daafcf2"), (n = n()), _popScopeId(), n

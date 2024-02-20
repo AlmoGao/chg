@@ -36,7 +36,6 @@ export default {
         },
         "get"
       ).then((res) => {
-        console.log(res);
 
         if (res.code === 0) {
           directoryList.value = res.data;
@@ -97,14 +96,6 @@ export default {
       key: 0,
       class: "CartoonDetail-DirectoryPage-tips-vip",
     };
-    console.log({
-      props,
-      startReading,
-      directoryList,
-      isSort,
-      sortFun,
-      _withScopeId,
-    });
 
     return (_ctx, _cache) => {
       return (

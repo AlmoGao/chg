@@ -87,7 +87,6 @@ export default {
         page: page.value,
       };
       likeListApi(params, "get").then((res) => {
-        console.log(res);
 
         if (res.code === 0) {
           loading.value = false;
@@ -237,28 +236,6 @@ export default {
     const _hoisted_20 = {
       class: "details_page",
     };
-    console.log({
-      props,
-      close,
-      close1,
-      labelLists,
-      activeIndex1,
-      activeIndex2,
-      active,
-      labelItemClick,
-      showDetailsPopul,
-      onClickTab,
-      likeList,
-      videoPlay,
-      loading,
-      onLoad,
-      error,
-      finished,
-      toDetails,
-      showDetailsPopul1,
-      key,
-      comics_id,
-    });
 
     return (_ctx, _cache) => {
       const _component_van_icon = _resolveComponent("van-icon");

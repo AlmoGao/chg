@@ -71,7 +71,6 @@ export default {
       return store.state.userInfo.focus_user.split(",");
     });
     let change_id = computed(() => {
-      console.log(props.isMy);
       return store.state.userInfo.change_id;
     });
 
@@ -547,39 +546,6 @@ export default {
     const _hoisted_67 = {
       class: "cont_body",
     };
-    console.log({
-      props,
-      toAutorDetails,
-      detailData,
-      getMyDate,
-      okBtns,
-      showDialog,
-      moneyValue,
-      showDsPopup,
-      time,
-      close1,
-      showDetailsPopul,
-      showVideoDetailsPopul,
-      videoId,
-      type,
-      close,
-      toBountyList,
-      popupType,
-      ask_video_id,
-      key,
-      rxqzList,
-      total,
-      focusSave,
-      videoPlay,
-      finished,
-      error,
-      loading,
-      onLoad,
-      getAskVideoCommentLike,
-      change_id,
-      cainaF,
-      showLoading,
-    });
 
     return (_ctx, _cache) => {
       const _component_Loading = _resolveComponent("Loading");

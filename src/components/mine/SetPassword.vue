@@ -83,11 +83,6 @@ export default {
     const _hoisted_8 = {
       class: "user-form-value",
     };
-    console.log({
-      props,
-      editPwd,
-      params,
-    });
 
     return (_ctx, _cache) => {
       return (

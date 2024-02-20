@@ -58,12 +58,6 @@ export default {
     const _hoisted_2 = {
       class: "user-nickname-form-item",
     };
-    console.log({
-      props,
-      nickname,
-      modifyNickname,
-      _withScopeId,
-    });
     return (_ctx, _cache) => {
       return (
         _openBlock(),

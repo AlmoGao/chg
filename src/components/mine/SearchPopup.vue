@@ -74,7 +74,6 @@ export default {
     const tjList = ref([]);
 
     const search = () => {
-      console.log(searchText);
 
       if (page.value === 1) {
         showLoading.value = true;
@@ -173,7 +172,6 @@ export default {
 
     const videoPlay = (item) => {
       store.commit("SET_VIDEO_DETAILS", item);
-      console.log(props.type);
 
       if (props.type === "details") {
         emit("close");
@@ -235,24 +233,6 @@ export default {
     const _hoisted_11 = {
       class: "cont_body",
     };
-    console.log({
-      props,
-      getMyDate,
-      detailsTitle,
-      tjList,
-      videoPlay,
-      close,
-      loading,
-      onLoad,
-      error,
-      finished,
-      close1,
-      showDetailsPopul,
-      videoId,
-      showLoading,
-      _createCommentVNode,
-      _withScopeId,
-    });
 
     return (_ctx, _cache) => {
       const _component_van_icon = _resolveComponent("van-icon");

@@ -51,12 +51,6 @@ export default {
         -1
       )
     );
-    console.log({
-      props,
-      noDataText,
-      // eslint-disable-next-line vue/no-dupe-keys
-      color,
-    });
 
     return () => {
       return (

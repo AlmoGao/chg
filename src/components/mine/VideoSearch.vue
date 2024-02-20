@@ -153,21 +153,6 @@ export default {
     const _hoisted_15 = {
       class: "details_page",
     };
-    console.log({
-      props,
-      close,
-      search,
-      searchText,
-      searchTexts,
-      hotLabel,
-      labelSearch,
-      showDetailsPopul,
-      close1,
-      searchLabels,
-      clear,
-      label_id,
-      key,
-    });
 
     return (_ctx, _cache) => {
       const _component_van_icon = _resolveComponent("van-icon");

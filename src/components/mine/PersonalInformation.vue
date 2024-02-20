@@ -229,27 +229,6 @@ export default {
         -1
       )
     );
-    console.log({
-      props,
-      showDialog,
-      showDialogFun,
-      okBtns,
-      pupupValue,
-      popupText,
-      showDetailsPopul,
-      close,
-      detailsTitle,
-      toDetails,
-      detailsView,
-      toLogin,
-      userInfo,
-      afterRead,
-      fileUrl,
-      bindEmail,
-      showDialog2,
-      email,
-      okBtns2,
-    });
 
     return (ctx, _cache) => {
       const _component_my_image = _resolveComponent("my-image");

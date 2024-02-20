@@ -35,19 +35,12 @@ export default {
     });
 
     const load = (e) => {
-      console.log(e);
       let oImg = document.getElementsByClassName("van-image__img");
       Array.prototype.forEach.call(oImg, function (item) {
         item.setAttribute("class", "animation");
       });
     };
 
-    console.log({
-      props,
-      imgUrl,
-      baseUrl,
-      load,
-    });
 
     const _withScopeId = (n) => (
       _pushScopeId("data-v-e0461e04"), (n = n()), _popScopeId(), n
@@ -83,7 +76,6 @@ export default {
       )
     );
 
-    console.log(ref)
     return (_ctx, _cache, $props) => {
       const _component_van_image = _resolveComponent("van-image");
 

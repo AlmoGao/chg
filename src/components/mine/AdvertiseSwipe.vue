@@ -53,11 +53,6 @@ export default {
       class: "advertise",
     };
     const _hoisted_2 = ["onClick"];
-    console.log({
-      bannerList,
-      toDetails,
-      _withScopeId,
-    })
     return () => {
       const _component_my_image = _resolveComponent("my-image");
 

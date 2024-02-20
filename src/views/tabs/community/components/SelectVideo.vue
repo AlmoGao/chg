@@ -215,21 +215,6 @@ export default {
     const _hoisted_11 = {
       class: "select_fot",
     };
-    console.log({
-      props,
-      close,
-      setVideo,
-      videoList,
-      selectVideo,
-      selectVideoList,
-      video_title,
-      reach,
-      finished,
-      error,
-      loading,
-      onLoad,
-      list,
-    });
 
     return (_ctx, _cache) => {
       const _component_van_icon = _resolveComponent("van-icon");

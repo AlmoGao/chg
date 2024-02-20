@@ -32,7 +32,6 @@ export default {
 
     const getBaseUrl = () => {
       try {
-        console.log(11111);
         request.get("/api/v1/index/ping").then(res => {
           if (res.code === 0) {
             res.data.urls = getBase64(res.data.urls).split(","); // res.data.urls =
@@ -44,11 +43,9 @@ export default {
 
           getStart(); // showView.value = true;
         }).catch(() => {
-          console.log(2222);
           showView.value = true;
         });
       } catch (error) {
-        console.log(3333);
         showView.value = true;
       }
     };
@@ -61,7 +58,6 @@ export default {
 
     const getStart = () => {
       startApi("", "get").then(res => {
-        console.log(res);
 
         if (res.code === 0 && res.data && res.data.second_url) {
           startImg.value = res.data.second_url;
@@ -118,7 +114,6 @@ export default {
         event.preventDefault();
       });
       document.body.addEventListener("touchmove", function (e) {
-        console.log(e);
 
         if (e.target.className === "van-tabbar-item") {
           e.preventDefault(); //阻止默认的处理方式(阻止下拉滑动的效果)

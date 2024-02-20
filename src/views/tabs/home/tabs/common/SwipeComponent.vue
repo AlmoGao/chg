@@ -52,12 +52,7 @@ export default {
 
     const _hoisted_1 = ["onClick"];
 
-    console.log({
-      props,
-      bannerList,
-      toDetails,
-      _withScopeId,
-    });
+ 
 
     return () => {
       const _component_my_image = _resolveComponent("my-image");

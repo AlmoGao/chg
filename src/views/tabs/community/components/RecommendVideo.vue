@@ -84,7 +84,6 @@ export default {
 
     const deleteF = (item) => {
       let arr = recommendVideoList.value.filter((elem) => elem.id !== item.id);
-      console.log(arr);
       store.commit("SET_RECOMMEND_VIDEO_LIST", arr);
     };
 
@@ -198,18 +197,6 @@ export default {
     const _hoisted_22 = {
       class: "cont_body_app",
     };
-    console.log({
-      props,
-      showDetailsPopul,
-      showDetails,
-      close,
-      recommendVideoList,
-      type,
-      submit,
-      key,
-      videoPlay,
-      deleteF,
-    });
 
     return (_ctx, _cache) => {
       const _component_my_image = _resolveComponent("my-image");

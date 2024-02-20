@@ -45,7 +45,6 @@ export default {
       detailsView.value = item.path;
       detailsTitle.value = item.title;
       active.value = item.active;
-      console.log(active.value);
       showDetailsPopul.value = true;
     };
 
@@ -241,17 +240,6 @@ export default {
     const _hoisted_27 = {
       class: "",
     };
-    console.log({
-      props,
-      userInfo,
-      showDetailsPopul,
-      detailsView,
-      close,
-      showHeader,
-      toDetails,
-      detailsTitle,
-      active,
-    });
 
     return (_ctx, _cache) => {
       const _component_van_icon = _resolveComponent("van-icon");

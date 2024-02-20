@@ -152,18 +152,6 @@ export default {
     const _hoisted_14 = {
       class: "cont_body",
     };
-    console.log({
-      props,
-      qrUrl,
-      close,
-      copy,
-      downImg,
-      toDetails,
-      showDetailsPopul,
-      userInfo,
-      _createTextVNode,
-    });
-
     return (_ctx, _cache) => {
       const _component_van_icon = _resolveComponent("van-icon");
 

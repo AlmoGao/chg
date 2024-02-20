@@ -134,14 +134,6 @@ export default {
         -1
       )
     );
-    console.log({
-      props,
-      dataItem: dataItem.value,
-      toAutorDetails,
-      focusSave,
-      getHeadLineCommentLike,
-    });
-
     return (_ctx, _cache) => {
       const _component_my_image = _resolveComponent("my-image");
 
