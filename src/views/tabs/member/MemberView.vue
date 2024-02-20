@@ -319,6 +319,7 @@ export default {
         },
         "get"
       ).then((res) => {
+        console.error('个人页广告', res)
         if (res.code === 0) {
           bannerList.value = res.data.rows;
         }

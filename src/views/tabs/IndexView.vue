@@ -141,6 +141,7 @@ export default {
         },
         "get"
       ).then((res) => {
+        console.error('底部广告', res)
         if (res.code === 0) {
           if (res.data.rows.length) {
             store.commit("SET_SHOW_BOTTOM_BANNER", true);
@@ -247,6 +248,7 @@ export default {
     const getBanner = () => {
       bannerApi("", "get").then((res) => {
         if (res.code === 0) {
+          console.error('banner', res.data)
           store.commit("SET_BANNEER_LIST", res.data.rows);
         }
       });

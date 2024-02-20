@@ -35,7 +35,11 @@
 
 .advertise .banner_item {
     width: 100%;
-    margin-bottom: 10px
+    margin-bottom: 10px;
+    min-height: 70px;
+}
+.advertise .banner_item .van-image {
+    min-height: 70px;
 }
 
 .agentMakesMoney {
@@ -1896,6 +1900,9 @@
 
 .videoDetails .cont .tab_cont .advertse .img_banner {
     margin-bottom: 10px;
+    min-height: 70px
+}
+.videoDetails .cont .tab_cont .advertse .img_banner .van-image {
     min-height: 70px
 }
 

@@ -258,7 +258,7 @@ export default {
                           class: "tabs_cont",
                           style: _normalizeStyle({
                             height: showBottomBanner.value
-                              ? "calc(100vh - 382px)"
+                              ? "calc(100vh - 250px)"
                               : "calc(100vh - 180px)",
                           }),
                         },
@@ -333,7 +333,7 @@ export default {
                           class: "tabs_cont",
                           style: _normalizeStyle({
                             height: showBottomBanner.value
-                              ? "calc(100vh - 382px)"
+                              ? "calc(100vh - 250px)"
                               : "calc(100vh - 180px)",
                           }),
                         },
