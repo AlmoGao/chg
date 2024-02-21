@@ -94,7 +94,7 @@ let config = {
   askVideoSaveApi: "/api/v1/ask_video/save",
   askVideoContinuationApi: "/api/v1/ask_video/continuation",
   modifyEmailApi: "/api/v1/user/modify_email",
-  countApi: "/api/v1/image/count"
+  countApi: "/api/v1/image/count",
 };
 let api = {};
 for (var k in config) {
