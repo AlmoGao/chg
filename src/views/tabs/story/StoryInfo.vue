@@ -45,7 +45,8 @@ const open = (e) => {
     item.value = e
     showRight.value = true
     axios({
-        url: "https://fzx.gucigdab.top/" + e.path,
+        // url: "https://fzx.gucigdab.top/" + e.path,
+        url: e.path,
         method: "get",
     }).then(res => {
         if (res.data) {
