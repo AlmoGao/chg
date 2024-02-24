@@ -27,7 +27,7 @@ export default {
   },
 
   setup(props) {
-    let active = ref(0);
+    let active = ref(1);
     const store = useStore();
 
     const handleShowStack = (path) => {
@@ -144,21 +144,21 @@ export default {
             },
             {
               default: _withCtx(() => [
-                _createVNode(
-                  _component_van_tab,
-                  {
-                    title: "求片",
-                  },
-                  {
-                    default: _withCtx(() => [
-                      _createElementVNode("div", _hoisted_6, [
-                        // _createVNode(_component_SwipeComponent),
-                        _createVNode(_component_AskForVideo),
-                      ]),
-                    ]),
-                    _: 1,
-                  }
-                ),
+                // _createVNode(
+                //   _component_van_tab,
+                //   {
+                //     title: "求片",
+                //   },
+                //   {
+                //     default: _withCtx(() => [
+                //       _createElementVNode("div", _hoisted_6, [
+                //         // _createVNode(_component_SwipeComponent),
+                //         _createVNode(_component_AskForVideo),
+                //       ]),
+                //     ]),
+                //     _: 1,
+                //   }
+                // ),
                 _createVNode(
                   _component_van_tab,
                   {

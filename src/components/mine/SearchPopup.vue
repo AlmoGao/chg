@@ -21,6 +21,10 @@ import { getGlobalProperties, getMyDate } from "@/assets/js/utils.js";
 export default {
   name: "SearchPopup",
   props: {
+    mini: {
+      type: Boolean,
+      default: false
+    },
     searchText: {
       type: String,
       default: "",
@@ -74,7 +78,6 @@ export default {
     const tjList = ref([]);
 
     const search = () => {
-
       if (page.value === 1) {
         showLoading.value = true;
         finished.value = false;
@@ -167,6 +170,7 @@ export default {
     const onLoad = () => {
       loading.value = true;
       page.value++;
+      console.error('onload')
       search();
     };
 
@@ -184,6 +188,7 @@ export default {
     watch(searchText, () => {
       tjList.value = [];
       page.value = 1;
+      console.error('watch')
       search();
     });
 
@@ -207,11 +212,11 @@ export default {
     };
     const _hoisted_3 = {
       key: 1,
-      class: "cont_body",
+      class: "",
     };
     const _hoisted_4 = {
       key: 0,
-      class: "info-recommend",
+      class: props.mini ? "info-recommend mini-recommend" : "info-recommend",
     };
     const _hoisted_5 = ["onClick"];
     const _hoisted_6 = {
@@ -252,7 +257,7 @@ export default {
       return (
         _openBlock(),
         _createElementBlock("div", null, [
-          _createElementVNode("div", _hoisted_1, [
+        props.mini ? _createCommentVNode("", true) : _createElementVNode("div", _hoisted_1, [
             _createVNode(
               _component_van_icon,
               {
@@ -311,7 +316,7 @@ export default {
                                     "div",
                                     {
                                       key: index,
-                                      class: "info-videoItem",
+                                      class: `info-videoItem ${props.mini ? "mini-video-item" : ""}`,
                                       onClick: () =>
                                         videoPlay(item),
                                     },

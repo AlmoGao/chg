@@ -47,6 +47,7 @@ export default {
     let menuTetx = ref("");
     const { homeMenuApi, hotAuthorApi } = getGlobalProperties().$api;
     let swipe = ref(null);
+
     const tabItemClick = (item, index) => {
       activeIndex.value = index;
       menu_id.value = item.id;
@@ -179,20 +180,22 @@ export default {
 
     const _component_my_image = _resolveComponent("my-image");
 
-      const _component_swiper_slide = _resolveComponent("swiper-slide");
+    const _component_swiper_slide = _resolveComponent("swiper-slide");
 
-      const _component_swiper = _resolveComponent("swiper");
+    const _component_swiper = _resolveComponent("swiper");
 
-      const _component_van_swipe_item = _resolveComponent("van-swipe-item");
+    const _component_van_swipe_item = _resolveComponent("van-swipe-item");
 
-      const _component_van_swipe = _resolveComponent("van-swipe");
+    const _component_van_swipe = _resolveComponent("van-swipe");
 
-      const _component_search_popup = _resolveComponent("search-popup");
+    const _component_search_popup = _resolveComponent("search-popup");
 
-      const _component_van_popup = _resolveComponent("van-popup");
+    const _component_van_popup = _resolveComponent("van-popup");
     return (_ctx, _cache) => {
-      
-
+      const _class_list = {
+        key: 0,
+        class: "class_list",
+      };
       return (
         _openBlock(),
         _createElementBlock("div", _hoisted_1, [
@@ -230,7 +233,7 @@ export default {
             _createVNode(
               _component_van_swipe,
               {
-                ref: el => swipe.value = el,
+                ref: (el) => (swipe.value = el),
                 class: "class-swiper2",
                 loop: false,
                 vertical: "",
@@ -263,8 +266,7 @@ export default {
                                         onClick:
                                           _cache[0] ||
                                           (_cache[0] = (...args) =>
-                                            menuAll &&
-                                            menuAll(...args)),
+                                            menuAll && menuAll(...args)),
                                       },
                                       "查看全部"
                                     ),
@@ -312,9 +314,7 @@ export default {
                                                           "li",
                                                           {
                                                             onClick: () =>
-                                                              toAutorDetails(
-                                                                a
-                                                              ),
+                                                              toAutorDetails(a),
                                                           },
                                                           [
                                                             _createElementVNode(
@@ -363,37 +363,59 @@ export default {
                                     )),
                                   ]),
                                 ]),
-                                _hoisted_13,
-                                _createElementVNode("div", _hoisted_14, [
-                                  (_openBlock(true),
-                                  _createElementBlock(
-                                    _Fragment,
-                                    null,
-                                    _renderList(i.label, (b, c) => {
-                                      return (
-                                        _openBlock(),
-                                        _createElementBlock(
-                                          "div",
-                                          {
-                                            key: c,
-                                            onClick: () =>
-                                              labelSearch(b),
-                                            class: "label_item",
-                                          },
-                                          _toDisplayString(b.name),
-                                          9,
-                                          _hoisted_15
-                                        )
-                                      );
-                                    }),
-                                    128
-                                  )),
-                                  // eslint-disable-next-line
-                                  50 % 3 === 2
-                                    ? (_openBlock(),
-                                      _createElementBlock("div", _hoisted_16))
-                                    : _createCommentVNode("", true),
-                                ]),
+                                // _hoisted_13,
+                                // _createElementVNode("div", _hoisted_14, [
+                                //   (_openBlock(true),
+                                //   _createElementBlock(
+                                //     _Fragment,
+                                //     null,
+                                //     _renderList(i.label, (b, c) => {
+                                //       return (
+                                //         _openBlock(),
+                                //         _createElementBlock(
+                                //           "div",
+                                //           {
+                                //             key: c,
+                                //             onClick: () =>
+                                //               labelSearch(b),
+                                //             class: "label_item",
+                                //           },
+                                //           _toDisplayString(b.name),
+                                //           9,
+                                //           _hoisted_15
+                                //         )
+                                //       );
+                                //     }),
+                                //     128
+                                //   )),
+                                //   // eslint-disable-next-line
+                                //   50 % 3 === 2
+                                //     ? (_openBlock(),
+                                //       _createElementBlock("div", _hoisted_16))
+                                //     : _createCommentVNode("", true),
+                                // ]),
+                                // menu_id.value = activeIndex.value
+                                activeIndex.value == d ? 
+                                _createBlock(
+                                  _component_search_popup,
+                                  {
+                                    key: 0,
+                                    mini: true,
+                                    searchText: searchText.value,
+                                    menu_id: menu_id.value,
+                                    label_id: label_id.value,
+                                    onClose: close,
+                                  },
+                                  null,
+                                  8,
+                                  [
+                                    "mini",
+                                    "searchText",
+                                    "menu_id",
+                                    "label_id",
+                                    "onClose",
+                                  ]
+                                ) : _createCommentVNode("", true),
                               ]),
                             ]),
                             _: 2,
