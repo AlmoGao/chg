@@ -9,6 +9,7 @@ import {
   openBlock as _openBlock,
   createElementBlock as _createElementBlock,
   createCommentVNode as _createCommentVNode,
+  createBlock as _createBlock,
   renderList as _renderList,
   Fragment as _Fragment,
   normalizeClass as _normalizeClass,
@@ -19,6 +20,7 @@ import {
 import _imports_0 from "@/assets/images/community/icon_see_num.png";
 import _imports_1 from "@/assets/images/community/icon_like_tag.png";
 import { computed } from "vue"; // import { api as viewerApi } from "v-viewer";
+import MicroHeadlinesInfo from './MicroHeadlinesInfo.vue'
 
 import { getGlobalProperties } from "@/assets/js/utils.js";
 import { showToast } from "vant";
@@ -30,14 +32,17 @@ export default {
       default: () => {},
     },
   },
+  components: {
+    MicroHeadlinesInfo,
+  },
 
   setup(props) {
     const store = useStore();
     const { focusSaveApi, headLineCommentLikeApi } = getGlobalProperties().$api;
     let dataItem = computed(() => {
-      
       return props.data;
     });
+    console.error("????", dataItem.value);
     const toAutorDetails = (item) => {
       if (item.isFocus === "null") return;
       store.commit("SET_LOGIN_POPUP", {
@@ -136,147 +141,157 @@ export default {
     );
     return (_ctx, _cache) => {
       const _component_my_image = _resolveComponent("my-image");
+      const _component_MicroHeadlinesInfo = _resolveComponent("MicroHeadlinesInfo")
 
       return (
         _openBlock(),
         _createElementBlock("div", _hoisted_1, [
-          _createElementVNode(
-            "div",
-            {
-              class: "user_box",
-              onClick:
-                _cache[1] ||
-                (_cache[1] = _withModifiers(
-                  () => toAutorDetails(dataItem.value),
-                  ["stop"]
-                )),
-            },
-            [
-              _createElementVNode("div", _hoisted_2, [
-                _createVNode(
-                  _component_my_image,
-                  {
-                    url: dataItem.value.user_image,
-                  },
-                  null,
-                  8,
-                  ["url"]
-                ),
-              ]),
-              _createElementVNode("div", _hoisted_3, [
-                _createElementVNode("div", _hoisted_4, [
-                  _createElementVNode(
-                    "p",
-                    null,
-                    _toDisplayString(dataItem.value.nickname),
-                    1
-                  ),
-                  _createElementVNode(
-                    "p",
-                    null,
-                    _toDisplayString(dataItem.value.day),
-                    1
-                  ),
-                ]),
-                _createElementVNode("div", _hoisted_5, [
-                  dataItem.value.isFocus !== "null"
-                    ? (_openBlock(),
-                      _createElementBlock(
-                        "span",
-                        {
-                          key: 0,
-                          onClick:
-                            _cache[0] ||
-                            (_cache[0] = _withModifiers(
-                              () => focusSave(dataItem.value),
-                              ["stop"]
-                            )),
-                          style: _normalizeStyle({
-                            color: dataItem.value.isFocus ? "#999" : "#fd5c18",
-                          }),
-                        },
-                        _toDisplayString(
-                          dataItem.value.isFocus ? "已关注" : "关注"
-                        ),
-                        5
-                      ))
-                    : _createCommentVNode("", true),
-                ]),
-              ]),
-            ]
-          ),
+          // _createElementVNode(
+          //   "div",
+          //   {
+          //     class: "user_box",
+          //     onClick:
+          //       _cache[1] ||
+          //       (_cache[1] = _withModifiers(
+          //         () => toAutorDetails(dataItem.value),
+          //         ["stop"]
+          //       )),
+          //   },
+          //   [
+          //     _createElementVNode("div", _hoisted_2, [
+          //       _createVNode(
+          //         _component_my_image,
+          //         {
+          //           url: dataItem.value.user_image,
+          //         },
+          //         null,
+          //         8,
+          //         ["url"]
+          //       ),
+          //     ]),
+          //     _createElementVNode("div", _hoisted_3, [
+          //       _createElementVNode("div", _hoisted_4, [
+          //         _createElementVNode(
+          //           "p",
+          //           null,
+          //           _toDisplayString(dataItem.value.nickname),
+          //           1
+          //         ),
+          //         _createElementVNode(
+          //           "p",
+          //           null,
+          //           _toDisplayString(dataItem.value.day),
+          //           1
+          //         ),
+          //       ]),
+          //       _createElementVNode("div", _hoisted_5, [
+          //         dataItem.value.isFocus !== "null"
+          //           ? (_openBlock(),
+          //             _createElementBlock(
+          //               "span",
+          //               {
+          //                 key: 0,
+          //                 onClick:
+          //                   _cache[0] ||
+          //                   (_cache[0] = _withModifiers(
+          //                     () => focusSave(dataItem.value),
+          //                     ["stop"]
+          //                   )),
+          //                 style: _normalizeStyle({
+          //                   color: dataItem.value.isFocus ? "#999" : "#fd5c18",
+          //                 }),
+          //               },
+          //               _toDisplayString(
+          //                 dataItem.value.isFocus ? "已关注" : "关注"
+          //               ),
+          //               5
+          //             ))
+          //           : _createCommentVNode("", true),
+          //       ]),
+          //     ]),
+          //   ]
+          // ),
           _createElementVNode("div", _hoisted_6, [
-            _createElementVNode(
-              "p",
-              _hoisted_7,
-              _toDisplayString(dataItem.value.content),
-              1
+          _createVNode(
+            _component_MicroHeadlinesInfo,
+              {
+                info: dataItem.value,
+              },
+              null,
+              8,
+              ["info"]
             ),
-            dataItem.value.images.length
-              ? (_openBlock(),
-                _createElementBlock("div", _hoisted_8, [
-                  (_openBlock(true),
-                  _createElementBlock(
-                    _Fragment,
-                    null,
-                    _renderList(dataItem.value.images, (item) => {
-                      return (
-                        _openBlock(),
-                        _createElementBlock(
-                          "div",
-                          {
-                            class: _normalizeClass(
-                              "details_img_" + dataItem.value.images.length
-                            ),
-                            key: item,
-                          },
-                          [
-                            _createVNode(
-                              _component_my_image,
-                              {
-                                url: item,
-                              },
-                              null,
-                              8,
-                              ["url"]
-                            ),
-                          ],
-                          2
-                        )
-                      );
-                    }),
-                    128
-                  )),
-                ]))
-              : _createCommentVNode("", true),
-            _createElementVNode("div", _hoisted_9, [
-              _createElementVNode("div", null, [
-                _hoisted_10,
-                _createTextVNode(
-                  " " + _toDisplayString(dataItem.value.count),
-                  1
-                ),
-              ]),
-              _createElementVNode(
-                "div",
-                {
-                  onClick:
-                    _cache[2] ||
-                    (_cache[2] = _withModifiers(
-                      () =>
-                        getHeadLineCommentLike(dataItem.value),
-                      ["stop"]
-                    )),
-                },
-                [
-                  _hoisted_11,
-                  _createTextVNode(
-                    " " + _toDisplayString(dataItem.value.like_num),
-                    1
-                  ),
-                ]
-              ),
-            ]),
+            // _createElementVNode(
+            //   "p",
+            //   _hoisted_7,
+            //   _toDisplayString(dataItem.value.content),
+            //   1
+            // ),
+            // dataItem.value.images.length
+            //   ? (_openBlock(),
+            //     _createElementBlock("div", _hoisted_8, [
+            //       (_openBlock(true),
+            //       _createElementBlock(
+            //         _Fragment,
+            //         null,
+            //         _renderList(dataItem.value.images, (item) => {
+            //           return (
+            //             _openBlock(),
+            //             _createElementBlock(
+            //               "div",
+            //               {
+            //                 class: _normalizeClass(
+            //                   "details_img_" + dataItem.value.images.length
+            //                 ),
+            //                 key: item,
+            //               },
+            //               [
+            //                 _createVNode(
+            //                   _component_my_image,
+            //                   {
+            //                     url: item,
+            //                   },
+            //                   null,
+            //                   8,
+            //                   ["url"]
+            //                 ),
+            //               ],
+            //               2
+            //             )
+            //           );
+            //         }),
+            //         128
+            //       )),
+            //     ]))
+            //   : _createCommentVNode("", true),
+            // _createElementVNode("div", _hoisted_9, [
+            //   _createElementVNode("div", null, [
+            //     _hoisted_10,
+            //     _createTextVNode(
+            //       " " + _toDisplayString(dataItem.value.count),
+            //       1
+            //     ),
+            //   ]),
+            //   _createElementVNode(
+            //     "div",
+            //     {
+            //       onClick:
+            //         _cache[2] ||
+            //         (_cache[2] = _withModifiers(
+            //           () =>
+            //             getHeadLineCommentLike(dataItem.value),
+            //           ["stop"]
+            //         )),
+            //     },
+            //     [
+            //       _hoisted_11,
+            //       _createTextVNode(
+            //         " " + _toDisplayString(dataItem.value.like_num),
+            //         1
+            //       ),
+            //     ]
+            //   ),
+            // ]),
           ]),
         ])
       );

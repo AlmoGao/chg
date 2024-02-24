@@ -1417,7 +1417,7 @@
 }
 
 .item .cont_details {
-    margin-left: 45px;
+    /* margin-left: 45px; */
     margin-top: 10px
 }
 
@@ -3224,7 +3224,7 @@
 }
 
 .item .cont_details {
-    margin-left: 45px;
+    /* margin-left: 45px; */
     margin-top: 10px
 }
 
@@ -3459,7 +3459,8 @@ background-color: rgba(0,0,0,0)!important;
 }
 
 .item .cont_details {
-    margin-top: 10px
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
 
 .item .cont_details .cont_text {

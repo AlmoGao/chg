@@ -385,7 +385,7 @@ export default {
                                   style: _normalizeStyle({
                                     color: detailData.value.isFocus
                                       ? "#999"
-                                      : "#fd5c18",
+                                      : "#eee",
                                   }),
                                 },
                                 _toDisplayString(
@@ -401,8 +401,11 @@ export default {
                   _createElementVNode("div", _hoisted_6, [
                     _createElementVNode(
                       "p",
-                      _hoisted_7,
-                      _toDisplayString(detailData.value.content),
+                      {
+                        class: "com-detail-html",
+                        innerHTML: detailData.value.content
+                      },
+                      null,
                       1
                     ),
                     detailData.value.images.length
@@ -605,3 +608,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.com-detail-html {
+  color: #eee;
+}
+.item .user_box .right_text .left p:first-of-type {
+  color: #eee;
+}
+</style>
