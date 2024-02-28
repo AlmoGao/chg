@@ -21,6 +21,7 @@ import {
   pushScopeId as _pushScopeId,
   popScopeId as _popScopeId,
 } from "vue";
+import eventBus from 'vue3-eventbus'
 import _imports_0 from "@/assets/images/loading.gif";
 import _imports_1 from "@/assets/images/coin.png";
 import _imports_2 from "@/assets/images/video_detail_like_red.png";
@@ -123,6 +124,7 @@ export default {
     };
 
     const initVideo = () => {
+      eventBus.emit("checkqq")
       document.getElementById("videoBox").innerHTML = `<video
       class="player-container-id"
         id="player-container-id-lb"
@@ -440,6 +442,7 @@ export default {
 
       options.value.url = "";
       emit("close");
+      eventBus.emit("checkqq")
 
       if (
         showDetailsPopul.value.type !== "VideoMrtj" &&

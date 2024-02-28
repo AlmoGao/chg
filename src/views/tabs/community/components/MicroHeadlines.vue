@@ -13,7 +13,7 @@ import {
   pushScopeId as _pushScopeId,
   popScopeId as _popScopeId,
 } from "vue";
-
+import eventBus from 'vue3-eventbus'
 import { ref, computed } from "vue";
 import { Toast } from "vant";
 import MicroHeadlinesList from "./MicroHeadlinesList.vue";
@@ -115,6 +115,7 @@ export default {
     const close = () => {
       showDetailsPopul.value = false;
       childGetList();
+      eventBus.emit("checkqq")
     };
 
     const showDetails = (item) => {

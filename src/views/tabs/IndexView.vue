@@ -23,6 +23,7 @@ import {
 import _imports_0 from "@/assets/images/close_white.png";
 import _imports_1 from "@/assets/images/notice_head.png";
 import _imports_2 from "@/assets/images//adultComics/wenxinntishi.png";
+import eventBus from 'vue3-eventbus'
 
 const _withScopeId = (n) => (
   _pushScopeId("data-v-7fbd3817"), (n = n()), _popScopeId(), n
@@ -317,13 +318,17 @@ export default {
 
       if (active.value === 0) {
         currentTabComponent.value = HomeView;
+        eventBus.emit("checkqq")
       } else if (active.value === 1) {
+        eventBus.emit("checkqq")
         currentTabComponent.value = ExploreComponent;
       } else if (active.value === 2) {
+        eventBus.emit("checkqq")
         currentTabComponent.value = CommunityView;
       } else if (active.value === 4) {
         currentTabComponent.value = MemberView;
       } else if (active.value === 3) {
+        eventBus.emit("checkqq")
         // location.href = store.state.baseUrl.download_url;
         currentTabComponent.value = StoryView;
       }

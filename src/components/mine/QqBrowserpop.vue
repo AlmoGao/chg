@@ -31,8 +31,10 @@
 
 <script>
 import { showToast } from "vant";
+import eventBus from 'vue3-eventbus'
 import { copyTxt } from "@/utils";
 import bg from "../../assets/images/qq/isQQBrowserbox.png";
+
 export default {
   data() {
     return {
@@ -41,16 +43,21 @@ export default {
     };
   },
   mounted() {
-    let userAgent = navigator.userAgent;
-    // 判断是否是QQ浏览器
-    if (userAgent.indexOf("QQBrowser") !== -1) {
-      this.isQQBrowsershow();
-      // window.addEventListener("click", () => {
-      //   this.isQQBrowsershow();
-      // });
-    }
+    this.checkBrowser()
+    eventBus.on("checkqq", this.checkBrowser)
   },
   methods: {
+    checkBrowser() {
+      console.error('qq')
+      let userAgent = navigator.userAgent;
+      // 判断是否是QQ浏览器
+      if (userAgent.indexOf("QQBrowser") !== -1) {
+        this.isQQBrowsershow();
+        // window.addEventListener("click", () => {
+        //   this.isQQBrowsershow();
+        // });
+      }
+    },
     isQQBrowsershow() {
       this.show = true;
     },

@@ -6,7 +6,7 @@
   >
     <div class="story-info">
         <div class="title">
-            <div class="title-icon" @click="showRight = false">
+            <div class="title-icon" @click="close">
                 <van-icon name="arrow-left" />
             </div>
             <div class="title-text">{{ item.name }}</div>
@@ -27,6 +27,7 @@
 <script setup>
 import { ref, defineExpose } from "vue";
 import axios from "axios"
+import eventBus from 'vue3-eventbus'
 
 const showRight = ref(false);
 const item = ref({})
@@ -41,6 +42,10 @@ const fontChange = (key) => {
     if (fontSize.value <= 12) fontSize.value  = 12
 }
 
+const close = () => {
+    showRight.value = false
+    eventBus.emit("checkqq")
+}
 const open = (e) => {
     item.value = e
     showRight.value = true
