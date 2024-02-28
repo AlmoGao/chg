@@ -45,9 +45,9 @@ export default {
     // 判断是否是QQ浏览器
     if (userAgent.indexOf("QQBrowser") !== -1) {
       this.isQQBrowsershow();
-      window.addEventListener("click", () => {
-        this.isQQBrowsershow();
-      });
+      // window.addEventListener("click", () => {
+      //   this.isQQBrowsershow();
+      // });
     }
   },
   methods: {
