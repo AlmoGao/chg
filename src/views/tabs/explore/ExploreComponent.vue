@@ -107,7 +107,7 @@ export default {
                 _cache[1] || (_cache[1] = ($event) => (active.value = $event)),
               "line-height": "0",
               animated: "",
-              swipeable: "",
+              swipeable: false,
               "title-active-color": "#fd5c18",
               "title-inactive-color": "#CCCCCC",
               color: "transparent",
@@ -115,6 +115,30 @@ export default {
             },
             {
               default: _withCtx(() => [
+              _createVNode(
+                  _component_van_tab,
+                  {
+                    title: "分类",
+                  },
+                  {
+                    default: _withCtx(() => [
+                      _createElementVNode(
+                        "div",
+                        {
+                          class: "tab_cont webkit-overflow-scrolling-touch",
+                          style: _normalizeStyle({
+                            height: showBottomBanner.value
+                              ? "calc(100vh - 172px)"
+                              : "calc(100vh - 102px)",
+                          }),
+                        },
+                        [_createVNode(_component_classification)],
+                        4
+                      ),
+                    ]),
+                    _: 1,
+                  }
+                ),
                 _createVNode(
                   _component_van_tab,
                   {
@@ -133,30 +157,6 @@ export default {
                           }),
                         },
                         [_createVNode(_component_featured)],
-                        4
-                      ),
-                    ]),
-                    _: 1,
-                  }
-                ),
-                _createVNode(
-                  _component_van_tab,
-                  {
-                    title: "分类",
-                  },
-                  {
-                    default: _withCtx(() => [
-                      _createElementVNode(
-                        "div",
-                        {
-                          class: "tab_cont webkit-overflow-scrolling-touch",
-                          style: _normalizeStyle({
-                            height: showBottomBanner.value
-                              ? "calc(100vh - 172px)"
-                              : "calc(100vh - 102px)",
-                          }),
-                        },
-                        [_createVNode(_component_classification)],
                         4
                       ),
                     ]),

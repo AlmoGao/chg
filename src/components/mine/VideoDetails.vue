@@ -21,7 +21,7 @@ import {
   pushScopeId as _pushScopeId,
   popScopeId as _popScopeId,
 } from "vue";
-import eventBus from 'vue3-eventbus'
+import eventBus from "vue3-eventbus";
 import _imports_0 from "@/assets/images/loading.gif";
 import _imports_1 from "@/assets/images/coin.png";
 import _imports_2 from "@/assets/images/video_detail_like_red.png";
@@ -39,12 +39,14 @@ import {
   getMyDate,
   advertiseDetails,
 } from "@/assets/js/utils.js";
+import aoyou from "./Aoyou.vue"
 import { showToast, showDialog as showDialog2, showConfirmDialog } from "vant";
 import AskForVideoDetails from "@/views/tabs/community/components/AskForVideoDetails.vue";
 export default {
   name: "VideoDetails",
   components: {
     AskForVideoDetails,
+    aoyou,
   },
   props: ["details_type"],
 
@@ -108,7 +110,7 @@ export default {
         },
         "get"
       ).then((res) => {
-        console.error('播放页广告', res)
+        console.error("播放页广告", res);
         if (res.code === 0) {
           bannerList.value = res.data.rows;
         }
@@ -124,7 +126,7 @@ export default {
     };
 
     const initVideo = () => {
-      eventBus.emit("checkqq")
+      eventBus.emit("checkqq");
       document.getElementById("videoBox").innerHTML = `<video
       class="player-container-id"
         id="player-container-id-lb"
@@ -418,7 +420,6 @@ export default {
     };
 
     const showDetailsPopul = computed(() => {
-      
       return store.state.showLoginPopup;
     });
     watch(showDetailsPopul, () => {
@@ -442,7 +443,7 @@ export default {
 
       options.value.url = "";
       emit("close");
-      eventBus.emit("checkqq")
+      eventBus.emit("checkqq");
 
       if (
         showDetailsPopul.value.type !== "VideoMrtj" &&
@@ -800,6 +801,7 @@ export default {
     };
     return (_ctx, _cache) => {
       const _component_video_banner = _resolveComponent("video-banner");
+      const _component_aoyou = _resolveComponent("aoyou");
 
       const _component_my_header = _resolveComponent("my-header");
 
@@ -925,6 +927,7 @@ export default {
                 _toDisplayString(detailsData.value.title),
                 1
               ),
+              _createVNode(_component_aoyou),
               detailsData.value.label
                 ? (_openBlock(),
                   _createElementBlock("div", _hoisted_18, [
@@ -965,8 +968,7 @@ export default {
                   class: "no-play",
                   onClick:
                     _cache[1] ||
-                    (_cache[1] = (...args) =>
-                      noPlay && noPlay(...args)),
+                    (_cache[1] = (...args) => noPlay && noPlay(...args)),
                 },
                 [
                   _createVNode(_component_van_icon, {
@@ -1025,8 +1027,7 @@ export default {
                     class: "info-btn-item",
                     onClick:
                       _cache[3] ||
-                      (_cache[3] = (...args) =>
-                        askVideo && askVideo(...args)),
+                      (_cache[3] = (...args) => askVideo && askVideo(...args)),
                   },
                   _hoisted_31
                 ),
@@ -1099,9 +1100,7 @@ export default {
                             _createElementVNode(
                               "span",
                               null,
-                              _toDisplayString(
-                                getMyDate(item.created, 2)
-                              ),
+                              _toDisplayString(getMyDate(item.created, 2)),
                               1
                             ),
                           ]),
@@ -1185,8 +1184,7 @@ export default {
                     class: "input-sub",
                     onClick:
                       _cache[6] ||
-                      (_cache[6] = (...args) =>
-                        send && send(...args)),
+                      (_cache[6] = (...args) => send && send(...args)),
                   },
                   "确定"
                 ),
@@ -1385,8 +1383,7 @@ export default {
               show: showAskVideoDetails.value,
               "onUpdate:show":
                 _cache[13] ||
-                (_cache[13] = ($event) =>
-                  (showAskVideoDetails.value = $event)),
+                (_cache[13] = ($event) => (showAskVideoDetails.value = $event)),
               class: "popup_coentent",
               overlay: false,
               teleport: "#app",

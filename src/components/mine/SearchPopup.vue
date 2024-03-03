@@ -25,6 +25,10 @@ export default {
       type: Boolean,
       default: false
     },
+    jingxuan: { // 精选页面
+      type: Boolean,
+      default: false
+    },
     searchText: {
       type: String,
       default: "",
@@ -72,7 +76,7 @@ export default {
     const label_name = computed(() => {
       
       return props.label_name;
-    }); // const searchText = ref(props.searchText);
+    });
 
     const detailsTitle = ref("");
     const tjList = ref([]);
@@ -214,9 +218,13 @@ export default {
       key: 1,
       class: "",
     };
+    
+    let c = "info-recommend"
+    if (props.mini) c += "  mini-recommend"
+    if (props.jingxuan) c += "  jingxuan-recommend"
     const _hoisted_4 = {
       key: 0,
-      class: props.mini ? "info-recommend mini-recommend" : "info-recommend",
+      class: c,
     };
     const _hoisted_5 = ["onClick"];
     const _hoisted_6 = {
@@ -257,7 +265,7 @@ export default {
       return (
         _openBlock(),
         _createElementBlock("div", null, [
-        props.mini ? _createCommentVNode("", true) : _createElementVNode("div", _hoisted_1, [
+        (props.mini || props.jingxuan) ? _createCommentVNode("", true) : _createElementVNode("div", _hoisted_1, [
             _createVNode(
               _component_van_icon,
               {

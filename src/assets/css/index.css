@@ -829,6 +829,13 @@
     overflow-y: auto;
     overflow-x: hidden
 }
+.jingxuan-recommend {
+    padding: 10px 0 !important;
+    padding: 15px;
+    height: calc(100vh - 180px);
+    overflow-y: auto;
+    overflow-x: hidden
+}
 
 .info-videoItem {
     padding: 8px 0 11px;

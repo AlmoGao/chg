@@ -148,6 +148,7 @@ export default {
 
     return (_ctx, _cache) => {
       const _component_qq_view = _resolveComponent("qq-browserpop");
+      const _component_home_pop = _resolveComponent("home-pop");
       const _component_router_view = _resolveComponent("router-view");
 
       const _component_van_circle = _resolveComponent("van-circle");
@@ -181,6 +182,7 @@ export default {
               _: 1,
             }),
             _createVNode(_component_qq_view),
+            _createVNode(_component_home_pop),
           ]))
         : (_openBlock(),
           _createElementBlock("div", _hoisted_2, [
