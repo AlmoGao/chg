@@ -61,13 +61,18 @@ export default {
 
     const getHeadLineDetail = () => {
       showLoading.value = true;
+      detailData.value = props.item
+      console.error("------------", props)
+      setTimeout(() => {
+        showLoading.value = false;
+      }, 500)
       headLineDetailApi(
         {
           head_lines_id: props.id,
         },
         "get"
       ).then((res) => {
-        showLoading.value = false;
+        
 
         if (res.code === 0) {
           res.data.isFocus = isFocus.value.includes(res.data.user_id + "");

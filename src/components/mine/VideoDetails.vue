@@ -28,6 +28,7 @@ import _imports_2 from "@/assets/images/video_detail_like_red.png";
 import _imports_3 from "@/assets/images/mine/video_detail_like.png";
 import _imports_4 from "@/assets/images/mine/video_detail_more.png";
 import _imports_5 from "@/assets/images/mine/video_detail_send.png";
+import _imports_6 from "@/assets/images/mine/share.png";
 
 import { useStore } from "vuex";
 import { ref, nextTick, watch, computed } from "vue"; // import Hls from "hls.js";
@@ -118,6 +119,14 @@ export default {
     };
 
     getBanner();
+
+    const showShare = () => {
+      console.error('????', detailsData.value)
+      store.commit("SET_SHOW_SHARE_POPUP", {
+        show: true,
+        videoDetails: detailsData.value,
+      });
+    };
 
     const toBannerDetails = (item) => {
       if (item.link) {
@@ -675,6 +684,21 @@ export default {
       /*#__PURE__*/ _createElementVNode("span", null, "求续集", -1)
     );
 
+    const _hoisted_share = /*#__PURE__*/ _withScopeId(() =>
+      /*#__PURE__*/ _createElementVNode(
+        "img",
+        {
+          src: _imports_6,
+        },
+        null,
+        -1
+      )
+    );
+    const _hoisted_share_text = /*#__PURE__*/ _withScopeId(() =>
+      /*#__PURE__*/ _createElementVNode("span", null, "分享", -1)
+    );
+    const _hoisted_share_btn = [_hoisted_share, _hoisted_share_text]
+
     const _hoisted_31 = [_hoisted_29, _hoisted_30];
     const _hoisted_32 = {
       class: "advertse",
@@ -1030,6 +1054,14 @@ export default {
                       (_cache[3] = (...args) => askVideo && askVideo(...args)),
                   },
                   _hoisted_31
+                ),
+                _createElementVNode(
+                  "div",
+                  {
+                    class: "info-btn-item",
+                    onClick: () => showShare(),
+                  },
+                  _hoisted_share_btn
                 ),
               ]),
               _createElementVNode("div", _hoisted_32, [

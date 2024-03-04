@@ -118,9 +118,12 @@ export default {
       eventBus.emit("checkqq")
     };
 
+    const head_line_info = ref({})
     const showDetails = (item) => {
       showDetailsPopul.value = true;
       head_lines_id.value = item.id;
+      head_line_info.value = item
+      console.error('点击', head_line_info.value)
     };
 
     const stopPropagation = ref(false);
@@ -445,10 +448,11 @@ export default {
                         onChildGetList: childGetList.value,
                         key: head_lines_id.value,
                         id: head_lines_id.value,
+                        item: head_line_info.value,
                       },
                       null,
                       8,
-                      ["onChildGetList", "id"]
+                      ["onChildGetList", "id", "item"]
                     )),
                   ]),
                 ]),

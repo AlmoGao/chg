@@ -592,7 +592,7 @@ export default {
                 8,
                 ["show"]
               ),
-              _createVNode(_component_SharePopup),
+              // _createVNode(_component_SharePopup),
               _createVNode(
                 _component_van_popup,
                 {
