@@ -2,7 +2,7 @@ import axios from "axios";
 import { showToast } from "vant";
 
 const instance = axios.create({
-  baseURL: "/api",
+  baseURL: "https://admin.xzcs.xyz/api",
 });
 
 // 添加请求拦截器

@@ -4,11 +4,11 @@
     <!-- 顶部 -->
     <div class="home-top">
       <img class="logo" src="@/assets/home/home_logo.png" alt="logo" />
-      <div class="search">
+      <!-- <div class="search">
         <Icon name="search" />
         <span>视频｜创作</span>
       </div>
-      <img class="everyday" src="@/assets/home/everyday.png" alt="everyday" />
+      <img class="everyday" src="@/assets/home/everyday.png" alt="everyday" /> -->
     </div>
     <!-- 分类 -->
     <div @click.stop="goFind" class="c-icon"><Icon name="wap-nav" /></div>
@@ -29,12 +29,12 @@
         :key="i"
         :title="item.name"
       >
-        <template v-if="i == 0">
+        <!-- <template v-if="i == 0">
             <Follow />
         </template>
-        <template v-if="i != 0">
+        <template v-if="i != 0"> -->
             <VideoList v-if="active == i" :key="i" :id="item.id" />
-        </template>
+        <!-- </template> -->
       </Tab>
     </Tabs>
   </div>
@@ -44,13 +44,14 @@
 import { Tab, Tabs, Icon } from "vant";
 import { computed, ref } from "vue";
 import store from "@/store/index";
-import Follow from "./components/Follow";
+// import Follow from "./components/Follow";
 import router from "@/router/index.js"
 import VideoList from "./components/VideoList"
 
-const active = ref(1);
+const active = ref(0);
 const tabs = computed(() => {
-  return [{ name: "关注" }, ...(store.state.config.navigation || [])];
+  // return [{ name: "关注" }, ...(store.state.config.navigation || [])];
+  return store.state.config.navigation || []
 });
 
 const goFind = () => {

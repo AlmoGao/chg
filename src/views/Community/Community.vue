@@ -3,9 +3,9 @@
   <div class="page page-community">
 
     <div class="community-top">
-      <img class="everyday" src="@/assets/home/everyday.png" alt="everyday" />
+      <!-- <img class="everyday" src="@/assets/home/everyday.png" alt="everyday" /> -->
       <div class="title">微头条</div>
-      <img class="post" src="@/assets/community/post.png" alt="post" />
+      <!-- <img class="post" src="@/assets/community/post.png" alt="post" /> -->
     </div>
 
     <div class="community-content">

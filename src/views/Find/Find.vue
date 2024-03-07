@@ -2,12 +2,12 @@
 <template>
   <div class="page page-find">
     <div class="find-top">
-      <img class="everyday" src="@/assets/home/everyday.png" alt="everyday" />
+      <!-- <img class="everyday" src="@/assets/home/everyday.png" alt="everyday" /> -->
       <div class="title">微头条</div>
-      <div class="search">
+      <!-- <div class="search">
         <Icon name="search" />
         <span>搜索</span>
-      </div>
+      </div> -->
     </div>
 
     <div class="find-content">
