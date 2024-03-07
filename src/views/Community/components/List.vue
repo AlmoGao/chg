@@ -8,20 +8,22 @@
       @load="onLoad"
     >
       <AdSwiper style="margin-bottom: 0.2rem" :id="5" />
-      <div class="list-item" v-for="(item, i) in list" :key="i" @click="goInfo(item)">
+      <div class="list-item" v-for="(item, i) in list" :key="i" >
         <template v-if="item.type == 'ad'">
           <AdBanner :id="5" />
           <AdBox :id="5" />
         </template>
         <template v-else>
-          <div class="poster">
-            <img v-lazy="item.image" alt="img" />
-          </div>
-          <div class="title">{{ item.title }}</div>
-          <div class="info">
-            <span>{{ item.views }}观看</span>
-            <span>{{ item.create_time_text }}</span>
-          </div>
+          <template @click="goInfo(item)">
+            <div class="poster">
+              <img v-lazy="item.image" alt="img" />
+            </div>
+            <div class="title">{{ item.title }}</div>
+            <div class="info">
+              <span>{{ item.views }}观看</span>
+              <span>{{ item.create_time_text }}</span>
+            </div>
+          </template>
         </template>
       </div>
     </List>
