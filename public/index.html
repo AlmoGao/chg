@@ -1,73 +1,196 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
-        <link rel="shortcut icon" href="./favicon.ico"/>
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <link rel="manifest" href="/manifest.json">
-        <link href="splashscreens/iphone5_splash.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image"/>
-        <link href="splashscreens/iphone6_splash.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image"/>
-        <link href="splashscreens/iphoneplus_splash.png" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image"/>
-        <link href="splashscreens/iphonex_splash.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image"/>
-        <link href="splashscreens/iphonexr_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image"/>
-        <link href="splashscreens/iphonexsmax_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image"/>
-        <link href="splashscreens/ipad_splash.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image"/>
-        <link href="splashscreens/ipadpro1_splash.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image"/>
-        <link href="splashscreens/ipadpro3_splash.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image"/>
-        <link href="splashscreens/ipadpro2_splash.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image"/>
-</script><title>采花阁</title>
-<style>
-    @keyframes loading {
-        /*以百分比来规定改变发生的时间 也可以通过"from"和"to",等价于0% 和 100%*/
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <link rel="icon" href="./favicon.ico" />
+    <title>采花阁</title>
+    <style>
+      @keyframes preloadingAni {
         0% {
-            /*rotate(2D旋转) scale(放大或者缩小) translate(移动) skew(翻转)*/
-            transform: rotate(0deg);
+          transform: translateX(-50%) translateY(-50%) rotate(0deg);
         }
-
         100% {
-            transform: rotate(360deg);
+          transform: translateX(-50%) translateY(-50%) rotate(360deg);
         }
-    }
+      }
+      @-webkit-keyframes preloadingAni {
+        0% {
+          transform: translateX(-50%) translateY(-50%) rotate(0deg);
+        }
+        100% {
+          transform: translateX(-50%) translateY(-50%) rotate(360deg);
+        }
+      }
+      .preloading-box {
+        position: absolute;
+        height: 148px;
+        width: 148px;
+        top: 50%;
+        left: 50%;
+        animation: preloadingAni 3s linear infinite;
+      }
+      .preloading-item {
+        width: 13px;
+        height: 148px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: flex;
+        justify-content: flex-end;
+      }
+      .preloading-item:nth-child(1) {
+        transform: translateX(-50%) translateY(-50%) rotate(0);
+      }
+      .preloading-item:nth-child(2) {
+        transform: translateX(-50%) translateY(-50%) rotate(30deg);
+      }
+      .preloading-item:nth-child(3) {
+        transform: translateX(-50%) translateY(-50%) rotate(60deg);
+      }
+      .preloading-item:nth-child(4) {
+        transform: translateX(-50%) translateY(-50%) rotate(90deg);
+      }
+      .preloading-item:nth-child(5) {
+        transform: translateX(-50%) translateY(-50%) rotate(120deg);
+      }
+      .preloading-item:nth-child(6) {
+        transform: translateX(-50%) translateY(-50%) rotate(150deg);
+      }
+      .preloading-item:nth-child(7) {
+        transform: translateX(-50%) translateY(-50%) rotate(180deg);
+      }
+      .preloading-item:nth-child(8) {
+        transform: translateX(-50%) translateY(-50%) rotate(210deg);
+      }
+      .preloading-item:nth-child(9) {
+        transform: translateX(-50%) translateY(-50%) rotate(240deg);
+      }
+      .preloading-item:nth-child(10) {
+        transform: translateX(-50%) translateY(-50%) rotate(270deg);
+      }
+      .preloading-item:nth-child(11) {
+        transform: translateX(-50%) translateY(-50%) rotate(300deg);
+      }
+      .preloading-item:nth-child(12) {
+        transform: translateX(-50%) translateY(-50%) rotate(330deg);
+      }
+      .preloading-default {
+        width: 13px;
+        height: 33px;
+        border-radius: 7px;
+        background-color: #ededed;
+      }
+      .preloading-color {
+        background-color: rgba(253, 92, 24, 0.8);
+      }
+      body {
+        background-color: #322f2f;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" class="font_5">
+      <img
+        style="
+          width: 49px;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translateX(-50%) translateY(-50%);
+        "
+        src="./favicon.ico"
+        alt=""
+      />
+      <div class="preloading-box">
+        <div class="preloading-item">
+          <div class="preloading-default preloading-color"></div>
+        </div>
+        <div class="preloading-item">
+          <div class="preloading-default preloading-color"></div>
+        </div>
+        <div class="preloading-item">
+          <div class="preloading-default preloading-color"></div>
+        </div>
+        <div class="preloading-item">
+          <div class="preloading-default preloading-color"></div>
+        </div>
+        <div class="preloading-item">
+          <div class="preloading-default preloading-color"></div>
+        </div>
+        <div class="preloading-item">
+          <div class="preloading-default preloading-color"></div>
+        </div>
 
-    #loading {
-        /* display: none; */
-    }
-
-    #icon {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        margin-top: calc(50% - 50px);
-        margin-left: calc(50% - 25px);
-        animation: loading 2s linear infinite;
-    }
-</style>
-<!-- <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
-<script>
-    LA.init({
-        id: "JiRlV4BpkMYZXK6c",
-        ck: "JiRlV4BpkMYZXK6c"
-    })
-</script> -->
-</head>
-<body>
-    <noscript>
-        <strong>We're sorry but 采花阁 doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="app"></div>
-    <div style="width:100%;height:100%;background: #181818;position:absolute;z-index: 999;left: 0;top: 0px" id="loading">
-        <img src="./static/loading.png" id="icon">
-        <p style="text-align: center;
-      margin-top: 10px;
-      color: #FD5C18;
-      font-size: 15px;">数据准备中...</p>
+        <div class="preloading-item">
+          <div class="preloading-default"></div>
+        </div>
+        <div class="preloading-item">
+          <div class="preloading-default"></div>
+        </div>
+        <div class="preloading-item">
+          <div class="preloading-default"></div>
+        </div>
+        <div class="preloading-item">
+          <div class="preloading-default"></div>
+        </div>
+        <div class="preloading-item">
+          <div class="preloading-default"></div>
+        </div>
+        <div class="preloading-item">
+          <div class="preloading-default"></div>
+        </div>
+      </div>
     </div>
+    <script>
+      // 解析参数
+      const keys = ["inviteUserId", "token", "deviceId", "autoKey", "origin"];
+      keys.forEach((item) => {
+        getQueryFromUrl(item);
+      });
+      function getQueryFromUrl(key) {
+        try {
+          if (location.search.includes(key)) {
+            const str = location.search.split(key + "=")[1].split("&")[0];
+            localStorage.setItem(key, str);
+          }
+        } catch {
+          console.error(key + "获取失败");
+        }
+      }
+      // rem
+      (function (doc, win) {
+        var docEl = doc.documentElement,
+          resizeEvt =
+            "orientationchange" in window ? "orientationchange" : "resize",
+          recalc = function () {
+            if (docEl.clientWidth > 750) {
+              docEl.style.fontSize = "100px"; // 100% == 7.5rem
+              // doc.getElementById("app").style.width = "750px";
+              doc.getElementById("app").style.width = "100%";
+            } else {
+              var width = docEl.clientWidth / 7.5;
+              docEl.style.fontSize = width + "px";
+              doc.getElementById("app").style.width = "100%";
+            }
+
+            if (docEl.clientWidth > 1000) {
+              doc.getElementById("app").style.width = "1000px";
+            }
+          };
+        recalc();
+        if (!doc.addEventListener) return;
+        win.addEventListener(resizeEvt, recalc, false);
+        doc.addEventListener("DOMContentLoaded", recalc, false);
+      })(document, window);
+    </script>
     <link href="https://web.sdk.qcloud.com/player/tcplayer/release/v4.6.0/tcplayer.min.css" rel="stylesheet"/>
     <script src="https://web.sdk.qcloud.com/player/tcplayer/release/v4.6.0/libs/TXLivePlayer-1.2.3.min.js"></script>
     <script src="https://web.sdk.qcloud.com/player/tcplayer/release/v4.6.0/libs/hls.min.1.1.5.js"></script>
     <script src="https://web.sdk.qcloud.com/player/tcplayer/release/v4.6.0/tcplayer.v4.6.0.min.js"></script>
-</body>
+  </body>
 </html>
