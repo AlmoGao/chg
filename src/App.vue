@@ -31,7 +31,6 @@ const showTab = computed(() => {
 
 console.error("---storage---", store.state);
 _index({ site_id }).then((res) => {
-  console.error(res.data);
   if (res.code == 1) {
     store.commit("setConfig", res.data);
   }

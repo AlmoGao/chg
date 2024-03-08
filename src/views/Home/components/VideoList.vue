@@ -69,7 +69,7 @@ const onLoad = () => {
         sessionStorage.setItem('index_page_' + props.id, page.value)
         sessionStorage.setItem('index_list_' + props.id, JSON.stringify(list.value))
         if (!res.data.length) {
-          finished.value = false;
+          finished.value = true;
         }
       }
     })

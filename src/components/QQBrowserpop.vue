@@ -57,8 +57,7 @@ const downmaxthon = () => {
   window.open("https://www.maxthon.com/zh");
 };
 
-watch(route, (val) => {
-  console.error("route----", val);
+watch(route, () => {
   checkBrowser();
 });
 </script>

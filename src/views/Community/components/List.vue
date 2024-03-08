@@ -71,7 +71,7 @@ const onLoad = () => {
         sessionStorage.setItem('community_page', page.value)
         sessionStorage.setItem('community_list', JSON.stringify(list.value))
         if (!res.data.length) {
-          finished.value = false;
+          finished.value = true;
         }
       }
     })

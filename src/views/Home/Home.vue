@@ -4,11 +4,11 @@
     <!-- 顶部 -->
     <div class="home-top">
       <img class="logo" src="@/assets/home/home_logo.png" alt="logo" />
-      <!-- <div class="search">
+      <div class="search" @click="goSearch">
         <Icon name="search" />
-        <span>视频｜创作</span>
+        <span>搜索</span>
       </div>
-      <img class="everyday" src="@/assets/home/everyday.png" alt="everyday" /> -->
+      <!-- <img class="everyday" src="@/assets/home/everyday.png" alt="everyday" /> -->
     </div>
     <!-- 分类 -->
     <div @click.stop="goFind" class="c-icon"><Icon name="wap-nav" /></div>
@@ -33,7 +33,7 @@
             <Follow />
         </template>
         <template v-if="i != 0"> -->
-            <VideoList v-if="active == i" :key="i" :id="item.id" />
+        <VideoList v-if="active == i" :key="i" :id="item.id" />
         <!-- </template> -->
       </Tab>
     </Tabs>
@@ -45,20 +45,25 @@ import { Tab, Tabs, Icon } from "vant";
 import { computed, ref } from "vue";
 import store from "@/store/index";
 // import Follow from "./components/Follow";
-import router from "@/router/index.js"
-import VideoList from "./components/VideoList"
+import router from "@/router/index.js";
+import VideoList from "./components/VideoList";
 
 const active = ref(0);
 const tabs = computed(() => {
   // return [{ name: "关注" }, ...(store.state.config.navigation || [])];
-  return store.state.config.navigation || []
+  return store.state.config.navigation || [];
 });
 
 const goFind = () => {
-    router.push({
-        name: "find"
-    })
-}
+  router.push({
+    name: "find",
+  });
+};
+const goSearch = () => {
+  router.push({
+    name: "search",
+  });
+};
 </script>
 
 <style lang="less" scoped>
@@ -83,20 +88,20 @@ const goFind = () => {
   .home-top {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     height: 54px;
     padding: 0 10px;
     .logo {
       height: 30px;
     }
     .search {
-      flex: 1;
-      margin: 0 12px 0 20px;
+      margin: 0 0 0 20px;
       background-color: #404040;
       height: 34px;
       border-radius: 17px;
       display: flex;
       align-items: center;
-      padding: 0 12px;
+      padding: 0 20px;
       overflow: hidden;
       color: #c8c9cc;
       span {
@@ -120,19 +125,19 @@ const goFind = () => {
     margin-right: 34px;
     padding-left: 12px;
     overflow-x: auto;
-    height: 0.8rem!important;
+    height: 0.8rem !important;
   }
   .van-tab {
     font-size: 0.35rem;
     flex: none;
     margin-right: 14px;
-    line-height: 1!important;
+    line-height: 1 !important;
   }
   .van-tabs__content {
     flex: 1;
     overflow: hidden;
     .van-tab__panel {
-        height: 100%;
+      height: 100%;
     }
   }
 }

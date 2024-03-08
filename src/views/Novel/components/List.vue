@@ -65,7 +65,7 @@ const onLoad = () => {
         sessionStorage.setItem('novel_page', page.value)
         sessionStorage.setItem('novel_list', JSON.stringify(list.value))
         if (!res.data.length) {
-          finished.value = false;
+          finished.value = true;
         }
       }
     })

@@ -3,8 +3,10 @@
   <div class="page page-community">
 
     <div class="community-top">
+      <img class="logo" src="@/assets/home/home_logo.png" alt="logo" />
       <!-- <img class="everyday" src="@/assets/home/everyday.png" alt="everyday" /> -->
       <div class="title">微头条</div>
+      <img class="logo" src="@/assets/home/home_logo.png" alt="logo" />
       <!-- <img class="post" src="@/assets/community/post.png" alt="post" /> -->
     </div>
 
@@ -30,6 +32,9 @@ import List from "./components/List"
     justify-content: space-between;
     height: 54px;
     padding: 0 10px;
+    .logo {
+      width: 24vw;
+    }
     .everyday {
       width: 30px;
       height: 30px;

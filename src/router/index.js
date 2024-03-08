@@ -61,6 +61,16 @@ const routes = [
     component: () => import("../views/My/My.vue"),
   },
   {
+    path: "/search",
+    name: "search",
+    component: () => import("../views/Search/Search.vue"),
+  },
+  {
+    path: "/result",
+    name: "result",
+    component: () => import("../views/Search/Result.vue"),
+  },
+  {
     // 找不到路由时
     path: "/:pathMatch(.*)*",
     redirect: "/",

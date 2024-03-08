@@ -15,6 +15,7 @@
         <div class="title">{{ videoInfo.title }}</div>
         <div class="tags" v-if="videoInfo.tag_text">
           <div
+            @click="clickTag(item)"
             class="tag"
             v-for="(item, i) in videoInfo.tag_text.split(',')"
             :key="i"
@@ -96,6 +97,15 @@ onBeforeUnmount(() => {
   }
   document.querySelector(".video-content").innerHTML = "";
 });
+
+const clickTag = name => {
+  router.push({
+    name: "result",
+    query: {
+      keyword: name
+    }
+  })
+}
 </script>
 
 <style lang="less" scoped>

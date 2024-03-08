@@ -30,7 +30,7 @@
   <script setup>
   import { List } from "vant";
   import { defineProps, ref } from "vue";
-  import { _findList } from "@/api/api.js";
+  import { _tag_video } from "@/api/api.js";
   import { _goPlay } from "@/utils/index"
   // import AdSwiper from "@/components/AdSwiper.vue";
   // import AdBanner from "@/components/AdBanner.vue";
@@ -49,15 +49,15 @@
   const page = ref(1);
   const list = ref([]);
   try {
-    page.value = sessionStorage.getItem('find_page_' + props.id) || 1
-    list.value = JSON.parse(sessionStorage.getItem('find_list_' + props.id)) || []
+    page.value = sessionStorage.getItem('tags_page_' + props.id) || 1
+    list.value = JSON.parse(sessionStorage.getItem('tags_list_' + props.id)) || []
   } catch {
     console.error('find数据解析失败')
   }
   
   const onLoad = () => {
-    _findList({
-      category_id: props.id,
+    _tag_video({
+      tag_id: props.id,
       limit: 20,
       page: page.value,
     })
@@ -66,8 +66,8 @@
           list.value.push(...res.data);
           list.value.push({ type: "ad" });
           page.value++;
-          sessionStorage.setItem('find_page_' + props.id, page.value)
-          sessionStorage.setItem('find_list_' + props.id, JSON.stringify(list.value))
+          sessionStorage.setItem('tags_page_' + props.id, page.value)
+          sessionStorage.setItem('tags_list_' + props.id, JSON.stringify(list.value))
           if (!res.data.length) {
             finished.value = true;
           }

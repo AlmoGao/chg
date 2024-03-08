@@ -76,7 +76,6 @@ const save = () => {
   showToast("请自行在本页面截图保存！");
 };
 const close = () => {
-    console.error('??')
     store.commit("closeShare")
 }
 </script>

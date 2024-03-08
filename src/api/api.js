@@ -6,6 +6,12 @@ export const _video_class = () => {
     custom: { toast: false, auth: true },
   });
 };
+// 标签分类
+export const _tag_class = () => {
+  return http.get(`/content/tag_class`, {
+    custom: { toast: false, auth: true },
+  });
+};
 // 全局配置
 export const _index = (data) => {
   return http.post(`/index/index`, data, {
@@ -52,6 +58,18 @@ export const _novel = (data) => {
 // 分类视频
 export const _findList = (data) => {
   return http.post(`/content/video`, data, {
+    custom: { auth: false, toast: true },
+  });
+};
+// 标签视频
+export const _tag_video = (data) => {
+  return http.post(`/content/tag_video`, data, {
+    custom: { auth: false, toast: true },
+  });
+};
+// 搜索
+export const _search = (data) => {
+  return http.post(`/content/search`, data, {
     custom: { auth: false, toast: true },
   });
 };
