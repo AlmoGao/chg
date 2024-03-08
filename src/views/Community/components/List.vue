@@ -14,7 +14,7 @@
           <AdBox :id="5" />
         </template>
         <template v-else>
-          <template @click="goInfo(item)">
+          <div @click="goInfo(item)">
             <div class="poster">
               <img v-lazy="item.image" alt="img" />
             </div>
@@ -23,7 +23,7 @@
               <span>{{ item.views }}观看</span>
               <span>{{ item.create_time_text }}</span>
             </div>
-          </template>
+          </div>
         </template>
       </div>
     </List>
