@@ -18,8 +18,21 @@
         backgroundColor: bgColor,
         fontSize: fontSize + 'px',
       }"
-      v-html="item.content"
-    ></div>
+    >
+      <img
+        style="width: 100%"
+        class="logo"
+        src="@/assets/home/home_logo.png"
+        alt="logo"
+      />
+      <div v-html="item.content"></div>
+      <img
+        style="width: 100%"
+        class="logo"
+        src="@/assets/home/home_logo.png"
+        alt="logo"
+      />
+    </div>
     <div class="color-box" v-show="showColor">
       <div class="text-pick">
         <Icon @click="fontChange(-1)" name="minus" />
@@ -34,17 +47,17 @@
 </template>
 
 <script setup>
-import { Icon } from 'vant';
+import { Icon } from "vant";
 import { ref } from "vue";
 import axios from "axios";
-import router from "@/router/index"
-import store from "@/store/index"
+import router from "@/router/index";
+import store from "@/store/index";
 
 const item = ref({});
 try {
-  item.value = JSON.parse(localStorage.getItem("novelinfo"))
+  item.value = JSON.parse(localStorage.getItem("novelinfo"));
 } catch {
-  console.error("数据解析异常")
+  console.error("数据解析异常");
 }
 
 const color = ref("#8ca19a");
@@ -68,16 +81,16 @@ const init = () => {
     }
   });
 };
-init()
-
+init();
 
 const share = () => {
-  store.commit("setShare", item.value)
-}
+  store.commit("setShare", item.value);
+};
 </script>
 
 <style scoped lang="less">
 .page-novel-info {
+  padding-bottom: 50px;
   width: 100%;
   height: 100%;
   background-color: #282828;

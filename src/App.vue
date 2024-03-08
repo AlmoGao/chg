@@ -26,7 +26,7 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 
 const showTab = computed(() => {
-  return ["home", "find", "my", "community", "novel"].includes(route.name);
+  return ["home", "find", "my", "community", "novel", "novelinfo", "communityinfo"].includes(route.name);
 });
 
 console.error("---storage---", store.state);
