@@ -77,9 +77,11 @@ watch(route, (val) => {
       active.value = 1
       break
     case "community":
+    case "communityinfo":
       active.value = 2
       break
     case "novel":
+    case "novelinfo":
       active.value = 3
       break
     case "my":

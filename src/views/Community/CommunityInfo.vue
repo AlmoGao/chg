@@ -1,6 +1,20 @@
 <!-- 小说详情 -->
 <template>
   <div class="page page-community-info">
+    <div style="display: flex;justify-content: space-between;padding: 0 10px;">
+      <img
+        style="width: 24vw"
+        class="logo"
+        src="@/assets/home/home_logo.png"
+        alt="logo"
+      />
+      <img
+        style="width: 24vw"
+        class="logo"
+        src="@/assets/home/home_logo.png"
+        alt="logo"
+      />
+    </div>
     <div class="title">
       <div class="title-icon" @click="router.back">
         <Icon name="arrow-left" />
@@ -11,19 +25,7 @@
       </div>
     </div>
     <div class="box">
-      <img
-        style="width: 100%"
-        class="logo"
-        src="@/assets/home/home_logo.png"
-        alt="logo"
-      />
       <div v-html="item.content"></div>
-      <img
-        style="width: 100%"
-        class="logo"
-        src="@/assets/home/home_logo.png"
-        alt="logo"
-      />
     </div>
   </div>
 </template>
